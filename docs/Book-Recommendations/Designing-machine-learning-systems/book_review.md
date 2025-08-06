@@ -4,7 +4,7 @@
 **Publisher:** O'Reilly Media  
 **Publication Year:** 2022  
 
-![Book Cover](images/designing-ml-systems-cover.jpg)
+![Book Cover](https://www.oreilly.com/covers/urn:orm:book:9781098107956/400w/)
 
 ## Overview
 

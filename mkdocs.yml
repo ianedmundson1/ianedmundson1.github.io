@@ -46,6 +46,8 @@ nav:
       - Lane Detection: Lane-detection/ReadMe.md
   - Book Recommendations: 
       - book_recommendations.md
+      - Designing Machine Learning Systems: Book-Recommendations/Designing-machine-learning-systems/book_review.md
+      - Graph-Powered Machine Learning: Book-Recommendations/Graph-Powered-Machine-Learning/book_review.md
 
 extra:
   social:
