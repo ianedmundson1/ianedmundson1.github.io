@@ -31,21 +31,21 @@ I specialize in developing end-to-end machine learning solutions, from data engi
 
 Explore my technical work across various domains:
 
-### 🏭 [Energy Optimization Systems](MIT_Applied_Data_Science/README.md)
+### 🏭 [Energy Optimization Systems](projects/data-science/mit-applied-data-science/README.md)
 Advanced machine learning models for optimizing energy efficiency at large-scale facilities, reducing operational costs through predictive analytics.
 
-### 👁️ [Computer Vision Applications](Facial-detection/README.md)
+### 👁️ [Computer Vision Applications](projects/computer-vision/facial-detection/README.md)
 Real-time face detection and emotion recognition systems using deep learning and OpenCV.
 
-### 🛡️ [IoT Security Solutions](Security-camera/README.md)
+### 🛡️ [IoT Security Solutions](projects/computer-vision/security-camera/README.md)
 Raspberry Pi-based security camera system with motion detection, cloud storage, and automated notifications.
 
-### 🚗 [Autonomous Vehicle Technology](Lane-detection/ReadMe.md)
+### 🚗 [Autonomous Vehicle Technology](projects/computer-vision/lane-detection/README.md)
 Lane detection algorithms for autonomous driving applications using computer vision and image processing.
 
 ## Knowledge Sharing
 
-### 📚 [Book Recommendations](book_recommendations.md)
+### 📚 [Book Recommendations](books/index.md)
 Curated reviews of essential books for data scientists and machine learning engineers, including insights on production ML systems and advanced analytics.
 
 ## Technical Impact

@@ -1,6 +1,7 @@
-site_name: My Docs
-site_url: https://mydomain.org/mysite
+site_name: Ian Edmundson - Portfolio
+site_url: https://ianedmundson1.github.io
 site_author: Ian Edmundson
+site_description: Data Scientist & Software Engineer Portfolio
 theme:
   name: material
   palette:
@@ -26,7 +27,7 @@ theme:
         name: Switch to system preference
 
 #This adds a GitHub icon to the header
-repo_url: https://github.com/ianedmundson1
+repo_url: https://github.com/ianedmundson1/ianedmundson.github.io
 repo_name: GitHub 
 
 # filepath: /home/edmundsonim/github/ianedmundson.github.io/mkdocs.yml
@@ -35,19 +36,25 @@ plugins:
   - include-markdown
   - mkdocs-simple-hooks:
       hooks:
-        on_pre_build: "docs.fetch_readme:fetch_readme"
+        on_pre_build: "docs.scripts.fetch_readme:fetch_readme"
 
 nav:
   - Home: index.md
   - Projects:
-      - MIT Applied Data Science: MIT_Applied_Data_Science/README.md
-      - Facial Detection: Facial-detection/README.md
-      - Security Camera: Security-camera/README.md
-      - Lane Detection: Lane-detection/ReadMe.md
-  - Book Recommendations: 
-      - book_recommendations.md
-      - Designing Machine Learning Systems: Book-Recommendations/Designing-machine-learning-systems/book_review.md
-      - Graph-Powered Machine Learning: Book-Recommendations/Graph-Powered-Machine-Learning/book_review.md
+      - Overview: projects/index.md
+      - Computer Vision:
+          - Overview: projects/computer-vision/index.md
+          - Facial Detection: projects/computer-vision/facial-detection/README.md
+          - Lane Detection: projects/computer-vision/lane-detection/README.md
+          - Security Camera: projects/computer-vision/security-camera/README.md
+      - Data Science:
+          - Overview: projects/data-science/index.md
+          - MIT Applied Data Science: projects/data-science/mit-applied-data-science/README.md
+  - Books: 
+      - Overview: books/index.md
+      - Reviews:
+          - Designing Machine Learning Systems: books/reviews/Book-Recommendations/Designing-machine-learning-systems/book_review.md
+          - Graph-Powered Machine Learning: books/reviews/Book-Recommendations/graph-powered-machine-learning/book_review.md
 
 extra:
   social:
