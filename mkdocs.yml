@@ -1,0 +1,55 @@
+site_name: My Docs
+site_url: https://mydomain.org/mysite
+site_author: Ian Edmundson
+theme:
+  name: material
+  palette:
+
+    # Palette toggle for automatic mode
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default 
+      toggle:
+        icon: material/brightness-7 
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
+
+#This adds a GitHub icon to the header
+repo_url: https://github.com/ianedmundson1
+repo_name: GitHub 
+
+# filepath: /home/edmundsonim/github/ianedmundson.github.io/mkdocs.yml
+plugins:
+  - search
+  - include-markdown
+  - mkdocs-simple-hooks:
+      hooks:
+        on_pre_build: "docs.fetch_readme:fetch_readme"
+
+nav:
+  - Home: index.md
+  - Projects:
+      - MIT Applied Data Science: MIT_Applied_Data_Science/README.md
+      - Facial Detection: Facial-detection/README.md
+      - Security Camera: Security-camera/README.md
+      - Lane Detection: Lane-detection/ReadMe.md
+  - Book Recommendations: 
+      - book_recommendations.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/ianedmundson1
+    - icon: fontawesome/brands/linkedin
+      link: https://linkedin.com/in/ian-edmundson-a0979a178

@@ -1,0 +1,39 @@
+repositories:
+  # MIT Applied Data Science README
+  - name: "MIT Applied Data Science"
+    type: "file"
+    url: "https://raw.githubusercontent.com/ianedmundson1/MIT_Applied_Data_Science/main/ReadMe.md"
+    output_path: "docs/MIT_Applied_Data_Science/README.md"
+    
+  # Lane Detection README
+  - name: "Lane Detection README"
+    type: "file"
+    url: "https://raw.githubusercontent.com/ianedmundson1/Lane-detection/main/ReadMe.md"
+    output_path: "docs/Lane-detection/ReadMe.md"
+    
+  # Lane Detection Images folder
+  - name: "Lane Detection Images"
+    type: "folder"
+    repo_url: "https://github.com/ianedmundson1/Lane-detection"
+    folder_path: "images"
+    output_path: "docs/Lane-detection/images"
+    branch: "main"
+    
+  # Lane Detection Video folder
+  - name: "Lane Detection Videos"
+    type: "folder"
+    repo_url: "https://github.com/ianedmundson1/Lane-detection"
+    folder_path: "video"
+    output_path: "docs/Lane-detection/video"
+    branch: "main"
+    
+  # Add other repositories as needed
+  - name: "Facial Detection README"
+    type: "file"
+    url: "https://raw.githubusercontent.com/ianedmundson1/Facial-detection/main/README.md"
+    output_path: "docs/Facial-detection/README.md"
+    
+  - name: "Security Camera README"
+    type: "file"
+    url: "https://raw.githubusercontent.com/ianedmundson1/Security-camera/main/README.md"
+    output_path: "docs/Security-camera/README.md"

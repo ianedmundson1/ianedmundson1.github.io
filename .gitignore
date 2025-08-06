@@ -1,0 +1,25 @@
+# Ignore image folders
+images/
+*/images/
+**/images/
+
+# Ignore video folders
+videos/
+video/
+*/videos/
+*/video/
+**/videos/
+**/video/
+
+# Ignore specific file types (optional)
+*.mp4
+*.avi
+*.mov
+*.wmv
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+*.tiff
+*.svg
