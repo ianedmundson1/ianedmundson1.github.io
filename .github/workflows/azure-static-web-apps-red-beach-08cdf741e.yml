@@ -33,6 +33,35 @@ jobs:
         run: |
           mkdocs build --verbose
 
+      - name: Verify build output
+        run: |
+          echo "=== Current working directory ==="
+          pwd
+          echo ""
+          echo "=== Root directory contents ==="
+          ls -la
+          echo ""
+          echo "=== Site directory contents ==="
+          if [ -d "site" ]; then
+            ls -la site/
+            echo ""
+            echo "=== Site directory structure ==="
+            find site/ -type f -name "*.html" | head -10
+            echo ""
+            echo "=== Checking for index.html ==="
+            if [ -f "site/index.html" ]; then
+              echo "index.html found in site/ directory"
+              echo "File size: $(stat -c%s site/index.html) bytes"
+            else
+              echo "index.html NOT found in site/ directory"
+            fi
+          else
+            echo "site/ directory does not exist"
+          fi
+          echo ""
+          echo "=== Disk usage ==="
+          du -sh site/ 2>/dev/null || echo "site/ directory not accessible"
+
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
@@ -55,6 +84,7 @@ jobs:
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_RED_BEACH_08CDF741E }}
           action: "close"
+
 
 
 
