@@ -1,108 +1,73 @@
-# Ian Edmundson - Portfolio Website
+# React + TypeScript + Vite
 
-[![MkDocs](https://img.shields.io/badge/docs-mkdocs-blue)](https://www.mkdocs.org/)
-[![Material for MkDocs](https://img.shields.io/badge/material-mkdocs-blue)](https://squidfunk.github.io/mkdocs-material/)
-[![GitHub Pages](https://img.shields.io/badge/deployed-github%20pages-brightgreen)](https://ianedmundson1.github.io)
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-This repository contains the source code for my professional portfolio website, showcasing my work in data science, machine learning, and software engineering.
+Currently, two official plugins are available:
 
-## 🌐 Live Site
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-Visit the live site at: [ianedmundson1.github.io](https://ianedmundson1.github.io)
+## React Compiler
 
-## 🏗️ Built With
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-- **[MkDocs](https://www.mkdocs.org/)** - Static site generator
-- **[Material for MkDocs](https://squidfunk.github.io/mkdocs-material/)** - Modern theme
-- **[GitHub Pages](https://pages.github.com/)** - Hosting platform
+## Expanding the ESLint configuration
 
-## 📁 Repository Structure
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-```text
-├── docs/                          # Documentation source files
-│   ├── projects/                  # Project showcases
-│   │   ├── computer-vision/       # CV projects
-│   │   └── data-science/          # Data science projects
-│   ├── books/                     # Book recommendations
-│   ├── assets/                    # Shared images and media
-│   └── scripts/                   # Build and utility scripts
-├── extras/                        # Templates and additional resources
-├── mkdocs.yml                     # MkDocs configuration
-├── requirements.txt               # Python dependencies
-└── README.md                      # This file
+```js
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
+
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 ```
 
-## 🚀 Local Development
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-### Prerequisites
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
 
-- Python 3.8+
-- pip
-
-### Setup
-
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/ianedmundson1/ianedmundson.github.io.git
-   cd ianedmundson.github.io
-   ```
-
-2. Install dependencies:
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. Serve the site locally:
-
-   ```bash
-   mkdocs serve
-   ```
-
-4. Open your browser to `http://127.0.0.1:8000`
-
-### Building for Production
-
-```bash
-mkdocs build
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 ```
-
-## 📝 Content Management
-
-### Adding New Projects
-
-1. Create a new directory in `docs/projects/`
-2. Add your project documentation and assets
-3. Update the navigation in `mkdocs.yml`
-
-### Adding Book Reviews
-
-1. Create a new directory in `docs/books/reviews/`
-2. Use the template from `extras/book_review_template.md`
-3. Update the books index page
-
-## 🔄 Automated Content Updates
-
-The site includes automated fetching of README files from external repositories using the `fetch_readme.py` script and `readme_config.yaml` configuration.
-
-## 🤝 Contributing
-
-While this is a personal portfolio, suggestions and improvements are welcome! Please feel free to:
-
-1. Open an issue for bugs or suggestions
-2. Submit a pull request for improvements
-3. Share feedback on the content or structure
-
-## 📧 Contact
-
-- **GitHub**: [@ianedmundson1](https://github.com/ianedmundson1)
-- **LinkedIn**: [Ian Edmundson](https://linkedin.com/in/ian-edmundson-a0979a178)
-
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
-
----
-
-Last updated: August 2025
