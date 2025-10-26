@@ -22,8 +22,7 @@ const ProjectsPage: React.FC = () => {
               
               <div className="category-section">
                 <h2 className="category-title">
-                  <span className="category-icon">🖥️</span>
-                  Computer Vision
+                  Personal Projects
                 </h2>
                 <p className="category-description">
                   Real-time computer vision applications using OpenCV, deep learning, and image processing techniques.
@@ -38,7 +37,7 @@ const ProjectsPage: React.FC = () => {
                       Real-time face detection and emotion recognition system using deep learning models and OpenCV for live video processing.
                     </p>
                     <div className="project-links">
-                      <a href="/projects/computer-vision/facial-detection" className="project-link primary">
+                      <a href="https://github.com/ianedmundson1/Facial-detection" className="project-link primary">
                         View Project
                       </a>
                     </div>
@@ -53,7 +52,7 @@ const ProjectsPage: React.FC = () => {
                       Advanced lane detection system for autonomous driving applications using computer vision and image processing techniques.
                     </p>
                     <div className="project-links">
-                      <a href="/projects/computer-vision/lane-detection" className="project-link primary">
+                      <a href="https://github.com/ianedmundson1/Lane-detection" className="project-link primary">
                         View Project
                       </a>
                     </div>
@@ -68,7 +67,7 @@ const ProjectsPage: React.FC = () => {
                       Raspberry Pi-based security camera system with motion detection, cloud storage integration, and automated notifications.
                     </p>
                     <div className="project-links">
-                      <a href="/projects/computer-vision/security-camera" className="project-link primary">
+                      <a href="https://github.com/ianedmundson1/Security-camera" className="project-link primary">
                         View Project
                       </a>
                     </div>
@@ -76,7 +75,7 @@ const ProjectsPage: React.FC = () => {
                 </div>
                 <div className="category-footer">
                   <a href="/projects/computer-vision" className="view-all-link">
-                    View All Computer Vision Projects →
+                    View All Personal Projects →
                   </a>
                 </div>
               </div>
@@ -84,7 +83,7 @@ const ProjectsPage: React.FC = () => {
               <div className="category-section">
                 <h2 className="category-title">
                   <span className="category-icon">📊</span>
-                  Data Science
+                  Continuing Education & Certification Programs
                 </h2>
                 <p className="category-description">
                   Advanced analytics, machine learning models, and data engineering solutions for real-world problems.
@@ -93,18 +92,37 @@ const ProjectsPage: React.FC = () => {
                   <div className="project-card">
                     <div className="project-header">
                       <h3>MIT Applied Data Science</h3>
-                      <span className="project-badge">Machine Learning • Analytics</span>
+                      <div className="project-badges">
+                        <span className="project-badge">Machine Learning • Analytics</span>
+                        <span className="project-badge interactive">Interactive</span>
+                      </div>
                     </div>
                     <p className="project-description">
                       Comprehensive data science coursework covering advanced machine learning techniques, statistical analysis, and real-world applications.
                     </p>
                     <div className="project-links">
-                      <a href="/projects/data-science/mit-applied-data-science" className="project-link primary">
+                      <a href="/projects/mit-data-science" className="project-link primary">
                         View Project
                       </a>
                     </div>
                   </div>
-
+                </div>
+                <div className="category-footer">
+                  <a href="/projects/data-science" className="view-all-link">
+                    View All Continuing Education & Certification Programs Projects →
+                  </a>
+                </div>
+              </div>
+              <div className="category-section">
+                <h2 className="category-title">
+                  <span className="category-icon">📊</span>
+                  Past Work Projects
+                </h2>
+                <p className="category-description">
+                  Advanced analytics, machine learning models, and data engineering solutions for real-world problems.
+                </p>
+                <div className="projects-grid">
+                  
                   <div className="project-card">
                     <div className="project-header">
                       <h3>Energy Optimization Systems</h3>
@@ -141,60 +159,12 @@ const ProjectsPage: React.FC = () => {
                   </a>
                 </div>
               </div>
+              
 
             </div>
           </div>
         </section>
-
-        <section className="technologies-section">
-          <div className="section-container">
-            <h2 className="section-title">Technologies & Tools</h2>
-            <div className="tech-categories">
-              <div className="tech-category">
-                <h3>Machine Learning & AI</h3>
-                <div className="tech-tags">
-                  <span className="tech-tag">Python</span>
-                  <span className="tech-tag">Scikit-learn</span>
-                  <span className="tech-tag">TensorFlow</span>
-                  <span className="tech-tag">PyTorch</span>
-                  <span className="tech-tag">XGBoost</span>
-                  <span className="tech-tag">Prophet</span>
-                </div>
-              </div>
-              <div className="tech-category">
-                <h3>Data Engineering</h3>
-                <div className="tech-tags">
-                  <span className="tech-tag">Azure</span>
-                  <span className="tech-tag">Synapse</span>
-                  <span className="tech-tag">Delta Lake</span>
-                  <span className="tech-tag">Apache Spark</span>
-                  <span className="tech-tag">SQL</span>
-                  <span className="tech-tag">ETL</span>
-                </div>
-              </div>
-              <div className="tech-category">
-                <h3>Computer Vision</h3>
-                <div className="tech-tags">
-                  <span className="tech-tag">OpenCV</span>
-                  <span className="tech-tag">YOLO</span>
-                  <span className="tech-tag">PIL</span>
-                  <span className="tech-tag">NumPy</span>
-                  <span className="tech-tag">Matplotlib</span>
-                </div>
-              </div>
-              <div className="tech-category">
-                <h3>Development & Deployment</h3>
-                <div className="tech-tags">
-                  <span className="tech-tag">FastAPI</span>
-                  <span className="tech-tag">Plotly Dash</span>
-                  <span className="tech-tag">GitHub Actions</span>
-                  <span className="tech-tag">Docker</span>
-                  <span className="tech-tag">Raspberry Pi</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        
       </main>
     </div>
   );

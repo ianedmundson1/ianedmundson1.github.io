@@ -70,41 +70,6 @@ const HomePage: React.FC = () => {
           </div>
         </section>
 
-        <section className="featured-projects">
-          <div className="section-container">
-            <h2 className="section-title">Featured Projects</h2>
-            <div className="projects-grid">
-              <div className="project-card">
-                <div className="project-icon">🏭</div>
-                <h3>Energy Optimization Systems</h3>
-                <p>Advanced machine learning models for optimizing energy efficiency at large-scale facilities, reducing operational costs through predictive analytics.</p>
-                <a href="/projects/data-science">Explore Project →</a>
-              </div>
-
-              <div className="project-card">
-                <div className="project-icon">👁️</div>
-                <h3>Computer Vision Applications</h3>
-                <p>Real-time face detection and emotion recognition systems using deep learning and OpenCV.</p>
-                <a href="/projects/computer-vision/facial-detection">Explore Project →</a>
-              </div>
-
-              <div className="project-card">
-                <div className="project-icon">🛡️</div>
-                <h3>IoT Security Solutions</h3>
-                <p>Raspberry Pi-based security camera system with motion detection, cloud storage, and automated notifications.</p>
-                <a href="/projects/computer-vision/security-camera">Explore Project →</a>
-              </div>
-
-              <div className="project-card">
-                <div className="project-icon">🚗</div>
-                <h3>Autonomous Vehicle Technology</h3>
-                <p>Lane detection algorithms for autonomous driving applications using computer vision and image processing.</p>
-                <a href="/projects/computer-vision/lane-detection">Explore Project →</a>
-              </div>
-            </div>
-          </div>
-        </section>
-
         <section className="impact-section">
           <div className="section-container">
             <h2 className="section-title">Technical Impact</h2>
@@ -124,6 +89,56 @@ const HomePage: React.FC = () => {
               <div className="impact-item">
                 <h4>Data Accessibility</h4>
                 <p>Streamlined data workflows and real-time decision-making capabilities</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="technologies-section">
+          <div className="section-container">
+            <h2 className="section-title">Technologies & Tools</h2>
+            <div className="tech-categories">
+              <div className="tech-category">
+                <h3>Machine Learning & AI</h3>
+                <div className="tech-tags">
+                  <span className="tech-tag">Python</span>
+                  <span className="tech-tag">Scikit-learn</span>
+                  <span className="tech-tag">TensorFlow</span>
+                  <span className="tech-tag">PyTorch</span>
+                  <span className="tech-tag">XGBoost</span>
+                  <span className="tech-tag">Prophet</span>
+                </div>
+              </div>
+              <div className="tech-category">
+                <h3>Data Engineering</h3>
+                <div className="tech-tags">
+                  <span className="tech-tag">Azure</span>
+                  <span className="tech-tag">Synapse</span>
+                  <span className="tech-tag">Delta Lake</span>
+                  <span className="tech-tag">Apache Spark</span>
+                  <span className="tech-tag">SQL</span>
+                  <span className="tech-tag">ETL</span>
+                </div>
+              </div>
+              <div className="tech-category">
+                <h3>Computer Vision</h3>
+                <div className="tech-tags">
+                  <span className="tech-tag">OpenCV</span>
+                  <span className="tech-tag">YOLO</span>
+                  <span className="tech-tag">PIL</span>
+                  <span className="tech-tag">NumPy</span>
+                  <span className="tech-tag">Matplotlib</span>
+                </div>
+              </div>
+              <div className="tech-category">
+                <h3>Development & Deployment</h3>
+                <div className="tech-tags">
+                  <span className="tech-tag">FastAPI</span>
+                  <span className="tech-tag">Plotly Dash</span>
+                  <span className="tech-tag">GitHub Actions</span>
+                  <span className="tech-tag">Docker</span>
+                  <span className="tech-tag">Raspberry Pi</span>
+                </div>
               </div>
             </div>
           </div>
