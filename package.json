@@ -4,10 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+  "build": "npm run build:frontend",
+  "build:frontend": "vite build frontend --emptyOutDir",
+  "dev": "vite frontend"
   },
   "dependencies": {
     "react": "^19.1.1",

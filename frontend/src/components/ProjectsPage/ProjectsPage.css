@@ -1,0 +1,269 @@
+.projects-page {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.main-content {
+  width: 100%;
+}
+
+.section-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Hero Section */
+.projects-hero {
+  padding: 3rem 1rem 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  text-align: center;
+}
+
+.hero-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.hero-title {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+  font-size: 1.3rem;
+  opacity: 0.9;
+  line-height: 1.6;
+}
+
+/* Projects Overview */
+.projects-overview {
+  padding: 4rem 0;
+}
+
+.project-categories {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+.category-section {
+  background: white;
+  border-radius: 16px;
+  padding: 3rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.category-title {
+  display: flex;
+  align-items: center;
+  font-size: 2.2rem;
+  color: #333;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.category-icon {
+  font-size: 2.5rem;
+  margin-right: 1rem;
+}
+
+.category-description {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.project-card {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 2rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-left: 4px solid #667eea;
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.project-header {
+  margin-bottom: 1rem;
+}
+
+.project-header h3 {
+  font-size: 1.4rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.project-badge {
+  background: #e3f2fd;
+  color: #1976d2;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.project-description {
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.project-links {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.project-link {
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.project-link.primary {
+  background-color: #667eea;
+  color: white;
+}
+
+.project-link.primary:hover {
+  background-color: #5a6fd8;
+  transform: translateY(-1px);
+}
+
+.category-footer {
+  text-align: center;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e9ecef;
+}
+
+.view-all-link {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.view-all-link:hover {
+  color: #5a6fd8;
+}
+
+/* Technologies Section */
+.technologies-section {
+  padding: 4rem 0;
+  background: white;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 3rem;
+  font-weight: 700;
+}
+
+.tech-categories {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.tech-category {
+  background: #f8f9fa;
+  padding: 2rem;
+  border-radius: 12px;
+  border-top: 4px solid #667eea;
+}
+
+.tech-category h3 {
+  color: #333;
+  margin-bottom: 1.5rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.tech-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tech-tag {
+  background: #667eea;
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.1rem;
+  }
+  
+  .category-section {
+    padding: 2rem;
+  }
+  
+  .category-title {
+    font-size: 1.8rem;
+  }
+  
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .tech-categories {
+    grid-template-columns: 1fr;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .projects-hero {
+    padding: 2rem 1rem 1.5rem;
+  }
+  
+  .category-section {
+    padding: 1.5rem;
+  }
+  
+  .project-card {
+    padding: 1.5rem;
+  }
+  
+  .tech-category {
+    padding: 1.5rem;
+  }
+}
+
+.project-badge.interactive {
+  background: linear-gradient(135deg, #ff6b6b 0%, #dc3545 100%);
+  color: white;
+  font-weight: 600;
+}
