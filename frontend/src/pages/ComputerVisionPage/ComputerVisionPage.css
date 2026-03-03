@@ -1,6 +1,6 @@
 .computer-vision-page {
   min-height: 100vh;
-  background-color: #f8f9fa;
+  background-color: var(--color-bg-subtle);
 }
 
 .main-content {
@@ -16,7 +16,7 @@
 /* Hero Section */
 .cv-hero {
   padding: 3rem 1rem 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--gradient-primary);
   color: white;
   text-align: center;
 }
@@ -50,7 +50,7 @@
 }
 
 .project-item {
-  background: white;
+  background: var(--color-bg);
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
@@ -68,14 +68,14 @@
 
 .project-info h2 {
   font-size: 2rem;
-  color: #333;
+  color: var(--color-text-primary);
   margin-bottom: 1rem;
   font-weight: 700;
 }
 
 .project-summary {
   font-size: 1.1rem;
-  color: #666;
+  color: var(--color-text-muted);
   line-height: 1.7;
   margin-bottom: 2rem;
 }
@@ -88,8 +88,8 @@
 }
 
 .tech-badge {
-  background: #e3f2fd;
-  color: #1976d2;
+  background: rgba(102, 126, 234, 0.15);
+  color: var(--color-primary);
   padding: 0.5rem 1rem;
   border-radius: 20px;
   font-size: 0.9rem;
@@ -111,12 +111,12 @@
 }
 
 .btn-primary {
-  background-color: #667eea;
+  background-color: var(--color-primary);
   color: white;
 }
 
 .btn-primary:hover {
-  background-color: #5a6fd8;
+  background-color: var(--color-primary-hover);
   transform: translateY(-2px);
 }
 

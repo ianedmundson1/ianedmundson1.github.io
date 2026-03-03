@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTheme } from '../../context/ThemeContext';
 import './Navigation.css';
 
 interface NavigationProps {
@@ -6,6 +7,8 @@ interface NavigationProps {
 }
 
 const Navigation: React.FC<NavigationProps> = ({ className }) => {
+  const { theme, toggleTheme } = useTheme();
+
   return (
     <nav className={`navigation ${className || ''}`}>
       <div className="nav-container">
@@ -18,6 +21,13 @@ const Navigation: React.FC<NavigationProps> = ({ className }) => {
           <li><a href="/books">Books</a></li>
           <li><a href="/about">About</a></li>
         </ul>
+        <button
+          className="theme-toggle"
+          onClick={toggleTheme}
+          aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+        >
+          {theme === 'dark' ? '☀️' : '🌙'}
+        </button>
       </div>
     </nav>
   );

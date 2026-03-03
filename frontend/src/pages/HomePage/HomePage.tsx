@@ -14,9 +14,9 @@ const HomePage: React.FC = () => {
               Data Scientist & Software Engineer
             </p>
             <p className="hero-description">
-              Passionate about building scalable, data-driven solutions that optimize operations 
-              and drive measurable business value. I specialize in end-to-end machine learning 
-              solutions, from data engineering pipelines to production-ready models.
+              Data scientist with 3+ years building analytics infrastructure and governance programs 
+              for federal operations. Recognized with an NIH Director's Award for ML-based forecasting 
+              that protected critical infrastructure during a high-demand crisis event.
             </p>
             <div className="hero-actions">
               <a href="/projects" className="btn btn-primary">
@@ -25,6 +25,9 @@ const HomePage: React.FC = () => {
               <a href="#expertise" className="btn btn-secondary">
                 My Expertise
               </a>
+            </div>
+            <div className="hero-award">
+              🏆 NIH Director's Award 2024
             </div>
           </div>
         </section>
@@ -37,11 +40,11 @@ const HomePage: React.FC = () => {
                 <div className="expertise-icon">🤖</div>
                 <h3>Data Science & Machine Learning</h3>
                 <ul>
-                  <li>Advanced Modeling: Multi-Layer Perceptron, Random Forest, XGBoost</li>
-                  <li>Forecasting Systems: NARX and Prophet models for 96-hour advance prediction</li>
-                  <li>Optimization Algorithms: PSO and Genetic Algorithms</li>
-                  <li>Anomaly Detection: Isolation Forest for time-series analysis</li>
-                  <li>RAG Systems: Azure PromptFlow with ChatGPT-4</li>
+                  <li>Forecasting: 96-hour demand prediction systems (NARX, Prophet)</li>
+                  <li>Anomaly Detection: Isolation Forest across 20,000+ monitoring points</li>
+                  <li>MLOps: Cloud-native pipelines with managed feature tables on Databricks</li>
+                  <li>NLP: Knowledge graph extraction from operator logs using LLMs</li>
+                  <li>RAG: AI search over 1,000+ page compliance manuals</li>
                 </ul>
               </div>
 
@@ -49,10 +52,11 @@ const HomePage: React.FC = () => {
                 <div className="expertise-icon">🔧</div>
                 <h3>Data Engineering</h3>
                 <ul>
-                  <li>Cloud Migration: 35,000+ data points from OSIsoft PI to Azure Data Lake Gen2</li>
-                  <li>ETL Pipelines: Scalable architectures for real-time processing</li>
-                  <li>Modern Data Stack: Azure Synapse, Delta Lakes, ACID transactions</li>
-                  <li>Performance Optimization: Multithreading and parallel processing</li>
+                  <li>Platform: Databricks with Delta Live Tables processing 30M+ daily sensor readings</li>
+                  <li>Migration: 6 years of sensor data (35,000+ points) to Azure Data Lake Gen2</li>
+                  <li>Pipelines: CI/CD for 10+ analytics applications, cutting deployment cycles 50%</li>
+                  <li>APIs: FastAPI modernization of legacy analytics codebases</li>
+                  <li>Data Quality: Governance standards across 20,000+ OSIsoft PI monitoring points</li>
                 </ul>
               </div>
 
@@ -60,10 +64,11 @@ const HomePage: React.FC = () => {
                 <div className="expertise-icon">💻</div>
                 <h3>Software Development</h3>
                 <ul>
-                  <li>API Development: FastAPI modernization with Swagger UI</li>
-                  <li>Data Visualization: Interactive Plotly Dash dashboards</li>
-                  <li>DevOps: CI/CD automation using GitHub Actions</li>
-                  <li>Cloud Architecture: Azure ML integration for model deployment</li>
+                  <li>Backend: FastAPI, Python, SQL — scalable REST APIs</li>
+                  <li>Frontend: React, TypeScript, Vite</li>
+                  <li>Visualization: Plotly Dash dashboards for 30+ stakeholders</li>
+                  <li>DevOps: GitHub Actions CI/CD, Docker, Azure cloud governance</li>
+                  <li>Current: Modernizing legacy .NET/C# app for UW Botanic Gardens</li>
                 </ul>
               </div>
             </div>
@@ -75,20 +80,20 @@ const HomePage: React.FC = () => {
             <h2 className="section-title">Technical Impact</h2>
             <div className="impact-grid">
               <div className="impact-item">
-                <h4>Energy Efficiency</h4>
-                <p>Delivered measurable cost reductions through ML-driven optimization at NIH's Central Utility Plant</p>
+                <h4>$2.2M</h4>
+                <p>Annual energy savings delivered through ML-driven optimization at NIH's Central Utility Plant</p>
               </div>
               <div className="impact-item">
-                <h4>Predictive Analytics</h4>
-                <p>Enabled proactive operational planning with 96-hour advance forecasting models</p>
+                <h4>93%</h4>
+                <p>Reduction in false positive maintenance alerts across 20,000+ monitored points</p>
               </div>
               <div className="impact-item">
-                <h4>System Reliability</h4>
-                <p>Improved uptime through anomaly detection and preventive maintenance strategies</p>
+                <h4>50% More Accurate</h4>
+                <p>96-hour cooling demand forecasting vs. legacy system, enabling proactive chiller sequencing</p>
               </div>
               <div className="impact-item">
-                <h4>Data Accessibility</h4>
-                <p>Streamlined data workflows and real-time decision-making capabilities</p>
+                <h4>83% Faster</h4>
+                <p>Data transfer speeds achieved through custom open-source migration tooling vs. vendor solution</p>
               </div>
             </div>
           </div>
@@ -102,42 +107,42 @@ const HomePage: React.FC = () => {
                 <h3>Machine Learning & AI</h3>
                 <div className="tech-tags">
                   <span className="tech-tag">Python</span>
-                  <span className="tech-tag">Scikit-learn</span>
                   <span className="tech-tag">TensorFlow</span>
-                  <span className="tech-tag">PyTorch</span>
+                  <span className="tech-tag">Scikit-learn</span>
                   <span className="tech-tag">XGBoost</span>
                   <span className="tech-tag">Prophet</span>
+                  <span className="tech-tag">LLMs</span>
                 </div>
               </div>
               <div className="tech-category">
                 <h3>Data Engineering</h3>
                 <div className="tech-tags">
-                  <span className="tech-tag">Azure</span>
-                  <span className="tech-tag">Synapse</span>
+                  <span className="tech-tag">Databricks</span>
                   <span className="tech-tag">Delta Lake</span>
-                  <span className="tech-tag">Apache Spark</span>
+                  <span className="tech-tag">Azure ML</span>
+                  <span className="tech-tag">OSIsoft PI</span>
                   <span className="tech-tag">SQL</span>
-                  <span className="tech-tag">ETL</span>
+                  <span className="tech-tag">pandas</span>
                 </div>
               </div>
               <div className="tech-category">
-                <h3>Computer Vision</h3>
-                <div className="tech-tags">
-                  <span className="tech-tag">OpenCV</span>
-                  <span className="tech-tag">YOLO</span>
-                  <span className="tech-tag">PIL</span>
-                  <span className="tech-tag">NumPy</span>
-                  <span className="tech-tag">Matplotlib</span>
-                </div>
-              </div>
-              <div className="tech-category">
-                <h3>Development & Deployment</h3>
+                <h3>Software & DevOps</h3>
                 <div className="tech-tags">
                   <span className="tech-tag">FastAPI</span>
-                  <span className="tech-tag">Plotly Dash</span>
-                  <span className="tech-tag">GitHub Actions</span>
+                  <span className="tech-tag">React</span>
+                  <span className="tech-tag">TypeScript</span>
                   <span className="tech-tag">Docker</span>
-                  <span className="tech-tag">Raspberry Pi</span>
+                  <span className="tech-tag">GitHub Actions</span>
+                  <span className="tech-tag">Azure</span>
+                </div>
+              </div>
+              <div className="tech-category">
+                <h3>Visualization & Reporting</h3>
+                <div className="tech-tags">
+                  <span className="tech-tag">Plotly</span>
+                  <span className="tech-tag">Dash</span>
+                  <span className="tech-tag">Neo4j</span>
+                  <span className="tech-tag">Knowledge Graphs</span>
                 </div>
               </div>
             </div>
@@ -157,8 +162,8 @@ const HomePage: React.FC = () => {
               <a href="https://linkedin.com/in/ian-edmundson-a0979a178" className="connect-link" target="_blank" rel="noopener noreferrer">
                 <span>LinkedIn</span>
               </a>
-              <a href="/books" className="connect-link">
-                <span>Book Reviews</span>
+              <a href="mailto:imedmundson@outlook.com" className="connect-link">
+                <span>Email</span>
               </a>
             </div>
           </div>

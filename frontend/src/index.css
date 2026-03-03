@@ -1,19 +1,66 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+:root {
+  /* Brand */
+  --color-primary: #667eea;
+  --color-primary-dark: #764ba2;
+  --color-primary-hover: #5a6fd8;
+  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 
-body {
+  /* Text */
+  --color-text-primary: #333333;
+  --color-text-secondary: #555555;
+  --color-text-muted: #666666;
+
+  /* Backgrounds */
+  --color-bg: #ffffff;
+  --color-bg-subtle: #f8f9fa;
+
+  /* Misc */
+  --color-border: rgba(0, 0, 0, 0.1);
+  --border-radius: 12px;
+  --transition: 0.3s ease;
+
+  /* Typography */
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  line-height: 1.5;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-.App {
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Text */
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #cbd5e1;
+  --color-text-muted: #94a3b8;
+
+  /* Backgrounds */
+  --color-bg: #0f172a;
+  --color-bg-subtle: #1e293b;
+
+  /* Misc */
+  --color-border: rgba(255, 255, 255, 0.1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
   min-height: 100vh;
+  color: var(--color-text-primary);
+  background-color: var(--color-bg);
+}
+
+#root {
+  width: 100%;
 }
 
 a {
