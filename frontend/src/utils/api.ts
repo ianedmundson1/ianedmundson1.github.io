@@ -1,89 +1,36 @@
 import type { EmotionApiResponse } from '../types/emotion';
 
-// ...existing code...
-const fileToDataUrl = (file: File) =>
-  new Promise<string>((resolve, reject) => {
-    const r = new FileReader();
-    r.onload = () => resolve(r.result as string);
-    r.onerror = reject;
-    r.readAsDataURL(file);
-  });
-
 /**
- * Convert image to 3D pixel array (height, width, channels) for MLflow model
- * Model expects shape: (48, 48, 3) - RGB image
+ * Helper to convert base64 data URL to Blob
+ * Needed for webcam captures to be sent as files
  */
-const imageToTensorArray = async (imageDataUrl: string): Promise<number[][][]> => {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      
-      if (!ctx) {
-        reject(new Error('Could not get canvas context'));
-        return;
-      }
-
-      // Model expects 48x48 RGB images
-      const targetWidth = 48;
-      const targetHeight = 48;
-      
-      canvas.width = targetWidth;
-      canvas.height = targetHeight;
-      
-      // Draw and resize image
-      ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
-      
-      // Get pixel data (RGBA format)
-      const imageData = ctx.getImageData(0, 0, targetWidth, targetHeight);
-      const pixels = imageData.data;
-      
-      // Convert to 3D array: [height][width][channels]
-      // Shape: (48, 48, 3) - RGB only (drop alpha channel)
-      const tensorArray: number[][][] = [];
-      
-      for (let y = 0; y < targetHeight; y++) {
-        const row: number[][] = [];
-        for (let x = 0; x < targetWidth; x++) {
-          const idx = (y * targetWidth + x) * 4;
-          // Normalize RGB values to [0, 1] range
-          const r = pixels[idx];
-          const g = pixels[idx + 1];
-          const b = pixels[idx + 2];
-          row.push([r, g, b]);
-        }
-        tensorArray.push(row);
-      }
-      
-      console.log(`Converted image to tensor shape: (${targetHeight}, ${targetWidth}, 3)`);
-      resolve(tensorArray);
-    };
-    
-    img.onerror = () => reject(new Error('Failed to load image'));
-    img.src = imageDataUrl;
-  });
+const dataURItoBlob = (dataURI: string) => {
+  const byteString = atob(dataURI.split(',')[1]);
+  const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+  const ab = new ArrayBuffer(byteString.length);
+  const ia = new Uint8Array(ab);
+  for (let i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i);
+  }
+  return new Blob([ab], { type: mimeString });
 };
 
-export const analyzeEmotionBase64 = async (imageDataUrl: string): Promise<EmotionApiResponse> => {
+/**
+ * Analyzes emotion from a file object
+ * Sends the file to the Python backend for processing and inference
+ */
+export const analyzeEmotion = async (imageFile: File): Promise<EmotionApiResponse> => {
   try {
-    console.log('Converting image to tensor array...');
-    const tensorArray = await imageToTensorArray(imageDataUrl);
-    
-    // MLflow expects: {"inputs": [tensor_data]}
-    // The outer array is for batch dimension
-    // Model signature: Tensor('float32', (-1, 48, 48, 3))
-    const payload = {
-      inputs: [tensorArray]  // Batch of 1 image
-    };
-    
-    console.log('Sending tensor to /api/invocations');
-    
-    const res = await fetch('/api/invocations', {
+    const formData = new FormData();
+    formData.append('file', imageFile);
+
+    console.log('Sending image to backend /api/emotion_classification');
+
+    const res = await fetch('/api/emotion_classification', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
+      // Note: Do NOT set Content-Type header when sending FormData
+      // The browser automatically sets it to multipart/form-data with the boundary
+      body: formData,
     });
 
     if (!res.ok) {
@@ -93,7 +40,7 @@ export const analyzeEmotionBase64 = async (imageDataUrl: string): Promise<Emotio
       let errorMessage: string;
       try {
         const errorJson = JSON.parse(errorText);
-        errorMessage = errorJson.message || errorJson.error || errorText;
+        errorMessage = errorJson.detail || errorJson.message || errorText;
       } catch {
         errorMessage = errorText;
       }
@@ -102,10 +49,12 @@ export const analyzeEmotionBase64 = async (imageDataUrl: string): Promise<Emotio
     }
 
     const json = await res.json();
-    console.log('API Response:', json);
+    console.log('Backend Response:', json);
     
-    // Handle different response formats from MLflow
+    // The backend returns the raw Databricks response
+    // Handle different response formats (predictions is standard for Databricks)
     const data = json.predictions ?? json.outputs ?? json;
+    
     return { success: true, data };
     
   } catch (error) {
@@ -117,7 +66,22 @@ export const analyzeEmotionBase64 = async (imageDataUrl: string): Promise<Emotio
   }
 };
 
-export const analyzeEmotion = async (imageFile: File): Promise<EmotionApiResponse> => {
-  const dataUrl = await fileToDataUrl(imageFile);
-  return analyzeEmotionBase64(dataUrl);
+/**
+ * Analyzes emotion from a base64 string (e.g. webcam)
+ * Converts base64 to file and reuses the main function
+ */
+export const analyzeEmotionBase64 = async (imageDataUrl: string): Promise<EmotionApiResponse> => {
+  try {
+    // Convert base64 to Blob/File so we can send it to the file upload endpoint
+    const blob = dataURItoBlob(imageDataUrl);
+    const file = new File([blob], "webcam-capture.jpg", { type: "image/jpeg" });
+    
+    return analyzeEmotion(file);
+  } catch (error) {
+    console.error('Error converting base64 to file:', error);
+    return {
+      success: false,
+      error: 'Failed to process image data'
+    };
+  }
 };

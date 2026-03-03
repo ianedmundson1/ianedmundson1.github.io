@@ -1,5 +1,5 @@
 import React from 'react';
-import Navigation from '../Navigation/Navigation';
+import Navigation from '../../components/Navigation/Navigation';
 import './ComputerVisionPage.css';
 
 const ComputerVisionPage: React.FC = () => {

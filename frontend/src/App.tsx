@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import HomePage from './components/HomePage';
-import ProjectsPage from './components/ProjectsPage';
-import ComputerVisionPage from './components/ComputerVisionPage';
+import HomePage from './pages/HomePage';
+import ProjectsPage from './pages/ProjectsPage';
+import ComputerVisionPage from './pages/ComputerVisionPage';
 import MITDataSciencePage from './pages/MITDataSciencePage/MITDataSciencePage';
 import './App.css';
 
