@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from 'react';
+import { useRef, useCallback } from 'react';
 import Webcam from 'react-webcam';
 
 interface CameraCaptureProps {
@@ -6,7 +6,7 @@ interface CameraCaptureProps {
   onCancel: () => void;
 }
 
-const CameraCapture: React.FC<CameraCaptureProps> = ({ onCapture, onCancel }) => {
+const CameraCapture = ({ onCapture, onCancel }: CameraCaptureProps) => {
   const webcamRef = useRef<Webcam>(null);
 
   const capture = useCallback(() => {
@@ -17,18 +17,27 @@ const CameraCapture: React.FC<CameraCaptureProps> = ({ onCapture, onCancel }) =>
   }, [onCapture]);
 
   return (
-    <div className="camera-container">
+    <div className="camera-container" role="region" aria-label="Camera capture">
       <Webcam
         audio={false}
         ref={webcamRef}
         screenshotFormat="image/jpeg"
         className="webcam"
+        aria-label="Live camera feed"
       />
       <div className="camera-controls">
-        <button className="capture-button primary" onClick={capture}>
-          📸 Capture Photo
+        <button
+          className="capture-button primary"
+          onClick={capture}
+          aria-label="Capture photo from camera"
+        >
+          <span aria-hidden="true">📸</span> Capture Photo
         </button>
-        <button className="capture-button secondary" onClick={onCancel}>
+        <button
+          className="capture-button secondary"
+          onClick={onCancel}
+          aria-label="Cancel and return to options"
+        >
           Cancel
         </button>
       </div>

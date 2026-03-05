@@ -1,96 +1,114 @@
-import React, { useRef, useState } from 'react';
+import { useRef, useState, useCallback, type ChangeEvent, type DragEvent } from 'react';
 
 interface ImageUploadProps {
   onUpload: (imageSrc: string) => void;
   onCancel: () => void;
 }
 
-const ImageUpload: React.FC<ImageUploadProps> = ({ onUpload, onCancel }) => {
+const ACCEPTED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+
+const ImageUpload = ({ onUpload, onCancel }: ImageUploadProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [dragOver, setDragOver] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [fileError, setFileError] = useState<string | null>(null);
 
-  const handleFileSelect = (file: File) => {
-    if (file && file.type.startsWith('image/')) {
+  const handleFileSelect = useCallback((file: File) => {
+    if (file && ACCEPTED_TYPES.includes(file.type)) {
+      setFileError(null);
       const reader = new FileReader();
-      reader.onload = (e) => {
-        const result = e.target?.result as string;
-        setPreviewUrl(result);
-      };
+      reader.onload = (e) => setPreviewUrl(e.target?.result as string);
       reader.readAsDataURL(file);
     } else {
-      alert('Please select a valid image file');
+      setFileError('Please select a valid image file (JPG, PNG, GIF, or WebP).');
     }
-  };
+  }, []);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      handleFileSelect(file);
-    }
-  };
+  const handleFileChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+      if (file) handleFileSelect(file);
+    },
+    [handleFileSelect],
+  );
 
-  const handleDragOver = (e: React.DragEvent) => {
+  const handleDragOver = useCallback((e: DragEvent) => {
     e.preventDefault();
     setDragOver(true);
-  };
+  }, []);
 
-  const handleDragLeave = (e: React.DragEvent) => {
+  const handleDragLeave = useCallback((e: DragEvent) => {
     e.preventDefault();
     setDragOver(false);
-  };
+  }, []);
 
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    setDragOver(false);
-    
-    const files = e.dataTransfer.files;
-    if (files.length > 0) {
-      handleFileSelect(files[0]);
-    }
-  };
+  const handleDrop = useCallback(
+    (e: DragEvent) => {
+      e.preventDefault();
+      setDragOver(false);
+      const files = e.dataTransfer.files;
+      if (files.length > 0) handleFileSelect(files[0]);
+    },
+    [handleFileSelect],
+  );
 
   return (
-    <div className="image-upload-container">
-      <h3>Upload an Image</h3>
-      
+    <div className="image-upload-container" role="region" aria-label="Image upload">
+      <h3 id="upload-heading">Upload an Image</h3>
+
+      {fileError && (
+        <p className="error-message" role="alert">
+          {fileError}
+        </p>
+      )}
+
       {!previewUrl ? (
         <div
-          className={`upload-area ${dragOver ? 'drag-over' : ''}`}
+          className={`upload-area${dragOver ? ' drag-over' : ''}`}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
           onClick={() => fileInputRef.current?.click()}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              fileInputRef.current?.click();
+            }
+          }}
+          role="button"
+          tabIndex={0}
+          aria-labelledby="upload-heading"
         >
           <div className="upload-content">
-            <div className="upload-icon">📁</div>
-            <p>Drag & drop an image here</p>
+            <div className="upload-icon" aria-hidden="true">📁</div>
+            <p>Drag &amp; drop an image here</p>
             <p className="upload-subtext">or click to browse</p>
-            <p className="file-types">Supports: JPG, PNG, GIF</p>
+            <p className="file-types">Supports: JPG, PNG, GIF, WebP</p>
           </div>
           <input
             ref={fileInputRef}
             type="file"
             accept="image/*"
             onChange={handleFileChange}
-            style={{ display: 'none' }}
+            className="sr-only"
+            aria-label="Choose image file"
           />
         </div>
       ) : (
         <div className="image-preview">
-          <img 
-            src={previewUrl} 
-            alt="Preview" 
+          <img
+            src={previewUrl}
+            alt="Preview of selected file"
             className="preview-image"
           />
           <div className="preview-actions">
-            <button 
+            <button
               onClick={() => onUpload(previewUrl)}
               className="upload-button primary"
             >
               Analyze This Image
             </button>
-            <button 
+            <button
               onClick={() => setPreviewUrl(null)}
               className="upload-button secondary"
             >
@@ -101,9 +119,10 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onUpload, onCancel }) => {
       )}
 
       <div className="action-buttons">
-        <button 
+        <button
           onClick={onCancel}
           className="upload-button cancel"
+          aria-label="Cancel upload and return to options"
         >
           Cancel
         </button>

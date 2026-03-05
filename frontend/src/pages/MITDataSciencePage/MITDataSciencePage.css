@@ -1,16 +1,60 @@
+/* ==============================================
+   MIT Data Science Page — scoped custom properties
+   ============================================== */
 .mit-data-science-page {
+  --mit-max-w: 1200px;
+  --mit-demo-max-w: 600px;
+  --mit-upload-max-w: 500px;
+  --mit-media-max-w: 480px;
+  --mit-hero-padding: 4rem 0;
+  --mit-section-padding: 4rem 0;
+  --mit-badge-bg: rgba(255, 255, 255, 0.2);
+  --mit-badge-radius: 20px;
+  --mit-color-success: #28a745;
+  --mit-color-success-hover: #218838;
+  --mit-color-success-bg: #d4edda;
+  --mit-color-success-border: #c3e6cb;
+  --mit-color-success-text: #155724;
+  --mit-color-danger-bg: #f8d7da;
+  --mit-color-danger-border: #f5c6cb;
+  --mit-color-danger-text: #721c24;
+  --mit-color-secondary: #6c757d;
+  --mit-color-secondary-hover: #545b62;
+  --mit-color-interactive: #dc3545;
+
   min-height: 100vh;
   background-color: var(--color-bg-subtle);
 }
 
+/* ---------- Skip-link ---------- */
+.mit-data-science-page .skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  z-index: 1000;
+  padding: 0.75rem 1.5rem;
+  background: var(--color-primary);
+  color: #fff;
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.mit-data-science-page .skip-link:focus {
+  top: 1rem;
+}
+
+/* ==============================================
+   Hero
+   ============================================== */
 .project-hero {
   background: var(--gradient-primary);
-  color: white;
-  padding: 4rem 0;
+  color: #fff;
+  padding: var(--mit-hero-padding);
 }
 
 .hero-container {
-  max-width: 1200px;
+  max-width: var(--mit-max-w);
   margin: 0 auto;
   padding: 0 2rem;
   text-align: center;
@@ -24,19 +68,19 @@
 }
 
 .project-badge {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--mit-badge-bg);
   padding: 0.5rem 1rem;
-  border-radius: 20px;
+  border-radius: var(--mit-badge-radius);
   font-size: 0.9rem;
   font-weight: 500;
 }
 
 .project-badge.interactive {
-  background-color: #dc3545;
-  animation: pulse 2s infinite;
+  background-color: var(--mit-color-interactive);
+  animation: mit-pulse 2s infinite;
 }
 
-@keyframes pulse {
+@keyframes mit-pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.7; }
 }
@@ -50,17 +94,20 @@
 .hero-subtitle {
   font-size: 1.2rem;
   opacity: 0.9;
-  max-width: 600px;
+  max-width: var(--mit-demo-max-w);
   margin: 0 auto;
 }
 
+/* ==============================================
+   Interactive demo
+   ============================================== */
 .interactive-demo {
-  padding: 4rem 0;
+  padding: var(--mit-section-padding);
   background: var(--color-bg);
 }
 
 .section-container {
-  max-width: 1200px;
+  max-width: var(--mit-max-w);
   margin: 0 auto;
   padding: 0 2rem;
 }
@@ -72,7 +119,7 @@
   color: var(--color-text-primary);
 }
 
-.interactive-demo p {
+.demo-description {
   text-align: center;
   font-size: 1.1rem;
   color: var(--color-text-muted);
@@ -80,14 +127,20 @@
 }
 
 .demo-container {
-  max-width: 600px;
+  max-width: var(--mit-demo-max-w);
   margin: 0 auto;
 }
 
-.demo-start {
-  text-align: center;
+/* ---------- Input options ---------- */
+.input-options {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
+/* ---------- Shared button styles ---------- */
 .capture-button {
   padding: 1rem 2rem;
   font-size: 1.1rem;
@@ -98,9 +151,14 @@
   margin: 0.5rem;
 }
 
+.capture-button:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
 .capture-button.primary {
   background: var(--color-primary);
-  color: white;
+  color: #fff;
 }
 
 .capture-button.primary:hover {
@@ -109,23 +167,26 @@
 }
 
 .capture-button.secondary {
-  background: #6c757d;
-  color: white;
+  background: var(--mit-color-secondary);
+  color: #fff;
 }
 
 .capture-button.secondary:hover {
-  background: #545b62;
+  background: var(--mit-color-secondary-hover);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
 }
 
+/* ==============================================
+   Camera
+   ============================================== */
 .camera-container {
   text-align: center;
 }
 
 .webcam {
   width: 100%;
-  max-width: 480px;
+  max-width: var(--mit-media-max-w);
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -134,20 +195,15 @@
   margin-top: 1rem;
 }
 
-.captured-image-container {
-  text-align: center;
-}
-
+/* ==============================================
+   Captured image & analysis
+   ============================================== */
 .captured-image {
   width: 100%;
-  max-width: 480px;
+  max-width: var(--mit-media-max-w);
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin-bottom: 1rem;
-}
-
-.analysis-controls {
-  margin-top: 1rem;
 }
 
 .analyze-button {
@@ -160,50 +216,56 @@
   transition: var(--transition);
 }
 
+.analyze-button:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
 .analyze-button.primary {
-  background: #28a745;
-  color: white;
+  background: var(--mit-color-success);
+  color: #fff;
 }
 
 .analyze-button.primary:hover {
-  background: #218838;
+  background: var(--mit-color-success-hover);
 }
 
 .analyze-button.secondary {
-  background: #6c757d;
-  color: white;
+  background: var(--mit-color-secondary);
+  color: #fff;
 }
 
+/* ---------- Spinner ---------- */
 .analyzing {
   text-align: center;
   padding: 2rem;
 }
 
 .spinner {
-  border: 4px solid #f3f3f3;
+  border: 4px solid var(--color-bg-subtle);
   border-top: 4px solid var(--color-primary);
   border-radius: 50%;
   width: 50px;
   height: 50px;
-  animation: spin 1s linear infinite;
+  animation: mit-spin 1s linear infinite;
   margin: 0 auto 1rem;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+@keyframes mit-spin {
+  to { transform: rotate(360deg); }
 }
 
+/* ---------- Emotion result ---------- */
 .emotion-result {
-  background: #d4edda;
-  border: 1px solid #c3e6cb;
+  background: var(--mit-color-success-bg);
+  border: 1px solid var(--mit-color-success-border);
   border-radius: 8px;
   padding: 2rem;
   margin-top: 1rem;
 }
 
 .emotion-result h3 {
-  color: #155724;
+  color: var(--mit-color-success-text);
   margin-bottom: 1rem;
 }
 
@@ -217,27 +279,31 @@
 
 .emotion-label {
   font-size: 2rem;
-  font-weight: bold;
-  color: #155724;
+  font-weight: 700;
+  color: var(--mit-color-success-text);
   text-transform: capitalize;
 }
 
 .confidence {
   font-size: 1.1rem;
-  color: #6c757d;
+  color: var(--mit-color-secondary);
 }
 
+/* ---------- Error ---------- */
 .error-message {
-  background: #f8d7da;
-  border: 1px solid #f5c6cb;
+  background: var(--mit-color-danger-bg);
+  border: 1px solid var(--mit-color-danger-border);
   border-radius: 8px;
   padding: 1rem;
   margin-top: 1rem;
-  color: #721c24;
+  color: var(--mit-color-danger-text);
 }
 
+/* ==============================================
+   Project details (unused but kept for future)
+   ============================================== */
 .project-details {
-  padding: 4rem 0;
+  padding: var(--mit-section-padding);
   background: var(--color-bg-subtle);
 }
 
@@ -289,7 +355,7 @@
   background: var(--color-bg-subtle);
   color: var(--color-text-secondary);
   padding: 0.5rem 1rem;
-  border-radius: 20px;
+  border-radius: var(--mit-badge-radius);
   font-size: 0.9rem;
   font-weight: 500;
 }
@@ -303,7 +369,7 @@
   display: inline-block;
   padding: 1rem 2rem;
   background: var(--color-primary);
-  color: white;
+  color: #fff;
   text-decoration: none;
   border-radius: 8px;
   font-weight: 500;
@@ -315,21 +381,18 @@
   transform: translateY(-2px);
 }
 
-/* Input options */
-
-.input-options {
-  display: flex;
-  gap: 2rem;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
+.project-link:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
-/* Image Upload Styles */
+/* ==============================================
+   Image upload
+   ============================================== */
 .image-upload-container {
   text-align: center;
   width: 100%;
-  max-width: 500px;
+  max-width: var(--mit-upload-max-w);
 }
 
 .image-upload-container h3 {
@@ -347,7 +410,8 @@
   margin-bottom: 2rem;
 }
 
-.upload-area:hover {
+.upload-area:hover,
+.upload-area:focus-visible {
   border-color: var(--color-primary);
   background: rgba(102, 126, 234, 0.08);
 }
@@ -415,23 +479,28 @@
   transition: var(--transition);
 }
 
+.upload-button:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
 .upload-button.primary {
-  background: #28a745;
-  color: white;
+  background: var(--mit-color-success);
+  color: #fff;
 }
 
 .upload-button.primary:hover {
-  background: #218838;
+  background: var(--mit-color-success-hover);
   transform: translateY(-1px);
 }
 
 .upload-button.secondary {
-  background: #6c757d;
-  color: white;
+  background: var(--mit-color-secondary);
+  color: #fff;
 }
 
 .upload-button.secondary:hover {
-  background: #545b62;
+  background: var(--mit-color-secondary-hover);
 }
 
 .upload-button.cancel {
@@ -449,6 +518,9 @@
   margin-top: 1rem;
 }
 
+/* ==============================================
+   Responsive
+   ============================================== */
 @media (max-width: 768px) {
   .hero-title {
     font-size: 2rem;
@@ -483,5 +555,18 @@
 
   .upload-button {
     width: 100%;
+  }
+}
+
+/* ==============================================
+   Reduced motion
+   ============================================== */
+@media (prefers-reduced-motion: reduce) {
+  .mit-data-science-page *,
+  .mit-data-science-page *::before,
+  .mit-data-science-page *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
