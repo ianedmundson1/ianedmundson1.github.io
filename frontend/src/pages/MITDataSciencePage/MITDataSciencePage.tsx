@@ -3,7 +3,7 @@ import Navigation from '../../components/Navigation/Navigation';
 import CameraCapture from './components/CameraCapture';
 import EmotionDetector from './components/EmotionDetector';
 import ImageUpload from './components/ImageUpload';
-import './MITDataSciencePage.css';
+import styles from './MITDataSciencePage.module.css';
 
 /* -------------------------------------------------- */
 /*  Types                                              */
@@ -41,7 +41,7 @@ const MITDataSciencePage = () => {
   }, []);
 
   return (
-    <div className="mit-data-science-page">
+    <div className={styles.mitDataSciencePage}>
       <a href="#demo" className="skip-link">
         Skip to interactive demo
       </a>
@@ -50,24 +50,24 @@ const MITDataSciencePage = () => {
 
       <main className="main-content">
         {/* ---------- Hero ---------- */}
-        <section className="project-hero" aria-labelledby="mit-hero-title">
-          <div className="hero-container">
-            <div className="project-badges" aria-hidden="true">
+        <section className={styles.projectHero} aria-labelledby="mit-hero-title">
+          <div className={styles.heroContainer}>
+            <div className={styles.projectBadges} aria-hidden="true">
               {BADGES.map((b) => (
                 <span
                   key={b.label}
-                  className={`project-badge${b.variant ? ` ${b.variant}` : ''}`}
+                  className={`${styles.projectBadge}${b.variant ? ` ${styles[b.variant]}` : ''}`}
                 >
                   {b.label}
                 </span>
               ))}
             </div>
 
-            <h1 id="mit-hero-title" className="hero-title">
+            <h1 id="mit-hero-title" className={styles.heroTitle}>
               MIT Applied Data Science
             </h1>
 
-            <p className="hero-subtitle">
+            <p className={styles.heroSubtitle}>
               Facial Emotion Detection using Deep Learning and Transfer Learning
             </p>
           </div>
@@ -76,28 +76,28 @@ const MITDataSciencePage = () => {
         {/* ---------- Interactive demo ---------- */}
         <section
           id="demo"
-          className="interactive-demo"
+          className={styles.interactiveDemo}
           aria-labelledby="demo-heading"
         >
           <div className="section-container">
             <h2 id="demo-heading">Try the Emotion Detection Model</h2>
-            <p className="demo-description">
+            <p className={styles.demoDescription}>
               Take a photo or upload an image to see how the trained model
               classifies facial expressions.
             </p>
 
-            <div className="demo-container">
+            <div className={styles.demoContainer}>
               {mode === 'idle' && (
-                <div className="input-options">
+                <div className={styles.inputOptions}>
                   <button
-                    className="capture-button primary"
+                    className={`${styles.captureButton} ${styles.primary}`}
                     onClick={() => setMode('camera')}
                     aria-label="Open camera to capture a photo"
                   >
                     <span aria-hidden="true">📸</span> Use Camera
                   </button>
                   <button
-                    className="capture-button secondary"
+                    className={`${styles.captureButton} ${styles.secondary}`}
                     onClick={() => setMode('upload')}
                     aria-label="Upload an image file"
                   >

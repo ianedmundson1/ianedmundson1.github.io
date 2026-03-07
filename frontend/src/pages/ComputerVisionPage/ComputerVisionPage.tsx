@@ -1,41 +1,41 @@
 import React from 'react';
 import Navigation from '../../components/Navigation/Navigation';
-import './ComputerVisionPage.css';
+import styles from './ComputerVisionPage.module.css';
 
 const ComputerVisionPage: React.FC = () => {
   return (
-    <div className="computer-vision-page">
+    <div className={styles.computerVisionPage}>
       <Navigation />
       <main className="main-content">
-        <section className="cv-hero">
-          <div className="hero-container">
-            <h1 className="hero-title">Computer Vision Projects</h1>
-            <p className="hero-subtitle">
+        <section className={styles.cvHero}>
+          <div className={styles.heroContainer}>
+            <h1 className={styles.heroTitle}>Computer Vision Projects</h1>
+            <p className={styles.heroSubtitle}>
               Real-time computer vision applications using OpenCV, deep learning, and image processing
             </p>
           </div>
         </section>
 
-        <section className="cv-projects">
-          <div className="section-container">
-            <div className="projects-list">
+        <section className={styles.cvProjects}>
+          <div className={styles.sectionContainer}>
+            <div className={styles.projectsList}>
               
-              <div className="project-item">
-                <div className="project-content">
-                  <div className="project-info">
+              <div className={styles.projectItem}>
+                <div className={styles.projectContent}>
+                  <div className={styles.projectInfo}>
                     <h2>Facial Detection System</h2>
-                    <p className="project-summary">
+                    <p className={styles.projectSummary}>
                       Real-time face detection and emotion recognition system using deep learning models 
                       and OpenCV for live video processing with high accuracy and performance.
                     </p>
-                    <div className="project-tech">
-                      <span className="tech-badge">OpenCV</span>
-                      <span className="tech-badge">Python</span>
-                      <span className="tech-badge">Deep Learning</span>
-                      <span className="tech-badge">Real-time Processing</span>
+                    <div className={styles.projectTech}>
+                      <span className={styles.techBadge}>OpenCV</span>
+                      <span className={styles.techBadge}>Python</span>
+                      <span className={styles.techBadge}>Deep Learning</span>
+                      <span className={styles.techBadge}>Real-time Processing</span>
                     </div>
-                    <div className="project-actions">
-                      <a href="/projects/computer-vision/facial-detection" className="btn btn-primary">
+                    <div className={styles.projectActions}>
+                      <a href="/projects/computer-vision/facial-detection" className={`${styles.btn} ${styles.btnPrimary}`}>
                         View Details
                       </a>
                     </div>
@@ -43,22 +43,22 @@ const ComputerVisionPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="project-item">
-                <div className="project-content">
-                  <div className="project-info">
+              <div className={styles.projectItem}>
+                <div className={styles.projectContent}>
+                  <div className={styles.projectInfo}>
                     <h2>Lane Detection Algorithm</h2>
-                    <p className="project-summary">
+                    <p className={styles.projectSummary}>
                       Advanced lane detection system for autonomous driving applications using computer vision 
                       and image processing techniques with robust performance in various conditions.
                     </p>
-                    <div className="project-tech">
-                      <span className="tech-badge">Computer Vision</span>
-                      <span className="tech-badge">Image Processing</span>
-                      <span className="tech-badge">OpenCV</span>
-                      <span className="tech-badge">Autonomous Vehicles</span>
+                    <div className={styles.projectTech}>
+                      <span className={styles.techBadge}>Computer Vision</span>
+                      <span className={styles.techBadge}>Image Processing</span>
+                      <span className={styles.techBadge}>OpenCV</span>
+                      <span className={styles.techBadge}>Autonomous Vehicles</span>
                     </div>
-                    <div className="project-actions">
-                      <a href="/projects/computer-vision/lane-detection" className="btn btn-primary">
+                    <div className={styles.projectActions}>
+                      <a href="/projects/computer-vision/lane-detection" className={`${styles.btn} ${styles.btnPrimary}`}>
                         View Details
                       </a>
                     </div>
@@ -66,22 +66,22 @@ const ComputerVisionPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="project-item">
-                <div className="project-content">
-                  <div className="project-info">
+              <div className={styles.projectItem}>
+                <div className={styles.projectContent}>
+                  <div className={styles.projectInfo}>
                     <h2>IoT Security Camera System</h2>
-                    <p className="project-summary">
+                    <p className={styles.projectSummary}>
                       Raspberry Pi-based security camera system with motion detection, cloud storage 
                       integration, and automated notifications for comprehensive surveillance.
                     </p>
-                    <div className="project-tech">
-                      <span className="tech-badge">Raspberry Pi</span>
-                      <span className="tech-badge">IoT</span>
-                      <span className="tech-badge">Motion Detection</span>
-                      <span className="tech-badge">Cloud Storage</span>
+                    <div className={styles.projectTech}>
+                      <span className={styles.techBadge}>Raspberry Pi</span>
+                      <span className={styles.techBadge}>IoT</span>
+                      <span className={styles.techBadge}>Motion Detection</span>
+                      <span className={styles.techBadge}>Cloud Storage</span>
                     </div>
-                    <div className="project-actions">
-                      <a href="/projects/computer-vision/security-camera" className="btn btn-primary">
+                    <div className={styles.projectActions}>
+                      <a href="/projects/computer-vision/security-camera" className={`${styles.btn} ${styles.btnPrimary}`}>
                         View Details
                       </a>
                     </div>

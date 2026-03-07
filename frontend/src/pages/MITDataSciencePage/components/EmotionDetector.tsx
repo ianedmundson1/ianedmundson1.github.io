@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { analyzeEmotionBase64 } from '../../../utils/api';
+import styles from '../MITDataSciencePage.module.css';
 
 interface EmotionDetectorProps {
   capturedImage: string;
@@ -75,30 +76,30 @@ const EmotionDetector = ({ capturedImage, onReset }: EmotionDetectorProps) => {
   }, [capturedImage]);
 
   return (
-    <div className="emotion-detector" role="region" aria-label="Emotion analysis results">
-      <div className="image-container">
+    <div className={styles.emotionDetector} role="region" aria-label="Emotion analysis results">
+      <div className={styles.imageContainer}>
         <img
           src={capturedImage}
           alt="Photo submitted for emotion analysis"
-          className="captured-image"
+          className={styles.capturedImage}
         />
       </div>
 
       {isAnalyzing && (
-        <div className="analyzing" aria-live="polite">
-          <div className="spinner" role="status" aria-label="Analyzing" />
+        <div className={styles.analyzing} aria-live="polite">
+          <div className={styles.spinner} role="status" aria-label="Analyzing" />
           <p>Analyzing facial expression…</p>
         </div>
       )}
 
       {!isAnalyzing && !error && prediction && (
-        <div className="emotion-result" aria-live="polite">
+        <div className={styles.emotionResult} aria-live="polite">
           <h3>Detected Emotion</h3>
-          <div className="emotion-display">
-            <div className="emotion-badge">
-              <span className="emotion-label">{prediction}</span>
+          <div className={styles.emotionDisplay}>
+            <div className={styles.emotionBadge}>
+              <span className={styles.emotionLabel}>{prediction}</span>
               <span
-                className="confidence-bar-container"
+                className={styles.confidenceBarContainer}
                 role="progressbar"
                 aria-valuenow={confidence}
                 aria-valuemin={0}
@@ -106,27 +107,27 @@ const EmotionDetector = ({ capturedImage, onReset }: EmotionDetectorProps) => {
                 aria-label={`${confidence}% confidence`}
               >
                 <div
-                  className="confidence-bar"
+                  className={styles.confidenceBar}
                   style={{ width: `${confidence}%` }}
                 />
               </span>
-              <span className="confidence-text">
+              <span className={styles.confidenceText}>
                 {confidence}% confidence
               </span>
             </div>
           </div>
-          <button className="analyze-button secondary" onClick={onReset}>
+          <button className={`${styles.analyzeButton} ${styles.secondary}`} onClick={onReset}>
             Try Another Image
           </button>
         </div>
       )}
 
       {error && (
-        <div className="error-message" role="alert">
+        <div className={styles.errorMessage} role="alert">
           <h3>Analysis Failed</h3>
           <p>{error}</p>
-          <div className="error-actions">
-            <button className="analyze-button secondary" onClick={onReset}>
+          <div className={styles.errorActions}>
+            <button className={`${styles.analyzeButton} ${styles.secondary}`} onClick={onReset}>
               Try Again
             </button>
           </div>

@@ -4,13 +4,13 @@ import HomePage from './pages/HomePage';
 import ProjectsPage from './pages/ProjectsPage';
 import ComputerVisionPage from './pages/ComputerVisionPage';
 import MITDataSciencePage from './pages/MITDataSciencePage/MITDataSciencePage';
-import './App.css';
+import styles from './App.module.css';
 
 function App() {
   return (
     <ThemeProvider>
     <Router>
-      <div className="App">
+      <div className={styles.App}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/projects" element={<ProjectsPage />} />

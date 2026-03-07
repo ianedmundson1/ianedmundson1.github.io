@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useCallback } from 'react';
 import Navigation from '../../components/Navigation/Navigation';
 import headshot from '../../assets/MEEBOSS_Hiring_Fest_Headshots_1-27-44.jpg';
-import './HomePage.css';
+import styles from './HomePage.module.css';
 
 /* -------------------------------------------------- */
 /*  Data                                               */
@@ -87,7 +87,7 @@ interface IconProps {
 
 const Icon: React.FC<IconProps> = ({ path, size = 20 }) => (
   <svg
-    className="connect-icon"
+    className={styles.connectIcon}
     viewBox="0 0 24 24"
     fill="currentColor"
     width={size}
@@ -101,19 +101,19 @@ const Icon: React.FC<IconProps> = ({ path, size = 20 }) => (
 /* -------------------------------------------------- */
 /*  Scroll-fade hook                                   */
 /* -------------------------------------------------- */
-function useFadeOnScroll() {
+function useFadeOnScroll(fadeClass: string, visibleClass: string) {
   const ref = useRef<HTMLDivElement>(null);
 
   const observe = useCallback(() => {
     const root = ref.current;
     if (!root) return;
 
-    const targets = root.querySelectorAll<HTMLElement>('.fade-section');
+    const targets = root.querySelectorAll<HTMLElement>(`.${fadeClass}`);
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
+            entry.target.classList.add(visibleClass);
             io.unobserve(entry.target); // stop observing once visible
           }
         });
@@ -122,7 +122,7 @@ function useFadeOnScroll() {
     );
     targets.forEach((t) => io.observe(t));
     return () => io.disconnect();
-  }, []);
+  }, [fadeClass, visibleClass]);
 
   useEffect(observe, [observe]);
 
@@ -133,10 +133,10 @@ function useFadeOnScroll() {
 /*  Component                                          */
 /* -------------------------------------------------- */
 const HomePage: React.FC = () => {
-  const wrapperRef = useFadeOnScroll();
+  const wrapperRef = useFadeOnScroll('fade-section', 'visible');
 
   return (
-    <div className="homepage" ref={wrapperRef}>
+    <div className={styles.homepage} ref={wrapperRef}>
       <a className="skip-link" href="#expertise">
         Skip to content
       </a>
@@ -145,52 +145,52 @@ const HomePage: React.FC = () => {
 
       <main className="main-content">
         {/* ---- Hero ---- */}
-        <header className="hero">
-          <div className="hero-container">
-            <div className="hero-text">
-              <div className="hero-badge" role="status">
-                <span className="hero-badge-dot" aria-hidden="true" />
+        <header className={styles.hero}>
+          <div className={styles.heroContainer}>
+            <div className={styles.heroText}>
+              <div className={styles.heroBadge} role="status">
+                <span className={styles.heroBadgeDot} aria-hidden="true" />
                 Open to opportunities
               </div>
-              <h1 className="hero-title">Ian Edmundson</h1>
-              <p className="hero-subtitle">Data Scientist & Software Engineer</p>
-              <p className="hero-description">
+              <h1 className={styles.heroTitle}>Ian Edmundson</h1>
+              <p className={styles.heroSubtitle}>Data Scientist & Software Engineer</p>
+              <p className={styles.heroDescription}>
                 Building analytics infrastructure and ML systems for federal
                 operations. NIH Director&apos;s Award recipient for forecasting that
                 protected critical infrastructure during a high-demand crisis
                 event.
               </p>
-              <div className="hero-actions">
-                <a href="/projects" className="btn btn-primary">
+              <div className={styles.heroActions}>
+                <a href="/projects" className={`${styles.btn} ${styles.btnPrimary}`}>
                   View Projects
                 </a>
-                <a href="#expertise" className="btn btn-secondary">
+                <a href="#expertise" className={`${styles.btn} ${styles.btnSecondary}`}>
                   My Expertise
                 </a>
               </div>
-              <p className="hero-award" role="note">
+              <p className={styles.heroAward} role="note">
                 <span aria-hidden="true">🏆</span> NIH Director&apos;s Award 2024
               </p>
             </div>
-            <div className="hero-photo">
-              <div className="hero-photo-ring" aria-hidden="true" />
+            <div className={styles.heroPhoto}>
+              <div className={styles.heroPhotoRing} aria-hidden="true" />
               <img src={headshot} alt="Ian Edmundson headshot" />
             </div>
           </div>
         </header>
 
         {/* ---- Expertise ---- */}
-        <section id="expertise" className="expertise-section fade-section" aria-labelledby="expertise-heading">
+        <section id="expertise" className={`${styles.expertiseSection} fade-section`} aria-labelledby="expertise-heading">
           <div className="section-container">
-            <h2 id="expertise-heading" className="section-title">Areas of Expertise</h2>
-            <p className="section-subtitle">
+            <h2 id="expertise-heading" className={styles.sectionTitle}>Areas of Expertise</h2>
+            <p className={styles.sectionSubtitle}>
               From raw data to production models — end-to-end ownership across
               the analytics stack.
             </p>
-            <div className="expertise-grid">
+            <div className={styles.expertiseGrid}>
               {EXPERTISE_CARDS.map((card) => (
-                <article key={card.title} className="expertise-card">
-                  <div className="expertise-icon" aria-hidden="true">{card.icon}</div>
+                <article key={card.title} className={styles.expertiseCard}>
+                  <div className={styles.expertiseIcon} aria-hidden="true">{card.icon}</div>
                   <h3>{card.title}</h3>
                   <ul>
                     {card.items.map((item) => (
@@ -204,15 +204,15 @@ const HomePage: React.FC = () => {
         </section>
 
         {/* ---- Impact ---- */}
-        <section className="impact-section fade-section" aria-labelledby="impact-heading">
+        <section className={`${styles.impactSection} fade-section`} aria-labelledby="impact-heading">
           <div className="section-container">
-            <h2 id="impact-heading" className="section-title">Technical Impact</h2>
-            <p className="section-subtitle">
+            <h2 id="impact-heading" className={styles.sectionTitle}>Technical Impact</h2>
+            <p className={styles.sectionSubtitle}>
               Measurable outcomes from data-driven solutions in production.
             </p>
-            <div className="impact-grid">
+            <div className={styles.impactGrid}>
               {IMPACT_ITEMS.map((item) => (
-                <div key={item.stat} className="impact-item">
+                <div key={item.stat} className={styles.impactItem}>
                   <h4>{item.stat}</h4>
                   <p>{item.description}</p>
                 </div>
@@ -222,19 +222,19 @@ const HomePage: React.FC = () => {
         </section>
 
         {/* ---- Technologies ---- */}
-        <section className="technologies-section fade-section" aria-labelledby="tech-heading">
+        <section className={`${styles.technologiesSection} fade-section`} aria-labelledby="tech-heading">
           <div className="section-container">
-            <h2 id="tech-heading" className="section-title">Technologies & Tools</h2>
-            <p className="section-subtitle">
+            <h2 id="tech-heading" className={styles.sectionTitle}>Technologies & Tools</h2>
+            <p className={styles.sectionSubtitle}>
               The stack I use to ship reliable, scalable analytics.
             </p>
-            <div className="tech-categories">
+            <div className={styles.techCategories}>
               {TECH_CATEGORIES.map((category) => (
-                <div key={category.title} className="tech-category">
+                <div key={category.title} className={styles.techCategory}>
                   <h3>{category.title}</h3>
-                  <div className="tech-tags">
+                  <div className={styles.techTags}>
                     {category.tags.map((tag) => (
-                      <span key={tag} className="tech-tag">{tag}</span>
+                      <span key={tag} className={styles.techTag}>{tag}</span>
                     ))}
                   </div>
                 </div>
@@ -244,19 +244,19 @@ const HomePage: React.FC = () => {
         </section>
 
         {/* ---- Connect ---- */}
-        <section className="connect-section fade-section" aria-labelledby="connect-heading">
+        <section className={`${styles.connectSection} fade-section`} aria-labelledby="connect-heading">
           <div className="section-container">
-            <h2 id="connect-heading" className="section-title">Connect With Me</h2>
-            <p className="connect-description">
+            <h2 id="connect-heading" className={styles.sectionTitle}>Connect With Me</h2>
+            <p className={styles.connectDescription}>
               I&apos;m always interested in discussing data science, machine learning,
               and innovative technology solutions. Let&apos;s connect!
             </p>
-            <div className="connect-links">
+            <div className={styles.connectLinks}>
               {CONNECT_LINKS.map((link) => (
                 <a
                   key={link.label}
                   href={link.href}
-                  className="connect-link"
+                  className={styles.connectLink}
                   {...(link.external && {
                     target: '_blank',
                     rel: 'noopener noreferrer',

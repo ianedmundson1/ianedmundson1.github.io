@@ -1,86 +1,19 @@
 /* ==========================================
-   ANIMATIONS
-   ========================================== */
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes gradient-shift {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-/* ==========================================
    CUSTOM PROPERTIES (local to this page)
    ========================================== */
 .projects-page {
-  --pp-accent: #667eea;
-  --pp-accent-secondary: #764ba2;
-  --pp-accent-tertiary: #f093fb;
-  --pp-gradient: linear-gradient(135deg, var(--pp-accent) 0%, var(--pp-accent-secondary) 50%, var(--pp-accent-tertiary) 100%);
-  --pp-accent-rgb: 102, 126, 234;
+  --pp-accent: var(--color-primary);
+  --pp-accent-secondary: var(--color-primary-dark);
+  --pp-accent-tertiary: var(--color-accent-tertiary);
+  --pp-gradient: var(--gradient-accent);
+  --pp-accent-rgb: var(--color-primary-rgb);
 
   min-height: 100vh;
   background-color: var(--color-bg-subtle);
 }
 
-/* ==========================================
-   SKIP LINK (accessibility)
-   ========================================== */
-.skip-link {
-  position: absolute;
-  top: -100%;
-  left: 1rem;
-  z-index: 1000;
-  padding: 0.75rem 1.5rem;
-  background: var(--pp-accent);
-  color: white;
-  border-radius: 0 0 8px 8px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: top 0.2s ease;
-}
-
-.skip-link:focus {
-  top: 0;
-}
-
-/* Screen-reader only utility */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-/* ==========================================
-   SCROLL FADE
-   ========================================== */
-.fade-section {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
-}
-
-.fade-section.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
+/* Respect reduced-motion preference */
 @media (prefers-reduced-motion: reduce) {
-  .fade-section {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-
   .projects-hero {
     animation: none;
   }
@@ -160,12 +93,6 @@
    ========================================== */
 .projects-overview {
   padding: 4rem 0;
-}
-
-.projects-overview .section-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
 }
 
 .project-categories {

@@ -1,4 +1,5 @@
 import { useRef, useState, useCallback, type ChangeEvent, type DragEvent } from 'react';
+import styles from '../MITDataSciencePage.module.css';
 
 interface ImageUploadProps {
   onUpload: (imageSrc: string) => void;
@@ -53,18 +54,18 @@ const ImageUpload = ({ onUpload, onCancel }: ImageUploadProps) => {
   );
 
   return (
-    <div className="image-upload-container" role="region" aria-label="Image upload">
+    <div className={styles.imageUploadContainer} role="region" aria-label="Image upload">
       <h3 id="upload-heading">Upload an Image</h3>
 
       {fileError && (
-        <p className="error-message" role="alert">
+        <p className={styles.errorMessage} role="alert">
           {fileError}
         </p>
       )}
 
       {!previewUrl ? (
         <div
-          className={`upload-area${dragOver ? ' drag-over' : ''}`}
+          className={`${styles.uploadArea}${dragOver ? ` ${styles.dragOver}` : ''}`}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
@@ -79,38 +80,38 @@ const ImageUpload = ({ onUpload, onCancel }: ImageUploadProps) => {
           tabIndex={0}
           aria-labelledby="upload-heading"
         >
-          <div className="upload-content">
-            <div className="upload-icon" aria-hidden="true">📁</div>
+          <div className={styles.uploadContent}>
+            <div className={styles.uploadIcon} aria-hidden="true">📁</div>
             <p>Drag &amp; drop an image here</p>
-            <p className="upload-subtext">or click to browse</p>
-            <p className="file-types">Supports: JPG, PNG, GIF, WebP</p>
+            <p className={styles.uploadSubtext}>or click to browse</p>
+            <p className={styles.fileTypes}>Supports: JPG, PNG, GIF, WebP</p>
           </div>
           <input
             ref={fileInputRef}
             type="file"
             accept="image/*"
             onChange={handleFileChange}
-            className="sr-only"
+            className={styles.srOnly}
             aria-label="Choose image file"
           />
         </div>
       ) : (
-        <div className="image-preview">
+        <div className={styles.imagePreview}>
           <img
             src={previewUrl}
             alt="Preview of selected file"
-            className="preview-image"
+            className={styles.previewImage}
           />
-          <div className="preview-actions">
+          <div className={styles.previewActions}>
             <button
               onClick={() => onUpload(previewUrl)}
-              className="upload-button primary"
+              className={`${styles.uploadButton} ${styles.primary}`}
             >
               Analyze This Image
             </button>
             <button
               onClick={() => setPreviewUrl(null)}
-              className="upload-button secondary"
+              className={`${styles.uploadButton} ${styles.secondary}`}
             >
               Choose Different Image
             </button>
@@ -118,10 +119,10 @@ const ImageUpload = ({ onUpload, onCancel }: ImageUploadProps) => {
         </div>
       )}
 
-      <div className="action-buttons">
+      <div className={styles.actionButtons}>
         <button
           onClick={onCancel}
-          className="upload-button cancel"
+          className={`${styles.uploadButton} ${styles.cancel}`}
           aria-label="Cancel upload and return to options"
         >
           Cancel

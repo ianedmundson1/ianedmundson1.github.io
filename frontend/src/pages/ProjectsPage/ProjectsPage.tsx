@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useCallback } from 'react';
 import Navigation from '../../components/Navigation/Navigation';
-import './ProjectsPage.css';
+import styles from './ProjectsPage.module.css';
 
 /* -------------------------------------------------- */
 /*  Data                                               */
@@ -112,19 +112,19 @@ const CATEGORIES: Category[] = [
 /* -------------------------------------------------- */
 /*  Scroll-fade hook                                   */
 /* -------------------------------------------------- */
-function useFadeOnScroll() {
+function useFadeOnScroll(fadeClass: string, visibleClass: string) {
   const ref = useRef<HTMLDivElement>(null);
 
   const observe = useCallback(() => {
     const root = ref.current;
     if (!root) return;
 
-    const targets = root.querySelectorAll<HTMLElement>('.fade-section');
+    const targets = root.querySelectorAll<HTMLElement>(`.${fadeClass}`);
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
+            entry.target.classList.add(visibleClass);
             io.unobserve(entry.target);
           }
         });
@@ -133,7 +133,7 @@ function useFadeOnScroll() {
     );
     targets.forEach((t) => io.observe(t));
     return () => io.disconnect();
-  }, []);
+  }, [fadeClass, visibleClass]);
 
   useEffect(observe, [observe]);
 
@@ -144,10 +144,10 @@ function useFadeOnScroll() {
 /*  Component                                          */
 /* -------------------------------------------------- */
 const ProjectsPage: React.FC = () => {
-  const wrapperRef = useFadeOnScroll();
+  const wrapperRef = useFadeOnScroll('fade-section', 'visible');
 
   return (
-    <div className="projects-page" ref={wrapperRef}>
+    <div className={styles.projectsPage} ref={wrapperRef}>
       <a className="skip-link" href="#projects-overview">
         Skip to content
       </a>
@@ -156,10 +156,10 @@ const ProjectsPage: React.FC = () => {
 
       <main className="main-content">
         {/* ---- Hero ---- */}
-        <header className="projects-hero">
-          <div className="hero-container">
-            <h1 className="hero-title">Projects</h1>
-            <p className="hero-subtitle">
+        <header className={styles.projectsHero}>
+          <div className={styles.heroContainer}>
+            <h1 className={styles.heroTitle}>Projects</h1>
+            <p className={styles.heroSubtitle}>
               Explore my work in data science, machine learning, and computer
               vision
             </p>
@@ -169,54 +169,54 @@ const ProjectsPage: React.FC = () => {
         {/* ---- Projects Overview ---- */}
         <section
           id="projects-overview"
-          className="projects-overview fade-section"
+          className={`${styles.projectsOverview} fade-section`}
           aria-labelledby="projects-overview-heading"
         >
           <h2 id="projects-overview-heading" className="sr-only">
             All Project Categories
           </h2>
           <div className="section-container">
-            <div className="project-categories">
+            <div className={styles.projectCategories}>
               {CATEGORIES.map((category) => (
                 <article
                   key={category.title}
-                  className="category-section fade-section"
+                  className={`${styles.categorySection} fade-section`}
                 >
-                  <h2 className="category-title">
-                    <span className="category-icon" aria-hidden="true">
+                  <h2 className={styles.categoryTitle}>
+                    <span className={styles.categoryIcon} aria-hidden="true">
                       {category.icon}
                     </span>
                     {category.title}
                   </h2>
-                  <p className="category-description">
+                  <p className={styles.categoryDescription}>
                     {category.description}
                   </p>
 
-                  <div className="projects-grid">
+                  <div className={styles.projectsGrid}>
                     {category.projects.map((project) => (
-                      <article key={project.title} className="project-card">
-                        <div className="project-header">
+                      <article key={project.title} className={styles.projectCard}>
+                        <div className={styles.projectHeader}>
                           <h3>{project.title}</h3>
-                          <div className="project-badges">
+                          <div className={styles.projectBadges}>
                             {project.badges.map((badge) => (
-                              <span key={badge} className="project-badge">
+                              <span key={badge} className={styles.projectBadge}>
                                 {badge}
                               </span>
                             ))}
                             {project.interactive && (
-                              <span className="project-badge interactive">
+                              <span className={`${styles.projectBadge} ${styles.interactive}`}>
                                 Interactive
                               </span>
                             )}
                           </div>
                         </div>
-                        <p className="project-description">
+                        <p className={styles.projectDescription}>
                           {project.description}
                         </p>
-                        <div className="project-links">
+                        <div className={styles.projectLinks}>
                           <a
                             href={project.link}
-                            className="project-link primary"
+                            className={`${styles.projectLink} ${styles.primary}`}
                             {...(project.external && {
                               target: '_blank',
                               rel: 'noopener noreferrer',
@@ -234,8 +234,8 @@ const ProjectsPage: React.FC = () => {
                     ))}
                   </div>
 
-                  <div className="category-footer">
-                    <a href={category.viewAllLink} className="view-all-link">
+                  <div className={styles.categoryFooter}>
+                    <a href={category.viewAllLink} className={styles.viewAllLink}>
                       {category.viewAllLabel} →
                     </a>
                   </div>

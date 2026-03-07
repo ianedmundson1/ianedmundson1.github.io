@@ -3,10 +3,6 @@
   background-color: var(--color-bg-subtle);
 }
 
-.main-content {
-  width: 100%;
-}
-
 .section-container {
   max-width: 1200px;
   margin: 0 auto;

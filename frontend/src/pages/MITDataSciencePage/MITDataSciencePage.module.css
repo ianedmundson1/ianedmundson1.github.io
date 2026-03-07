@@ -2,7 +2,6 @@
    MIT Data Science Page — scoped custom properties
    ============================================== */
 .mit-data-science-page {
-  --mit-max-w: 1200px;
   --mit-demo-max-w: 600px;
   --mit-upload-max-w: 500px;
   --mit-media-max-w: 480px;
@@ -26,21 +25,12 @@
   background-color: var(--color-bg-subtle);
 }
 
-/* ---------- Skip-link ---------- */
-.mit-data-science-page .skip-link {
-  position: absolute;
-  top: -100%;
-  left: 1rem;
-  z-index: 1000;
-  padding: 0.75rem 1.5rem;
-  background: var(--color-primary);
-  color: #fff;
+/* ---------- Skip-link override ---------- */
+.mit-data-science-page :global(.skip-link) {
   border-radius: var(--border-radius);
-  font-weight: 600;
-  text-decoration: none;
 }
 
-.mit-data-science-page .skip-link:focus {
+.mit-data-science-page :global(.skip-link):focus {
   top: 1rem;
 }
 
@@ -54,7 +44,7 @@
 }
 
 .hero-container {
-  max-width: var(--mit-max-w);
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 2rem;
   text-align: center;
@@ -104,12 +94,6 @@
 .interactive-demo {
   padding: var(--mit-section-padding);
   background: var(--color-bg);
-}
-
-.section-container {
-  max-width: var(--mit-max-w);
-  margin: 0 auto;
-  padding: 0 2rem;
 }
 
 .interactive-demo h2 {

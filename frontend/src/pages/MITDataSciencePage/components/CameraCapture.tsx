@@ -1,5 +1,6 @@
 import { useRef, useCallback } from 'react';
 import Webcam from 'react-webcam';
+import styles from '../MITDataSciencePage.module.css';
 
 interface CameraCaptureProps {
   onCapture: (imageSrc: string) => void;
@@ -17,24 +18,24 @@ const CameraCapture = ({ onCapture, onCancel }: CameraCaptureProps) => {
   }, [onCapture]);
 
   return (
-    <div className="camera-container" role="region" aria-label="Camera capture">
+    <div className={styles.cameraContainer} role="region" aria-label="Camera capture">
       <Webcam
         audio={false}
         ref={webcamRef}
         screenshotFormat="image/jpeg"
-        className="webcam"
+        className={styles.webcam}
         aria-label="Live camera feed"
       />
-      <div className="camera-controls">
+      <div className={styles.cameraControls}>
         <button
-          className="capture-button primary"
+          className={`${styles.captureButton} ${styles.primary}`}
           onClick={capture}
           aria-label="Capture photo from camera"
         >
           <span aria-hidden="true">📸</span> Capture Photo
         </button>
         <button
-          className="capture-button secondary"
+          className={`${styles.captureButton} ${styles.secondary}`}
           onClick={onCancel}
           aria-label="Cancel and return to options"
         >
