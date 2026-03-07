@@ -1,0 +1,140 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Install backend dependencies
+        run: uv sync
+
+  test:
+    if: github.ref == 'refs/heads/main' || github.event_name == 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    name: Test
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Run frontend tests
+        run: npm test
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Install backend dependencies
+        run: uv sync
+
+      - name: Run backend tests
+        run: .venv/bin/pytest tests/ -v
+
+  # ---------------------------------------------------------------
+  # Deploy to Azure Static Web Apps
+  # Uncomment when Azure Static Web Apps service is configured.
+  # ---------------------------------------------------------------
+  # deploy_azure:
+  #   if: github.ref == 'refs/heads/main'
+  #   needs: test
+  #   runs-on: ubuntu-latest
+  #   name: Deploy to Azure Static Web Apps
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #
+  #     - name: Set up Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: '22'
+  #         cache: 'npm'
+  #
+  #     - name: Install dependencies
+  #       run: npm ci
+  #
+  #     - name: Build frontend
+  #       run: npm run build
+  #
+  #     - name: Deploy
+  #       uses: Azure/static-web-apps-deploy@v1
+  #       with:
+  #         azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_RED_BEACH_08CDF741E }}
+  #         repo_token: ${{ secrets.GITHUB_TOKEN }}
+  #         action: "upload"
+  #         app_location: "backend/static/"
+  #         output_location: ""
+  #         skip_app_build: true
+
+  # ---------------------------------------------------------------
+  # Deploy to Databricks
+  # Uncomment when Databricks workspace is configured.
+  # Requires DATABRICKS_HOST and DATABRICKS_TOKEN secrets.
+  # ---------------------------------------------------------------
+  # deploy_databricks:
+  #   if: github.ref == 'refs/heads/main'
+  #   needs: test
+  #   runs-on: ubuntu-latest
+  #   name: Deploy to Databricks
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #
+  #     - name: Set up Python
+  #       uses: actions/setup-python@v5
+  #       with:
+  #         python-version: '3.11'
+  #
+  #     - name: Install Databricks CLI
+  #       run: pip install databricks-cli
+  #
+  #     - name: Deploy Databricks Bundle
+  #       env:
+  #         DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+  #         DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+  #       run: databricks bundle deploy --target prod
+
+
+
+
+
+
