@@ -88,8 +88,10 @@ async def post_emotion_classification(file: UploadFile = File(...)):
         # Convert to RGB (3 channels)
         image = image.convert('RGB')
         
-        # Convert to numpy array and normalize pixel values to [0, 1]
-        img_array = np.array(image).astype(np.float32)# / 255.0
+        # Convert to numpy array as float32.
+        # NOTE: The Databricks emotion model expects raw 0–255 float pixel values and performs any needed scaling internally,
+        # so we intentionally do NOT normalize here (the previous `/ 255.0` was disabled on purpose).
+        img_array = np.array(image).astype(np.float32)  # / 255.0
         
         # Add batch dimension: shape becomes (1, 48, 48, 3)
         input_data = np.expand_dims(img_array, axis=0)
@@ -108,6 +110,7 @@ async def post_emotion_classification(file: UploadFile = File(...)):
 static_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
 os.makedirs(static_dir, exist_ok=True)
 
+# Using a custom catch-all route below instead of StaticFiles mount for SPA routing.
 #app.mount("/", StaticFiles(directory=static_dir, html=True), name="static")
 
 # --- Catch-all for React Routes ---

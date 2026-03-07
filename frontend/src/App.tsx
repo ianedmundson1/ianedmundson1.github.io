@@ -1,15 +1,20 @@
+import { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
-import HomePage from './pages/HomePage';
-import ProjectsPage from './pages/ProjectsPage';
-import ComputerVisionPage from './pages/ComputerVisionPage';
-import MITDataSciencePage from './pages/MITDataSciencePage/MITDataSciencePage';
+import ErrorBoundary from './components/ErrorBoundary';
 import styles from './App.module.css';
+
+const HomePage = lazy(() => import('./pages/HomePage'));
+const ProjectsPage = lazy(() => import('./pages/ProjectsPage'));
+const ComputerVisionPage = lazy(() => import('./pages/ComputerVisionPage'));
+const MITDataSciencePage = lazy(() => import('./pages/MITDataSciencePage/MITDataSciencePage'));
 
 function App() {
   return (
     <ThemeProvider>
+    <ErrorBoundary>
     <Router>
+      <Suspense fallback={<div className={styles.loading}>Loading…</div>}>
       <div className={styles.App}>
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -18,7 +23,9 @@ function App() {
           <Route path="/projects/mit-data-science" element={<MITDataSciencePage />} />
         </Routes>
       </div>
+      </Suspense>
     </Router>
+    </ErrorBoundary>
     </ThemeProvider>
   );
 }

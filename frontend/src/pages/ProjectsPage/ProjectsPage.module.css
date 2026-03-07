@@ -212,7 +212,7 @@
 }
 
 .project-badge.interactive {
-  background: linear-gradient(135deg, #ff6b6b 0%, #dc3545 100%);
+  background: var(--gradient-danger);
   color: white;
   border-color: transparent;
   font-weight: 700;

@@ -66,7 +66,7 @@
 }
 
 .project-badge.interactive {
-  background-color: var(--mit-color-interactive);
+  background: linear-gradient(135deg, var(--mit-color-interactive), var(--mit-color-interactive));
   animation: mit-pulse 2s infinite;
 }
 

@@ -20,7 +20,7 @@
   --hp-accent-tertiary: var(--color-accent-tertiary);
   --hp-gradient: var(--gradient-accent);
   --hp-accent-rgb: var(--color-primary-rgb);
-  --hp-success: #4ade80;
+  --hp-success: var(--color-success);
 
   min-height: 100vh;
   background-color: var(--color-bg-subtle);

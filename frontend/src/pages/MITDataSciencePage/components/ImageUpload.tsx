@@ -91,7 +91,7 @@ const ImageUpload = ({ onUpload, onCancel }: ImageUploadProps) => {
             type="file"
             accept="image/*"
             onChange={handleFileChange}
-            className={styles.srOnly}
+            className="sr-only"
             aria-label="Choose image file"
           />
         </div>

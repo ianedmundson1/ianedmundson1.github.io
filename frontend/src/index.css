@@ -5,6 +5,10 @@
   --color-primary-hover: #5a6fd8;
   --color-primary-rgb: 102, 126, 234;
   --color-accent-tertiary: #f093fb;
+  --color-danger: #dc3545;
+  --color-danger-light: #ff6b6b;
+  --color-success: #4ade80;
+  --gradient-danger: linear-gradient(135deg, #ff6b6b 0%, #dc3545 100%);
   --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   --gradient-accent: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 50%, var(--color-accent-tertiary) 100%);
 

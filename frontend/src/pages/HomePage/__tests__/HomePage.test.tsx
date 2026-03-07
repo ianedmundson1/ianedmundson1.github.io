@@ -9,7 +9,7 @@ describe('HomePage', () => {
         <HomePage />
       </MemoryRouter>
     );
-    expect(screen.getByText('Ian Edmundson')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: 'Ian Edmundson' })).toBeInTheDocument();
   });
 
   it('renders the View Projects link', () => {

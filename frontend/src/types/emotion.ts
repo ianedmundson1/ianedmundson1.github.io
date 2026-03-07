@@ -1,5 +1,5 @@
 export interface EmotionResult {
-  emotion: 'happy' | 'sad' | 'neutral' | 'surprise';
+  emotion: string;
   confidence: number;
 }
 
