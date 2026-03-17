@@ -1,5 +1,5 @@
 import { useRef, useState, useCallback, type ChangeEvent, type DragEvent } from 'react';
-import styles from '../MITDataSciencePage.module.css';
+import styles from './ImageUpload.module.css';
 
 interface ImageUploadProps {
   onUpload: (imageSrc: string) => void;

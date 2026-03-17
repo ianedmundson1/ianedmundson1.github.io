@@ -1,5 +1,8 @@
-import React, { useEffect, useRef, useCallback } from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import Navigation from '../../components/Navigation/Navigation';
+import ConnectLinks from '../../components/ConnectLinks/ConnectLinks';
+import { useFadeOnScroll } from '../../hooks/useFadeOnScroll';
 import headshot from '../../assets/MEEBOSS_Hiring_Fest_Headshots_1-27-44.jpg';
 import styles from './HomePage.module.css';
 
@@ -8,37 +11,22 @@ import styles from './HomePage.module.css';
 /* -------------------------------------------------- */
 const EXPERTISE_CARDS = [
   {
-    icon: '🤖',
+    icon: '\uD83E\uDD16',
     title: 'Data Science & Machine Learning',
-    items: [
-      'Forecasting: 96-hour demand prediction systems (NARX, Prophet)',
-      'Anomaly Detection: Isolation Forest across 20,000+ monitoring points',
-      'MLOps: Cloud-native pipelines with managed feature tables on Databricks',
-      'NLP: Knowledge graph extraction from operator logs using LLMs',
-      'RAG: AI search over 1,000+ page compliance manuals',
-    ],
+    summary:
+      'Forecasting, anomaly detection, and NLP systems — from prototype to production on Databricks.',
   },
   {
-    icon: '🔧',
+    icon: '\uD83D\uDD27',
     title: 'Data Engineering',
-    items: [
-      'Platform: Databricks with Delta Live Tables processing 30M+ daily sensor readings',
-      'Migration: 6 years of sensor data (35,000+ points) to Azure Data Lake Gen2',
-      'Pipelines: CI/CD for 10+ analytics applications, cutting deployment cycles 50%',
-      'APIs: FastAPI modernization of legacy analytics codebases',
-      'Data Quality: Governance standards across 20,000+ OSIsoft PI monitoring points',
-    ],
+    summary:
+      'Scalable pipelines processing 30M+ daily readings, cloud migrations, and CI/CD for analytics apps.',
   },
   {
-    icon: '💻',
+    icon: '\uD83D\uDCBB',
     title: 'Software Development',
-    items: [
-      'Backend: FastAPI, Python, SQL — scalable REST APIs',
-      'Frontend: React, TypeScript, Vite',
-      'Visualization: Plotly Dash dashboards for 30+ stakeholders',
-      'DevOps: GitHub Actions CI/CD, Docker, Azure cloud governance',
-      'Current: Modernizing legacy .NET/C# app for UW Botanic Gardens',
-    ],
+    summary:
+      'Full-stack delivery with FastAPI, React, and TypeScript — from REST APIs to interactive dashboards.',
   },
 ] as const;
 
@@ -49,85 +37,32 @@ const IMPACT_ITEMS = [
   { stat: '83% Faster', description: 'Data transfer speeds achieved through custom open-source migration tooling vs. vendor solution' },
 ] as const;
 
-const TECH_CATEGORIES = [
-  { title: 'Machine Learning & AI', tags: ['Python', 'TensorFlow', 'Scikit-learn', 'XGBoost', 'Prophet', 'LLMs'] },
-  { title: 'Data Engineering', tags: ['Databricks', 'Delta Lake', 'Azure ML', 'OSIsoft PI', 'SQL', 'pandas'] },
-  { title: 'Software & DevOps', tags: ['FastAPI', 'React', 'TypeScript', 'Docker', 'GitHub Actions', 'Azure'] },
-  { title: 'Visualization & Reporting', tags: ['Plotly', 'Dash', 'Neo4j', 'Knowledge Graphs'] },
+const FEATURED_PROJECTS = [
+  {
+    title: 'MIT Applied Data Science — Emotion Detection',
+    badges: ['Machine Learning', 'Interactive Demo'],
+    description:
+      'Facial emotion classification using VGG16 transfer learning. Try the live demo with your webcam or upload an image.',
+    link: '/projects/mit-data-science',
+  },
+  {
+    title: 'Facial Detection System',
+    badges: ['OpenCV', 'Python'],
+    description:
+      'Real-time face detection and emotion recognition using deep learning models and OpenCV for live video processing.',
+    link: 'https://github.com/ianedmundson1/Facial-detection',
+    external: true,
+  },
+  {
+    title: 'Lane Detection Algorithm',
+    badges: ['Computer Vision', 'Autonomous Vehicles'],
+    description:
+      'Advanced lane detection for autonomous driving using computer vision and image processing techniques.',
+    link: 'https://github.com/ianedmundson1/Lane-detection',
+    external: true,
+  },
 ] as const;
 
-const CONNECT_LINKS = [
-  {
-    href: 'https://github.com/ianedmundson1',
-    label: 'GitHub',
-    external: true,
-    iconPath: 'M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12',
-  },
-  {
-    href: 'https://linkedin.com/in/ian-edmundson-a0979a178',
-    label: 'LinkedIn',
-    external: true,
-    iconPath: 'M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z',
-  },
-  {
-    href: 'mailto:imedmundson@outlook.com',
-    label: 'Email',
-    external: false,
-    iconPath: 'M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z',
-  },
-] as const;
-
-/* -------------------------------------------------- */
-/*  Icon component                                     */
-/* -------------------------------------------------- */
-interface IconProps {
-  path: string;
-  size?: number;
-}
-
-const Icon: React.FC<IconProps> = ({ path, size = 20 }) => (
-  <svg
-    className={styles.connectIcon}
-    viewBox="0 0 24 24"
-    fill="currentColor"
-    width={size}
-    height={size}
-    aria-hidden="true"
-  >
-    <path d={path} />
-  </svg>
-);
-
-/* -------------------------------------------------- */
-/*  Scroll-fade hook                                   */
-/* -------------------------------------------------- */
-function useFadeOnScroll(fadeClass: string, visibleClass: string) {
-  const ref = useRef<HTMLDivElement>(null);
-
-  const observe = useCallback(() => {
-    const root = ref.current;
-    if (!root) return;
-
-    const targets = root.querySelectorAll<HTMLElement>(`.${fadeClass}`);
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add(visibleClass);
-            io.unobserve(entry.target); // stop observing once visible
-          }
-        });
-      },
-      { threshold: 0.15 },
-    );
-    targets.forEach((t) => io.observe(t));
-    return () => io.disconnect();
-  }, [fadeClass, visibleClass]);
-
-  useEffect(observe, [observe]);
-
-  return ref;
-}
 
 /* -------------------------------------------------- */
 /*  Component                                          */
@@ -161,15 +96,23 @@ const HomePage: React.FC = () => {
                 event.
               </p>
               <div className={styles.heroActions}>
-                <a href="/projects" className={`${styles.btn} ${styles.btnPrimary}`}>
+                <Link to="/projects" className={`${styles.btn} ${styles.btnPrimary}`}>
                   View Projects
-                </a>
-                <a href="#expertise" className={`${styles.btn} ${styles.btnSecondary}`}>
-                  My Expertise
+                </Link>
+                <Link to="/about" className={`${styles.btn} ${styles.btnSecondary}`}>
+                  About Me
+                </Link>
+                <a
+                  href="/resume_ian_edmundson.pdf"
+                  className={`${styles.btn} ${styles.btnSecondary}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Resume (PDF)
                 </a>
               </div>
               <p className={styles.heroAward} role="note">
-                <span aria-hidden="true">🏆</span> NIH Director&apos;s Award 2024
+                <span aria-hidden="true">{'\uD83C\uDFC6'}</span> NIH Director&apos;s Award 2024
               </p>
             </div>
             <div className={styles.heroPhoto}>
@@ -179,7 +122,7 @@ const HomePage: React.FC = () => {
           </div>
         </header>
 
-        {/* ---- Expertise ---- */}
+        {/* ---- Expertise (condensed) ---- */}
         <section id="expertise" className={`${styles.expertiseSection} fade-section`} aria-labelledby="expertise-heading">
           <div className="section-container">
             <h2 id="expertise-heading" className={styles.sectionTitle}>Areas of Expertise</h2>
@@ -192,11 +135,7 @@ const HomePage: React.FC = () => {
                 <article key={card.title} className={styles.expertiseCard}>
                   <div className={styles.expertiseIcon} aria-hidden="true">{card.icon}</div>
                   <h3>{card.title}</h3>
-                  <ul>
-                    {card.items.map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
+                  <p>{card.summary}</p>
                 </article>
               ))}
             </div>
@@ -221,59 +160,50 @@ const HomePage: React.FC = () => {
           </div>
         </section>
 
-        {/* ---- Technologies ---- */}
-        <section className={`${styles.technologiesSection} fade-section`} aria-labelledby="tech-heading">
+        {/* ---- Featured Projects ---- */}
+        <section className={`${styles.featuredSection} fade-section`} aria-labelledby="featured-heading">
           <div className="section-container">
-            <h2 id="tech-heading" className={styles.sectionTitle}>Technologies & Tools</h2>
+            <h2 id="featured-heading" className={styles.sectionTitle}>Featured Projects</h2>
             <p className={styles.sectionSubtitle}>
-              The stack I use to ship reliable, scalable analytics.
+              A few highlights — see all my work on the projects page.
             </p>
-            <div className={styles.techCategories}>
-              {TECH_CATEGORIES.map((category) => (
-                <div key={category.title} className={styles.techCategory}>
-                  <h3>{category.title}</h3>
-                  <div className={styles.techTags}>
-                    {category.tags.map((tag) => (
-                      <span key={tag} className={styles.techTag}>{tag}</span>
+            <div className={styles.featuredGrid}>
+              {FEATURED_PROJECTS.map((project) => (
+                <article key={project.title} className={styles.featuredCard}>
+                  <div className={styles.featuredBadges}>
+                    {project.badges.map((badge) => (
+                      <span key={badge} className={styles.featuredBadge}>{badge}</span>
                     ))}
                   </div>
-                </div>
+                  <h3>{project.title}</h3>
+                  <p>{project.description}</p>
+                  {'external' in project && project.external ? (
+                    <a
+                      href={project.link}
+                      className={styles.featuredLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      View on GitHub &rarr;
+                    </a>
+                  ) : (
+                    <Link to={project.link} className={styles.featuredLink}>
+                      View Project &rarr;
+                    </Link>
+                  )}
+                </article>
               ))}
+            </div>
+            <div className={styles.featuredFooter}>
+              <Link to="/projects" className={styles.viewAllBtn}>
+                View All Projects &rarr;
+              </Link>
             </div>
           </div>
         </section>
 
         {/* ---- Connect ---- */}
-        <section className={`${styles.connectSection} fade-section`} aria-labelledby="connect-heading">
-          <div className="section-container">
-            <h2 id="connect-heading" className={styles.sectionTitle}>Connect With Me</h2>
-            <p className={styles.connectDescription}>
-              I&apos;m always interested in discussing data science, machine learning,
-              and innovative technology solutions. Let&apos;s connect!
-            </p>
-            <div className={styles.connectLinks}>
-              {CONNECT_LINKS.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  className={styles.connectLink}
-                  {...(link.external && {
-                    target: '_blank',
-                    rel: 'noopener noreferrer',
-                  })}
-                  aria-label={
-                    link.external
-                      ? `${link.label} (opens in new tab)`
-                      : link.label
-                  }
-                >
-                  <Icon path={link.iconPath} />
-                  <span>{link.label}</span>
-                </a>
-              ))}
-            </div>
-          </div>
-        </section>
+        <ConnectLinks variant="gradient" />
       </main>
     </div>
   );

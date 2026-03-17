@@ -35,8 +35,8 @@ const ComputerVisionPage: React.FC = () => {
                       <span className={styles.techBadge}>Real-time Processing</span>
                     </div>
                     <div className={styles.projectActions}>
-                      <a href="/projects/computer-vision/facial-detection" className={`${styles.btn} ${styles.btnPrimary}`}>
-                        View Details
+                      <a href="https://github.com/ianedmundson1/Facial-detection" className={`${styles.btn} ${styles.btnPrimary}`} target="_blank" rel="noopener noreferrer">
+                        View on GitHub
                       </a>
                     </div>
                   </div>
@@ -58,8 +58,8 @@ const ComputerVisionPage: React.FC = () => {
                       <span className={styles.techBadge}>Autonomous Vehicles</span>
                     </div>
                     <div className={styles.projectActions}>
-                      <a href="/projects/computer-vision/lane-detection" className={`${styles.btn} ${styles.btnPrimary}`}>
-                        View Details
+                      <a href="https://github.com/ianedmundson1/Lane-detection" className={`${styles.btn} ${styles.btnPrimary}`} target="_blank" rel="noopener noreferrer">
+                        View on GitHub
                       </a>
                     </div>
                   </div>
@@ -81,8 +81,8 @@ const ComputerVisionPage: React.FC = () => {
                       <span className={styles.techBadge}>Cloud Storage</span>
                     </div>
                     <div className={styles.projectActions}>
-                      <a href="/projects/computer-vision/security-camera" className={`${styles.btn} ${styles.btnPrimary}`}>
-                        View Details
+                      <a href="https://github.com/ianedmundson1/Security-camera" className={`${styles.btn} ${styles.btnPrimary}`} target="_blank" rel="noopener noreferrer">
+                        View on GitHub
                       </a>
                     </div>
                   </div>

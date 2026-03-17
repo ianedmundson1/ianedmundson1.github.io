@@ -1,0 +1,201 @@
+/* ==============================================
+   ProjectDetails — scoped styles
+   Uses custom properties from parent .mit-data-science-page
+   ============================================== */
+
+/* ---------- At-a-glance highlights ---------- */
+.highlights {
+  background: var(--gradient-primary);
+  padding: 2.5rem 1rem;
+}
+
+.highlights-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.highlight-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  color: #fff;
+}
+
+.highlight-value {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.highlight-label {
+  font-size: 0.85rem;
+  opacity: 0.85;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ---------- About section ---------- */
+.project-details {
+  padding: var(--mit-section-padding);
+  background: var(--color-bg-subtle);
+}
+
+.project-content h2 {
+  color: var(--color-text-primary);
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.project-content p {
+  color: var(--color-text-muted);
+  line-height: 1.7;
+  margin-bottom: 1rem;
+  max-width: 720px;
+}
+
+/* ---------- Pipeline section ---------- */
+.pipeline-section {
+  padding: var(--mit-section-padding);
+  background: var(--color-bg);
+}
+
+.pipeline-section h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  color: var(--color-text-primary);
+  margin-bottom: 2.5rem;
+}
+
+.pipeline-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.pipeline-card {
+  background: var(--color-bg-subtle);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  text-align: center;
+  position: relative;
+}
+
+.pipeline-step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.pipeline-card h3 {
+  font-size: 1.1rem;
+  color: var(--color-text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.pipeline-card p {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+/* ---------- Tech & links section ---------- */
+.tech-section {
+  padding: var(--mit-section-padding);
+  background: var(--color-bg-subtle);
+}
+
+.tech-section h2 {
+  font-size: 2rem;
+  color: var(--color-text-primary);
+  margin-bottom: 1.5rem;
+}
+
+.tech-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0 2rem;
+}
+
+.tech-tag {
+  background: var(--color-bg-subtle);
+  color: var(--color-text-secondary);
+  padding: 0.5rem 1rem;
+  border-radius: var(--mit-badge-radius);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.project-links {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.project-link {
+  display: inline-block;
+  padding: 1rem 2rem;
+  background: var(--color-primary);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.project-link:hover {
+  background: var(--color-primary-hover);
+  transform: translateY(-2px);
+}
+
+.project-link:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ---------- Future work ---------- */
+.future-work-list {
+  color: var(--color-text-muted);
+  line-height: 1.8;
+  padding-left: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.future-work-list li {
+  margin-bottom: 0.5rem;
+}
+
+.future-heading {
+  margin-top: 2.5rem;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .highlights-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .pipeline-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .project-link {
+    transition-duration: 0.01ms !important;
+  }
+}

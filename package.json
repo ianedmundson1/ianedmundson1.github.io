@@ -7,8 +7,8 @@
     "build": "npm run build:frontend",
     "build:frontend": "vite build frontend --emptyOutDir",
     "dev": "vite frontend",
-    "test": "vitest run --config frontend/vite.config.ts",
-    "test:watch": "vitest --config frontend/vite.config.ts"
+    "test": "cd frontend && npx vitest run",
+    "test:watch": "cd frontend && npx vitest"
   },
   "dependencies": {
     "react": "^19.1.1",

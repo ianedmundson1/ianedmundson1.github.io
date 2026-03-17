@@ -1,0 +1,399 @@
+/* ==========================================
+   CUSTOM PROPERTIES
+   ========================================== */
+.page {
+  --pg-accent: var(--color-primary);
+  --pg-accent-secondary: var(--color-primary-dark);
+  --pg-gradient: var(--gradient-accent);
+  --pg-accent-rgb: var(--color-primary-rgb);
+
+  min-height: 100vh;
+  background-color: var(--color-bg-subtle);
+}
+
+/* ==========================================
+   HERO
+   ========================================== */
+.hero {
+  position: relative;
+  padding: 5rem 1rem 4rem;
+  background: var(--pg-gradient);
+  background-size: 200% 200%;
+  animation: gradient-shift 8s ease infinite;
+  color: white;
+  text-align: center;
+  overflow: hidden;
+}
+
+.hero::before,
+.hero::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.08;
+  background: white;
+  pointer-events: none;
+}
+
+.hero::before {
+  width: 350px;
+  height: 350px;
+  top: -120px;
+  right: -80px;
+}
+
+.hero::after {
+  width: 200px;
+  height: 200px;
+  bottom: -60px;
+  left: -40px;
+}
+
+.hero-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.back-link:hover {
+  color: white;
+}
+
+.hero-badges {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.badge {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 0.35rem 1rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+  animation: fadeInUp 0.6s ease-out both;
+}
+
+.hero-subtitle {
+  font-size: 1.2rem;
+  opacity: 0.92;
+  line-height: 1.7;
+  max-width: 650px;
+  margin: 0 auto;
+  animation: fadeInUp 0.6s ease-out 0.15s both;
+}
+
+/* ==========================================
+   HIGHLIGHTS BAR
+   ========================================== */
+.highlights-bar {
+  background: var(--gradient-primary);
+  padding: 2.5rem 1rem;
+}
+
+.highlights-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.highlight-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  color: #fff;
+}
+
+.highlight-value {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.highlight-label {
+  font-size: 0.85rem;
+  opacity: 0.85;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ==========================================
+   SECTION TITLE
+   ========================================== */
+.section-title {
+  text-align: center;
+  font-size: 2.5rem;
+  color: var(--color-text-primary);
+  margin-bottom: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+/* ==========================================
+   CONTENT / PROSE
+   ========================================== */
+.content-section {
+  padding: 5rem 0;
+  background: var(--color-bg);
+}
+
+.prose {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.prose p {
+  color: var(--color-text-secondary);
+  font-size: 1.05rem;
+  line-height: 1.8;
+  margin-bottom: 1.25rem;
+}
+
+.prose p:last-child {
+  margin-bottom: 0;
+}
+
+/* ==========================================
+   PIPELINE
+   ========================================== */
+.pipeline-section {
+  padding: 5rem 0;
+  background: var(--color-bg-subtle);
+}
+
+.pipeline-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.pipeline-card {
+  background: var(--color-bg);
+  border-radius: 16px;
+  padding: 1.75rem;
+  text-align: center;
+  border: 1px solid var(--color-border);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pipeline-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(var(--pg-accent-rgb), 0.1);
+}
+
+.pipeline-step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: var(--pg-gradient);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+}
+
+.pipeline-card h3 {
+  font-size: 1.15rem;
+  color: var(--color-text-primary);
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.pipeline-card p {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+/* ==========================================
+   CHALLENGES
+   ========================================== */
+.challenges-section {
+  padding: 5rem 0;
+  background: var(--color-bg);
+}
+
+.challenges-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.challenge-card {
+  background: var(--color-bg-subtle);
+  border-radius: 16px;
+  padding: 2rem;
+  border: 1px solid var(--color-border);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.challenge-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--pg-gradient);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+
+.challenge-card:hover::before {
+  transform: scaleX(1);
+}
+
+.challenge-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(var(--pg-accent-rgb), 0.1);
+}
+
+.challenge-card h3 {
+  font-size: 1.15rem;
+  color: var(--color-text-primary);
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+}
+
+.challenge-card p {
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+}
+
+/* ==========================================
+   TECH STACK
+   ========================================== */
+.tech-section {
+  padding: 5rem 0;
+  background: var(--color-bg-subtle);
+}
+
+.tech-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.tech-tag {
+  background: rgba(var(--pg-accent-rgb), 0.1);
+  color: var(--pg-accent);
+  border: 1px solid rgba(var(--pg-accent-rgb), 0.15);
+  padding: 0.5rem 1.1rem;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.25s ease;
+}
+
+.tech-tag:hover {
+  background: var(--pg-gradient);
+  color: white;
+  border-color: transparent;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(var(--pg-accent-rgb), 0.25);
+}
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+
+  .highlights-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .pipeline-grid,
+  .challenges-grid {
+    grid-template-columns: 1fr;
+    max-width: 540px;
+  }
+
+  .section-title {
+    font-size: 2rem;
+  }
+
+  .content-section,
+  .pipeline-section,
+  .challenges-section,
+  .tech-section {
+    padding: 4rem 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding: 3.5rem 1rem 3rem;
+  }
+
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .hero-badges {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+/* ==========================================
+   REDUCED MOTION
+   ========================================== */
+@media (prefers-reduced-motion: reduce) {
+  .hero {
+    animation: none;
+  }
+
+  .hero-title,
+  .hero-subtitle {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .pipeline-card,
+  .challenge-card,
+  .tech-tag {
+    transition: none;
+  }
+}

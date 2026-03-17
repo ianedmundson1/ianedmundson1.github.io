@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { analyzeEmotionBase64 } from '../../../utils/api';
-import styles from '../MITDataSciencePage.module.css';
+import styles from './EmotionDetector.module.css';
 
 interface EmotionDetectorProps {
   capturedImage: string;

@@ -1,6 +1,6 @@
 import { useRef, useCallback } from 'react';
 import Webcam from 'react-webcam';
-import styles from '../MITDataSciencePage.module.css';
+import styles from './CameraCapture.module.css';
 
 interface CameraCaptureProps {
   onCapture: (imageSrc: string) => void;

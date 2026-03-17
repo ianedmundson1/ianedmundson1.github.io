@@ -1,5 +1,7 @@
-import React, { useEffect, useRef, useCallback } from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import Navigation from '../../components/Navigation/Navigation';
+import { useFadeOnScroll } from '../../hooks/useFadeOnScroll';
 import styles from './ProjectsPage.module.css';
 
 /* -------------------------------------------------- */
@@ -10,7 +12,7 @@ interface Project {
   badges: string[];
   interactive?: boolean;
   description: string;
-  link: string;
+  link?: string;
   linkLabel?: string;
   external?: boolean;
 }
@@ -20,8 +22,8 @@ interface Category {
   title: string;
   description: string;
   projects: Project[];
-  viewAllLink: string;
-  viewAllLabel: string;
+  viewAllLink?: string;
+  viewAllLabel?: string;
 }
 
 const CATEGORIES: Category[] = [
@@ -66,9 +68,7 @@ const CATEGORIES: Category[] = [
     icon: '📊',
     title: 'Continuing Education & Certification Programs',
     description:
-      'Advanced analytics, machine learning models, and data engineering solutions for real-world problems.',
-    viewAllLink: '/projects/data-science',
-    viewAllLabel: 'View All Continuing Education Projects',
+      'Hands-on coursework and capstone projects from professional data science and AI programs.',
     projects: [
       {
         title: 'MIT Applied Data Science',
@@ -85,60 +85,27 @@ const CATEGORIES: Category[] = [
     icon: '🏛️',
     title: 'Past Work Projects',
     description:
-      'Advanced analytics, machine learning models, and data engineering solutions for real-world problems.',
-    viewAllLink: '/projects/data-science',
-    viewAllLabel: 'View All Data Science Projects',
+      'Production ML systems, data pipelines, and cloud infrastructure built for federal operations at NIH.',
     projects: [
       {
         title: 'Energy Optimization Systems',
         badges: ['Forecasting', 'Optimization'],
         description:
-          'Advanced ML models for energy efficiency optimization using NARX, Prophet, and PSO algorithms for 96-hour advance predictions.',
-        link: '/projects/data-science/energy-optimization',
-        linkLabel: 'View Project',
+          'Advanced ML models for energy efficiency optimization using NARX, Prophet, and PSO algorithms for 96-hour advance predictions. Delivered $2.2M in annual savings.',
+        link: '/projects/energy-optimization',
+        linkLabel: 'View Details',
       },
       {
         title: 'Cloud Data Migration',
         badges: ['Azure', 'ETL'],
         description:
-          'Large-scale migration of 35,000+ data points from OSIsoft PI to Azure Data Lake Gen2 with optimized ETL pipelines.',
-        link: '/projects/data-science/cloud-migration',
-        linkLabel: 'View Project',
+          'Large-scale migration of 35,000+ data points from OSIsoft PI to Azure Data Lake Gen2 with optimized ETL pipelines. Achieved 83% faster transfer speeds via custom tooling.',
+        link: '/projects/cloud-migration',
+        linkLabel: 'View Details',
       },
     ],
   },
 ];
-
-/* -------------------------------------------------- */
-/*  Scroll-fade hook                                   */
-/* -------------------------------------------------- */
-function useFadeOnScroll(fadeClass: string, visibleClass: string) {
-  const ref = useRef<HTMLDivElement>(null);
-
-  const observe = useCallback(() => {
-    const root = ref.current;
-    if (!root) return;
-
-    const targets = root.querySelectorAll<HTMLElement>(`.${fadeClass}`);
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add(visibleClass);
-            io.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.15 },
-    );
-    targets.forEach((t) => io.observe(t));
-    return () => io.disconnect();
-  }, [fadeClass, visibleClass]);
-
-  useEffect(observe, [observe]);
-
-  return ref;
-}
 
 /* -------------------------------------------------- */
 /*  Component                                          */
@@ -213,32 +180,40 @@ const ProjectsPage: React.FC = () => {
                         <p className={styles.projectDescription}>
                           {project.description}
                         </p>
-                        <div className={styles.projectLinks}>
-                          <a
-                            href={project.link}
-                            className={`${styles.projectLink} ${styles.primary}`}
-                            {...(project.external && {
-                              target: '_blank',
-                              rel: 'noopener noreferrer',
-                            })}
-                            aria-label={
-                              project.external
-                                ? `${project.linkLabel ?? 'View Project'} — ${project.title} (opens in new tab)`
-                                : `${project.linkLabel ?? 'View Project'} — ${project.title}`
-                            }
-                          >
-                            {project.linkLabel ?? 'View Project'}
-                          </a>
-                        </div>
+                        {project.link && (
+                          <div className={styles.projectLinks}>
+                            {project.external ? (
+                              <a
+                                href={project.link}
+                                className={`${styles.projectLink} ${styles.primary}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label={`${project.linkLabel ?? 'View Project'} — ${project.title} (opens in new tab)`}
+                              >
+                                {project.linkLabel ?? 'View Project'}
+                              </a>
+                            ) : (
+                              <Link
+                                to={project.link}
+                                className={`${styles.projectLink} ${styles.primary}`}
+                                aria-label={`${project.linkLabel ?? 'View Project'} — ${project.title}`}
+                              >
+                                {project.linkLabel ?? 'View Project'}
+                              </Link>
+                            )}
+                          </div>
+                        )}
                       </article>
                     ))}
                   </div>
 
-                  <div className={styles.categoryFooter}>
-                    <a href={category.viewAllLink} className={styles.viewAllLink}>
-                      {category.viewAllLabel} →
-                    </a>
-                  </div>
+                  {category.viewAllLink && (
+                    <div className={styles.categoryFooter}>
+                      <Link to={category.viewAllLink} className={styles.viewAllLink}>
+                        {category.viewAllLabel} →
+                      </Link>
+                    </div>
+                  )}
                 </article>
               ))}
             </div>

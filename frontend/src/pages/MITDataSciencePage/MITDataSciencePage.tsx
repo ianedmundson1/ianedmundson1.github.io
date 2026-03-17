@@ -3,6 +3,7 @@ import Navigation from '../../components/Navigation/Navigation';
 import CameraCapture from './components/CameraCapture';
 import EmotionDetector from './components/EmotionDetector';
 import ImageUpload from './components/ImageUpload';
+import ProjectDetails from './components/ProjectDetails';
 import styles from './MITDataSciencePage.module.css';
 
 /* -------------------------------------------------- */
@@ -129,6 +130,9 @@ const MITDataSciencePage = () => {
             </div>
           </div>
         </section>
+
+        {/* ---------- Project details ---------- */}
+        <ProjectDetails />
       </main>
     </div>
   );

@@ -1,12 +1,15 @@
 import { render, screen, fireEvent } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import Navigation from '../Navigation';
 import { ThemeProvider } from '../../../context/ThemeContext';
 
-const renderNavigation = () =>
+const renderNavigation = (props?: { className?: string }) =>
   render(
-    <ThemeProvider>
-      <Navigation />
-    </ThemeProvider>,
+    <MemoryRouter>
+      <ThemeProvider>
+        <Navigation {...props} />
+      </ThemeProvider>
+    </MemoryRouter>,
   );
 
 describe('Navigation', () => {
@@ -19,7 +22,6 @@ describe('Navigation', () => {
     renderNavigation();
     expect(screen.getByRole('link', { name: 'Home' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Projects' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Books' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'About' })).toBeInTheDocument();
   });
 
@@ -42,11 +44,7 @@ describe('Navigation', () => {
   });
 
   it('applies optional className prop', () => {
-    render(
-      <ThemeProvider>
-        <Navigation className="custom-class" />
-      </ThemeProvider>,
-    );
+    renderNavigation({ className: 'custom-class' });
     const nav = screen.getByRole('navigation');
     expect(nav.className).toContain('custom-class');
   });
