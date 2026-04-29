@@ -49,17 +49,19 @@ const Navigation: React.FC<NavigationProps> = ({ className }) => {
         </div>
 
         <button
+          type="button"
           className={`${styles.hamburger} ${menuOpen ? styles.hamburgerOpen : ''}`}
           onClick={toggleMenu}
           aria-label={menuOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={menuOpen}
+          aria-controls="primary-nav"
         >
           <span className={styles.hamburgerBar} />
           <span className={styles.hamburgerBar} />
           <span className={styles.hamburgerBar} />
         </button>
 
-        <ul className={`${styles.navLinks} ${menuOpen ? styles.navLinksOpen : ''}`}>
+        <ul id="primary-nav" className={`${styles.navLinks} ${menuOpen ? styles.navLinksOpen : ''}`}>
           {NAV_ITEMS.map((item) => (
             <li key={item.to}>
               <Link
@@ -84,6 +86,7 @@ const Navigation: React.FC<NavigationProps> = ({ className }) => {
             Resume
           </a>
           <button
+            type="button"
             className={styles.themeToggle}
             onClick={toggleTheme}
             aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}

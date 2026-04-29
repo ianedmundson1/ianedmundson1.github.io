@@ -1,7 +1,10 @@
 import Navigation from '../../components/Navigation/Navigation';
 import ConnectLinks from '../../components/ConnectLinks/ConnectLinks';
+import Seo from '../../components/Seo';
 import { useFadeOnScroll } from '../../hooks/useFadeOnScroll';
-import headshot from '../../assets/MEEBOSS_Hiring_Fest_Headshots_1-27-44.jpg';
+import headshot400 from '../../assets/headshot-400.jpg';
+import headshot400Webp from '../../assets/headshot-400.webp';
+import headshot800Webp from '../../assets/headshot-800.webp';
 import styles from './AboutPage.module.css';
 
 /* -------------------------------------------------- */
@@ -123,6 +126,11 @@ const AboutPage = () => {
 
   return (
     <div className={styles.aboutPage} ref={wrapperRef}>
+      <Seo
+        title="About"
+        description="Ian Edmundson's background: federal data scientist at NIH, MIT Applied Data Science alum, and software engineer focused on production ML, forecasting, and analytics infrastructure."
+        path="/about"
+      />
       <a href="#about-intro" className="skip-link">
         Skip to content
       </a>
@@ -133,16 +141,32 @@ const AboutPage = () => {
         {/* ---------- Hero ---------- */}
         <header className={styles.hero} aria-labelledby="about-hero-title">
           <div className={styles.heroContainer}>
+            <div className={styles.heroText}>
+              <h1 id="about-hero-title" className={styles.heroTitle}>
+                About
+              </h1>
+              <p className={styles.heroSubtitle}>
+                Federal data scientist by day, full-stack engineer the rest of the time. Working on the boring infrastructure that makes the interesting work possible.
+              </p>
+            </div>
             <div className={styles.heroPhoto}>
               <div className={styles.heroPhotoRing} aria-hidden="true" />
-              <img src={headshot} alt="Ian Edmundson headshot" />
+              <picture>
+                <source
+                  type="image/webp"
+                  srcSet={`${headshot400Webp} 400w, ${headshot800Webp} 800w`}
+                  sizes="220px"
+                />
+                <img
+                  src={headshot400}
+                  alt="Ian Edmundson headshot"
+                  width={400}
+                  height={600}
+                  fetchPriority="high"
+                  decoding="async"
+                />
+              </picture>
             </div>
-            <h1 id="about-hero-title" className={styles.heroTitle}>
-              About Me
-            </h1>
-            <p className={styles.heroSubtitle}>
-              Data Scientist &amp; Software Engineer
-            </p>
           </div>
         </header>
 

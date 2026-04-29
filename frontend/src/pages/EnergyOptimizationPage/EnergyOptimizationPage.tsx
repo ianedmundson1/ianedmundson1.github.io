@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import Navigation from '../../components/Navigation/Navigation';
 import ConnectLinks from '../../components/ConnectLinks/ConnectLinks';
+import Seo from '../../components/Seo';
 import { useFadeOnScroll } from '../../hooks/useFadeOnScroll';
 import styles from './EnergyOptimizationPage.module.css';
 
@@ -85,6 +86,11 @@ const EnergyOptimizationPage = () => {
 
   return (
     <div className={styles.page} ref={wrapperRef}>
+      <Seo
+        title="Energy Optimization at NIH"
+        description="ML-driven energy optimization at NIH's Central Utility Plant: 96-hour cooling demand forecasting, anomaly detection across 20,000+ points, and $2.2M in annual savings."
+        path="/projects/energy-optimization"
+      />
       <a href="#overview" className="skip-link">Skip to content</a>
 
       <Navigation />

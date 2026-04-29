@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Navigation from '../../components/Navigation/Navigation';
+import Seo from '../../components/Seo';
 import { useFadeOnScroll } from '../../hooks/useFadeOnScroll';
 import styles from './ProjectsPage.module.css';
 
@@ -31,8 +32,8 @@ const CATEGORIES: Category[] = [
     icon: '🔬',
     title: 'Personal Projects',
     description:
-      'Real-time computer vision applications using OpenCV, deep learning, and image processing techniques.',
-    viewAllLink: '/projects/computer-vision',
+      'Side projects exploring computer vision, IoT, and deep learning — built outside of work.',
+    viewAllLink: '/projects/personal',
     viewAllLabel: 'View All Personal Projects',
     projects: [
       {
@@ -115,6 +116,11 @@ const ProjectsPage: React.FC = () => {
 
   return (
     <div className={styles.projectsPage} ref={wrapperRef}>
+      <Seo
+        title="Projects"
+        description="Selected projects by Ian Edmundson: emotion detection with VGG16 transfer learning, energy forecasting at NIH, cloud migration tooling, and computer vision systems."
+        path="/projects"
+      />
       <a className="skip-link" href="#projects-overview">
         Skip to content
       </a>

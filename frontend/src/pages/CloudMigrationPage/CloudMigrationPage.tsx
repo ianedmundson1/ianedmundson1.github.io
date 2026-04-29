@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import Navigation from '../../components/Navigation/Navigation';
 import ConnectLinks from '../../components/ConnectLinks/ConnectLinks';
+import Seo from '../../components/Seo';
 import { useFadeOnScroll } from '../../hooks/useFadeOnScroll';
 import styles from './CloudMigrationPage.module.css';
 
@@ -85,6 +86,11 @@ const CloudMigrationPage = () => {
 
   return (
     <div className={styles.page} ref={wrapperRef}>
+      <Seo
+        title="Cloud Migration"
+        description="Migrating 6 years of sensor data and 35,000+ monitoring points to cloud infrastructure with custom open-source tooling — 83% faster than vendor solutions."
+        path="/projects/cloud-migration"
+      />
       <a href="#overview" className="skip-link">Skip to content</a>
 
       <Navigation />

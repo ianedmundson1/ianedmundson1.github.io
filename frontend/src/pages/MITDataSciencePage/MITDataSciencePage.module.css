@@ -35,38 +35,64 @@
 }
 
 /* ==============================================
-   Hero
+   Hero — paper, left-aligned
    ============================================== */
 .project-hero {
-  background: var(--gradient-primary);
-  color: #fff;
-  padding: var(--mit-hero-padding);
+  position: relative;
+  background: var(--gradient-paper);
+  color: var(--color-text-primary);
+  padding: 5rem 1rem 4rem;
+  border-bottom: 1px solid var(--color-rule);
+  overflow: hidden;
+}
+
+.project-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, var(--color-border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-border) 1px, transparent 1px);
+  background-size: 64px 64px;
+  opacity: 0.35;
+  pointer-events: none;
+  mask-image: radial-gradient(ellipse at top right, black 10%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse at top right, black 10%, transparent 70%);
 }
 
 .hero-container {
-  max-width: 1200px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: 0 2rem;
-  text-align: center;
+  text-align: left;
+  position: relative;
+  z-index: 1;
 }
 
 .project-badges {
   display: flex;
-  gap: 1rem;
-  justify-content: center;
-  margin-bottom: 1rem;
+  gap: 0.5rem;
+  justify-content: flex-start;
+  margin-bottom: 1.25rem;
 }
 
 .project-badge {
-  background: var(--mit-badge-bg);
-  padding: 0.5rem 1rem;
-  border-radius: var(--mit-badge-radius);
-  font-size: 0.9rem;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  padding: 0.25rem 0.6rem;
+  border-radius: 3px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
   font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 .project-badge.interactive {
-  background: linear-gradient(135deg, var(--mit-color-interactive), var(--mit-color-interactive));
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-bg);
   animation: mit-pulse 2s infinite;
 }
 
@@ -76,16 +102,25 @@
 }
 
 .hero-title {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-  font-weight: 700;
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  margin: 0 0 0.5rem;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  color: var(--color-text-primary);
 }
 
 .hero-subtitle {
-  font-size: 1.2rem;
-  opacity: 0.9;
-  max-width: var(--mit-demo-max-w);
-  margin: 0 auto;
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--color-primary);
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+  max-width: 720px;
+  margin: 0;
 }
 
 /* ==============================================

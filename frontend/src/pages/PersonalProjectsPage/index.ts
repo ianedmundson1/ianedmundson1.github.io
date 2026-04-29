@@ -1,1 +1,1 @@
-export { default } from './ComputerVisionPage';
+export { default } from './PersonalProjectsPage';

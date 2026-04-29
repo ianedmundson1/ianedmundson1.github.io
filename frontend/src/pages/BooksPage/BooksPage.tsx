@@ -1,5 +1,6 @@
 import React from 'react';
 import Navigation from '../../components/Navigation/Navigation';
+import Seo from '../../components/Seo';
 import { useFadeOnScroll } from '../../hooks/useFadeOnScroll';
 import styles from './BooksPage.module.css';
 
@@ -92,6 +93,11 @@ const BooksPage: React.FC = () => {
 
   return (
     <div className={styles.booksPage} ref={wrapperRef}>
+      <Seo
+        title="Books"
+        description="A reading list and notes from Ian Edmundson — books on machine learning, software engineering, and data infrastructure."
+        path="/books"
+      />
       <a className="skip-link" href="#book-reviews">
         Skip to book reviews
       </a>

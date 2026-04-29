@@ -1,33 +1,34 @@
 /* ==============================================
-   ConnectLinks — shared component
+   ConnectLinks — shared component (editorial)
    ============================================== */
 
-/* ---------- Base ---------- */
 .connect-section {
-  padding: 4rem 0;
-  text-align: center;
+  padding: 5rem 0;
+  text-align: left;
+  border-top: 1px solid var(--color-rule);
 }
 
 .section-title {
-  text-align: center;
-  font-size: 2.25rem;
-  margin-bottom: 1rem;
-  font-weight: 700;
+  text-align: left;
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  margin: 0.5rem 0 0.75rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
 }
 
 .connect-description {
-  font-size: 1.15rem;
-  margin-bottom: 2.5rem;
-  max-width: 550px;
-  margin-left: auto;
-  margin-right: auto;
-  line-height: 1.7;
+  font-size: 1rem;
+  margin-bottom: 2rem;
+  max-width: 560px;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
 }
 
 .connect-links {
   display: flex;
-  gap: 1.25rem;
-  justify-content: center;
+  gap: 0.75rem;
   flex-wrap: wrap;
 }
 
@@ -35,15 +36,18 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.85rem 1.75rem;
-  border-radius: 50px;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--border-radius);
   text-decoration: none;
-  font-weight: 600;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.95rem;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
 }
 
 .connect-link:focus-visible {
-  outline: 3px solid var(--color-primary);
+  outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
 
@@ -51,17 +55,15 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 18px;
+  height: 18px;
   flex-shrink: 0;
 }
 
-/* ---------- Variant: gradient ---------- */
+/* ---------- Variant: gradient (now: ink panel with terracotta accent) ---------- */
 .gradient {
-  background: var(--gradient-accent);
-  background-size: 200% 200%;
-  animation: gradient-shift 8s ease infinite;
-  color: white;
+  background: var(--color-text-primary);
+  color: var(--color-bg);
   position: relative;
   overflow: hidden;
 }
@@ -69,36 +71,37 @@
 .gradient::before {
   content: '';
   position: absolute;
-  width: 300px;
-  height: 300px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.05);
-  top: -100px;
-  left: -80px;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 64px 64px;
   pointer-events: none;
 }
 
+.gradient > * {
+  position: relative;
+  z-index: 1;
+}
+
 .gradient .section-title {
-  color: white;
+  color: var(--color-bg);
 }
 
 .gradient .connect-description {
-  opacity: 0.92;
+  color: rgba(247, 243, 236, 0.78);
 }
 
 .gradient .connect-link {
-  background-color: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  background-color: transparent;
+  color: var(--color-bg);
+  border-color: rgba(247, 243, 236, 0.25);
 }
 
 .gradient .connect-link:hover {
-  background-color: white;
+  border-color: var(--color-primary);
   color: var(--color-primary);
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  background-color: rgba(247, 243, 236, 0.04);
 }
 
 /* ---------- Variant: subtle ---------- */
@@ -115,27 +118,20 @@
 }
 
 .subtle .connect-link {
-  background: var(--color-bg);
+  background: transparent;
   color: var(--color-text-primary);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  border-color: var(--color-border);
 }
 
 .subtle .connect-link:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
 }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 768px) {
   .connect-links {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .connect-link {
-    width: 220px;
-    text-align: center;
-    justify-content: center;
+    flex-direction: row;
   }
 }
 

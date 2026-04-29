@@ -80,7 +80,7 @@ const EmotionDetector = ({ capturedImage, onReset }: EmotionDetectorProps) => {
       <div className={styles.imageContainer}>
         <img
           src={capturedImage}
-          alt="Photo submitted for emotion analysis"
+          alt="Submitted for emotion analysis"
           className={styles.capturedImage}
         />
       </div>

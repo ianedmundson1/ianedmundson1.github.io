@@ -70,13 +70,14 @@ describe('ThemeContext', () => {
     expect(localStorage.getItem('theme')).toBe('light');
   });
 
-  it('persists theme to localStorage', () => {
+  it('persists theme to localStorage only after explicit toggle', () => {
     render(
       <ThemeProvider>
         <ThemeConsumer />
       </ThemeProvider>,
     );
-    expect(localStorage.getItem('theme')).toBe('light');
+    // No write on mount — preserves system-preference tracking until user opts in.
+    expect(localStorage.getItem('theme')).toBeNull();
 
     act(() => {
       fireEvent.click(screen.getByRole('button', { name: 'Toggle' }));

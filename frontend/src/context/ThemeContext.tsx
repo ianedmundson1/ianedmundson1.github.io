@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useLayoutEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useLayoutEffect, useState } from 'react';
 
 type Theme = 'light' | 'dark';
 
@@ -21,10 +21,25 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   useLayoutEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
   }, [theme]);
 
-  const toggleTheme = () => setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
+  useEffect(() => {
+    const media = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = (e: MediaQueryListEvent) => {
+      if (localStorage.getItem('theme')) return;
+      setTheme(e.matches ? 'dark' : 'light');
+    };
+    media.addEventListener('change', handleChange);
+    return () => media.removeEventListener('change', handleChange);
+  }, []);
+
+  const toggleTheme = () => {
+    setTheme(prev => {
+      const next = prev === 'light' ? 'dark' : 'light';
+      localStorage.setItem('theme', next);
+      return next;
+    });
+  };
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>

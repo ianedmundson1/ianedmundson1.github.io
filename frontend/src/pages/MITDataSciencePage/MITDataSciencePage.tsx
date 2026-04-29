@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import Navigation from '../../components/Navigation/Navigation';
+import Seo from '../../components/Seo';
 import CameraCapture from './components/CameraCapture';
 import EmotionDetector from './components/EmotionDetector';
 import ImageUpload from './components/ImageUpload';
@@ -43,6 +44,11 @@ const MITDataSciencePage = () => {
 
   return (
     <div className={styles.mitDataSciencePage}>
+      <Seo
+        title="MIT Applied Data Science — Emotion Detection"
+        description="Live facial emotion classification demo using VGG16 transfer learning. Capstone project from MIT's Applied Data Science Program. Try it with your webcam or upload an image."
+        path="/projects/mit-data-science"
+      />
       <a href="#demo" className="skip-link">
         Skip to interactive demo
       </a>
