@@ -19,7 +19,6 @@ interface Project {
 }
 
 interface Category {
-  icon: string;
   title: string;
   description: string;
   projects: Project[];
@@ -29,10 +28,9 @@ interface Category {
 
 const CATEGORIES: Category[] = [
   {
-    icon: '🔬',
     title: 'Personal Projects',
     description:
-      'Side projects exploring computer vision, IoT, and deep learning — built outside of work.',
+      'Side projects exploring computer vision, IoT, and deep learning.',
     viewAllLink: '/projects/personal',
     viewAllLabel: 'View All Personal Projects',
     projects: [
@@ -40,7 +38,7 @@ const CATEGORIES: Category[] = [
         title: 'Facial Detection System',
         badges: ['OpenCV', 'Python'],
         description:
-          'Real-time face detection and emotion recognition system using deep learning models and OpenCV for live video processing.',
+          'Real-time face detection system using deep learning models and OpenCV for live video processing.',
         link: 'https://github.com/ianedmundson1/Facial-detection',
         linkLabel: 'View Project',
         external: true,
@@ -66,7 +64,6 @@ const CATEGORIES: Category[] = [
     ],
   },
   {
-    icon: '📊',
     title: 'Continuing Education & Certification Programs',
     description:
       'Hands-on coursework and capstone projects from professional data science and AI programs.',
@@ -83,7 +80,6 @@ const CATEGORIES: Category[] = [
     ],
   },
   {
-    icon: '🏛️',
     title: 'Past Work Projects',
     description:
       'Production ML systems, data pipelines, and cloud infrastructure built for federal operations at NIH.',
@@ -92,7 +88,7 @@ const CATEGORIES: Category[] = [
         title: 'Energy Optimization Systems',
         badges: ['Forecasting', 'Optimization'],
         description:
-          'Advanced ML models for energy efficiency optimization using NARX, Prophet, and PSO algorithms for 96-hour advance predictions. Delivered $2.2M in annual savings.',
+          'NARX-based 96-hour energy forecasting, XGBoost prediction models for chillers and cooling towers, and PSO-driven corrosion optimization. Contributed to $2.2M in annual savings across operations.',
         link: '/projects/energy-optimization',
         linkLabel: 'View Details',
       },
@@ -156,9 +152,6 @@ const ProjectsPage: React.FC = () => {
                   className={`${styles.categorySection} fade-section`}
                 >
                   <h2 className={styles.categoryTitle}>
-                    <span className={styles.categoryIcon} aria-hidden="true">
-                      {category.icon}
-                    </span>
                     {category.title}
                   </h2>
                   <p className={styles.categoryDescription}>

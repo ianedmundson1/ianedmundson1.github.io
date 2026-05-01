@@ -32,13 +32,13 @@ const PIPELINE_STEPS = [
     step: 3,
     title: 'Model Training',
     description:
-      'Ensemble of NARX neural networks, Prophet, and XGBoost models with hyperparameter tuning via cross-validation.',
+      'NARX neural networks and Prophet for 96-hour demand forecasting. XGBoost models for equipment-level prediction on chillers and cooling towers.',
   },
   {
     step: 4,
     title: 'Optimization',
     description:
-      'Particle Swarm Optimization (PSO) to determine optimal chiller sequencing given the 96-hour demand forecast.',
+      'Particle Swarm Optimization (PSO) for corrosion optimization across the cooling infrastructure.',
   },
   {
     step: 5,
@@ -110,7 +110,7 @@ const EnergyOptimizationPage = () => {
             </h1>
             <p className={styles.heroSubtitle}>
               ML-driven 96-hour demand forecasting and chiller sequencing optimization
-              for NIH&apos;s Central Utility Plant — delivering $2.2M in annual energy savings
+              for NIH&apos;s Central Utility Plant, contributing to $2.2M in annual energy savings across operations
             </p>
           </div>
         </header>
