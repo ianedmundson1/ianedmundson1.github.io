@@ -1,6 +1,4 @@
 import { Link } from 'react-router-dom';
-import Navigation from '../../components/Navigation/Navigation';
-import ConnectLinks from '../../components/ConnectLinks/ConnectLinks';
 import Seo from '../../components/Seo';
 import { useFadeOnScroll } from '../../hooks/useFadeOnScroll';
 import styles from './CloudMigrationPage.module.css';
@@ -93,7 +91,6 @@ const CloudMigrationPage = () => {
       />
       <a href="#overview" className="skip-link">Skip to content</a>
 
-      <Navigation />
 
       <main className="main-content">
         {/* ---------- Hero ---------- */}
@@ -197,7 +194,6 @@ const CloudMigrationPage = () => {
           </div>
         </section>
 
-        <ConnectLinks variant="gradient" />
       </main>
     </div>
   );

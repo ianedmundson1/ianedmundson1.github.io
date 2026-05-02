@@ -4,6 +4,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import { ThemeProvider } from './context/ThemeContext';
 import ErrorBoundary from './components/ErrorBoundary';
 import RouteAnnouncer from './components/RouteAnnouncer';
+import Layout from './components/Layout/Layout';
 import styles from './App.module.css';
 
 const HomePage = lazy(() => import('./pages/HomePage'));
@@ -26,15 +27,17 @@ function App() {
       <Suspense fallback={<div className={styles.loading}>Loading…</div>}>
       <div className={styles.App}>
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/projects" element={<ProjectsPage />} />
-          <Route path="/projects/personal" element={<PersonalProjectsPage />} />
-          <Route path="/projects/mit-data-science" element={<MITDataSciencePage />} />
-          <Route path="/projects/energy-optimization" element={<EnergyOptimizationPage />} />
-          <Route path="/projects/cloud-migration" element={<CloudMigrationPage />} />
-          <Route path="/books" element={<BooksPage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="*" element={<NotFoundPage />} />
+          <Route element={<Layout />}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/projects" element={<ProjectsPage />} />
+            <Route path="/projects/personal" element={<PersonalProjectsPage />} />
+            <Route path="/projects/mit-data-science" element={<MITDataSciencePage />} />
+            <Route path="/projects/energy-optimization" element={<EnergyOptimizationPage />} />
+            <Route path="/projects/cloud-migration" element={<CloudMigrationPage />} />
+            <Route path="/books" element={<BooksPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Route>
         </Routes>
       </div>
       </Suspense>

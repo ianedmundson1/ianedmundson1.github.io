@@ -1,5 +1,3 @@
-import Navigation from '../../components/Navigation/Navigation';
-import ConnectLinks from '../../components/ConnectLinks/ConnectLinks';
 import Seo from '../../components/Seo';
 import { useFadeOnScroll } from '../../hooks/useFadeOnScroll';
 import headshot400 from '../../assets/headshot-400.jpg';
@@ -12,18 +10,17 @@ import styles from './AboutPage.module.css';
 /* -------------------------------------------------- */
 const EXPERIENCE = [
   {
-    role: 'Mentor',
-    org: 'Great Learning / Johns Hopkins University',
-    period: 'Feb 2026 – Present',
+    role: 'Technical Volunteer',
+    org: 'Peace Peloton',
+    period: 'March 2026 - Present',
     highlights: [
-      'Mentoring adult learners in Johns Hopkins University\'s continuing education AI program',
-      'Delivering weekly office hours to guide learners through hands-on technical coursework',
+      'Optimizing analytics and management workflows for non-profit incubator for black owned businesses',
     ],
   },
   {
     role: 'Technical Volunteer',
     org: 'University of Washington Botanic Gardens',
-    period: 'Oct 2025 – Present',
+    period: 'Oct 2025 - Present',
     highlights: [
       'Modernizing a legacy .NET/C# web application for RareCare, a UW seed conservation collections project',
       'Migrating codebase to GitHub, refactoring business logic, improving frontend functionality, and extending database schema',
@@ -32,12 +29,12 @@ const EXPERIENCE = [
   {
     role: 'Data Scientist (Federal, GS-11)',
     org: 'National Institutes of Health (NIH)',
-    period: 'Jan 2022 – July 2025',
+    period: 'Jan 2022 - July 2025',
     highlights: [
       'Established Databricks analytics platform with Delta Live Tables processing 30M+ daily sensor readings across 35,000+ monitoring points, delivering anomaly detection, predictive forecasting, and automated reporting to 30+ stakeholders that supported $2.2M in annual energy savings',
-      'Engineered 96-hour cooling demand forecasting system — 50% more accurate than legacy, enabling proactive resource scheduling for NIH\'s 62,400-ton cooling infrastructure',
-      'Developed anomaly detection models reducing false positive maintenance alerts by 93% across 20,000+ monitored points',
-      'Migrated 6 years of sensor data (35,000+ monitoring points) to cloud infrastructure — 83% faster transfer speeds via custom open-source tooling vs. vendor solution',
+      'Engineered 96-hour cooling demand forecasting system, 50% more accurate than legacy, enabling proactive resource scheduling for NIH\'s 62,400-ton cooling infrastructure',
+      'Developed anomaly detection framework across 20,000+ monitored points; 93% of alerts operator-validated as genuine anomalies, restoring engineer trust after widespread alert fatigue',
+      'Migrated 6 years of sensor data (35,000+ monitoring points) to cloud infrastructure at 83% faster transfer speeds using custom tooling over the vendor solution',
       'Migrated 15+ ML models from siloed CSV-based experimentation to a cloud-native MLOps pipeline with managed feature tables, cutting model deployment from weeks to days',
       'Implemented CI/CD pipelines for 10+ analytics applications, cutting deployment cycles by 50%',
       'Created an AI search system for instant retrieval of building codes and safety policies from 1,000+ page compliance manuals',
@@ -68,12 +65,12 @@ const TECHNICAL_CAPABILITIES = [
   {
     area: 'Predictive Analytics',
     description: 'Forecasting and anomaly detection systems to anticipate operational issues',
-    tags: ['Python', 'TensorFlow', 'XGBoost', 'Scikit-learn'],
+    tags: ['Python', 'LightGBM', 'SHAP', 'NARX', 'Scikit-learn'],
   },
   {
     area: 'Cloud Infrastructure',
     description: 'Scalable data platforms and ML pipelines',
-    tags: ['Azure ML', 'Databricks', 'Docker', 'GitHub Actions'],
+    tags: ['Databricks', 'Azure Data Lake Gen2', 'Docker', 'GitHub Actions'],
   },
   {
     area: 'Data Engineering',
@@ -83,7 +80,7 @@ const TECHNICAL_CAPABILITIES = [
   {
     area: 'Visualization & Reporting',
     description: 'Dashboards translating technical data into actionable insights',
-    tags: ['Plotly', 'Dash', 'Neo4j', 'Knowledge Graphs'],
+    tags: ['Plotly Dash', 'React', 'Neo4j', 'MLflow'],
   },
 ] as const;
 
@@ -92,7 +89,7 @@ const EDUCATION = [
     degree: 'Applied Data Science Program',
     institution: 'MIT Professional Education',
     description:
-      'Capstone: facial emotion detection using VGG16 transfer learning — classifying four emotions from 48×48 images with ~72–80% test accuracy.',
+      'Capstone: facial emotion detection using VGG16 transfer learning, classifying four emotions from 48×48 images with ~72-80% test accuracy.',
   },
   {
     degree: 'Bachelor of Science, Mechanical Engineering',
@@ -111,10 +108,10 @@ const AWARDS = [
 ] as const;
 
 const CERTIFICATIONS = [
-  'Applied Data Science Program: Leveraging AI for Effective Decision-Making — MIT Professional Education',
-  'NIH Training Center Emerging Talent Program — NIH',
-  'OLAO Lean Six Sigma Green Belt Training Course — NIH',
-  'Building Knowledge Graphs with LLMs — Neo4j',
+  'Applied Data Science Program: Leveraging AI for Effective Decision-Making, MIT Professional Education',
+  'NIH Training Center Emerging Talent Program, NIH',
+  'OLAO Lean Six Sigma Green Belt Training Course, NIH',
+  'Building Knowledge Graphs with LLMs, Neo4j',
 ] as const;
 
 
@@ -135,8 +132,6 @@ const AboutPage = () => {
         Skip to content
       </a>
 
-      <Navigation />
-
       <main className="main-content">
         {/* ---------- Hero ---------- */}
         <header className={styles.hero} aria-labelledby="about-hero-title">
@@ -146,7 +141,7 @@ const AboutPage = () => {
                 About
               </h1>
               <p className={styles.heroSubtitle}>
-                Federal data scientist by day, full-stack engineer the rest of the time. Working on the boring infrastructure that makes the interesting work possible.
+                Data scientist with a background in federal ML infrastructure. I build the systems that hold up when it actually matters.
               </p>
             </div>
             <div className={styles.heroPhoto}>
@@ -182,27 +177,28 @@ const AboutPage = () => {
             </h2>
             <div className={styles.introContent}>
               <p>
-                Data scientist with 3+ years building analytics infrastructure
-                and governance programs for federal operations. I&apos;ve developed
-                forecasting systems, data quality standards, and reporting
-                platforms serving 30+ stakeholders across technical and
-                executive audiences.
+                Data scientist with 3+ years at NIH&apos;s Central Utility Plant,
+                where I built production ML systems for one of the federal
+                government&apos;s largest central utility operations: forecasting,
+                anomaly detection, chiller efficiency analysis, and the data
+                infrastructure to make them reliable. The analytics work was
+                one piece of broader operational improvements that together
+                achieved $2.2M in annual energy savings across the plant,
+                recognized with an NIH Director&apos;s Award.
               </p>
               <p>
-                My day-to-day spans the full stack: designing ML pipelines on
-                Databricks, standing up FastAPI services, shipping React
-                front-ends, and wrangling 30M+ daily sensor readings through
-                Delta Live Tables. I care most about work that makes a
-                measurable difference — whether that&apos;s a forecasting model
-                that protects infrastructure during a crisis or an anomaly
-                detector that cuts false alarms by 93%.
+                My work spans the full stack: ML modeling in Python (LightGBM,
+                NARX, SHAP), FastAPI services, React front-ends, and data
+                pipelines connecting OSIsoft PI to Azure. I care most about
+                systems that hold up under pressure: a 96-hour forecast during
+                a heatwave, an alert system engineers actually trust.
               </p>
               <p>
-                I&apos;m passionate about using data to align cross-functional
-                teams around shared public service missions. Currently I&apos;m
-                mentoring in Johns Hopkins University&apos;s AI program and
-                volunteering with the UW Botanic Gardens, modernizing their
-                seed conservation web application.
+                I care about data done right in the public sector: responsible
+                deployment, clear governance, and tools people can actually use.
+                Currently volunteering with the UW Botanic Gardens, modernizing their
+                seed conservation web application, and with Peace Peloton, enhancing 
+                their management workflows.
               </p>
             </div>
           </div>
@@ -318,12 +314,6 @@ const AboutPage = () => {
           </div>
         </section>
 
-        {/* ---------- Connect ---------- */}
-        <ConnectLinks
-          heading="Get In Touch"
-          description="I'm always open to discussing data science, machine learning, and innovative technology solutions."
-          variant="subtle"
-        />
       </main>
     </div>
   );

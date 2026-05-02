@@ -126,8 +126,8 @@ const ProjectDetails = () => (
       aria-labelledby="tech-heading"
     >
       <div className="section-container">
-        <h2 id="tech-heading">Tech Stack</h2>
-        <div className={styles.techStack}>
+        <h2 id="tech-heading" className={styles.sectionTitle}>Tech Stack</h2>
+        <div className={styles.techGrid}>
           {TECH_STACK.map((tech) => (
             <span key={tech} className={styles.techTag}>
               {tech}

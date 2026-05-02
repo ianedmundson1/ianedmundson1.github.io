@@ -124,7 +124,18 @@
   margin-bottom: 1.5rem;
 }
 
-.tech-stack {
+.section-title {
+  text-align: left;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  color: var(--color-text-primary);
+  margin: 0 0 2rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.tech-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
@@ -132,12 +143,22 @@
 }
 
 .tech-tag {
-  background: var(--color-bg-subtle);
-  color: var(--color-text-secondary);
-  padding: 0.5rem 1rem;
-  border-radius: var(--mit-badge-radius);
+  background: rgba(var(--color-primary-rgb), 0.1);
+  color: var(--color-primary);
+  border: 1px solid rgba(var(--color-primary-rgb), 0.15);
+  padding: 0.5rem 1.1rem;
+  border-radius: var(--border-radius);
   font-size: 0.9rem;
-  font-weight: 500;
+  font-weight: 600;
+  transition: all 0.25s ease;
+}
+
+.tech-tag:hover {
+  background: var(--gradient-accent);
+  color: white;
+  border-color: transparent;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(var(--color-primary-rgb), 0.25);
 }
 
 .project-links {

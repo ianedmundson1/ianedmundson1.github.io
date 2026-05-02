@@ -1,6 +1,4 @@
 import { Link } from 'react-router-dom';
-import Navigation from '../../components/Navigation/Navigation';
-import ConnectLinks from '../../components/ConnectLinks/ConnectLinks';
 import Seo from '../../components/Seo';
 import { useFadeOnScroll } from '../../hooks/useFadeOnScroll';
 import styles from './EnergyOptimizationPage.module.css';
@@ -18,46 +16,46 @@ const HIGHLIGHTS = [
 const PIPELINE_STEPS = [
   {
     step: 1,
-    title: 'Ingest',
+    title: 'Data Infrastructure',
     description:
-      'Stream 30M+ daily sensor readings from OSIsoft PI into Databricks via Delta Live Tables.',
+      'Custom Python/pyodbc pipeline extracted 35,000+ sensor tags from OSIsoft PI historian and migrated 6 years of minute-level data (~110 billion rows) to Azure Data Lake Gen2, 83% faster than vendor tools.',
   },
   {
     step: 2,
     title: 'Feature Engineering',
     description:
-      'Lag features, rolling statistics, weather data joins, and calendar encodings for 35,000+ monitoring points.',
+      'Forecasting models use campus cooling load, dry-bulb, and wet-bulb temperature as inputs. Chiller efficiency models draw on chilled water supply temp, flow rate, wet-bulb, and refrigeration tonnage across all 10 chillers.',
   },
   {
     step: 3,
-    title: 'Model Training',
+    title: 'Demand Forecasting',
     description:
-      'NARX neural networks and Prophet for 96-hour demand forecasting. XGBoost models for equipment-level prediction on chillers and cooling towers.',
+      'NARX neural network and Segmented Linear Inference Model (SLIM) run in parallel, each producing a 96-hour rolling campus cooling load forecast updated hourly. SLIM uses AIC/BIC breakpoint selection; Monte Carlo simulation propagates NOAA weather forecast uncertainty through predictions.',
   },
   {
     step: 4,
-    title: 'Optimization',
+    title: 'Chiller Efficiency Analysis',
     description:
-      'Particle Swarm Optimization (PSO) for corrosion optimization across the cooling infrastructure.',
+      'LightGBM trained on 887,000+ five-minute observations across 10 chillers, evaluated against SVR and Random Forest baselines. SHAP analysis identified chiller selection and wet-bulb temperature as dominant efficiency drivers, 50% improvement in predictive accuracy over linear models.',
   },
   {
     step: 5,
-    title: 'Deployment',
+    title: 'Anomaly Detection',
     description:
-      'Automated daily retraining pipeline on Databricks with managed feature tables and model registry.',
+    'Five-check monitoring framework (sampling rate, out-of-range, missing rate, stale rate, outlier rate) across 20,000+ equipment points. Per-equipment thresholds and alert suppression rules stored in a dedicated parameters SQL table co-designed with plant engineers.',
   },
   {
     step: 6,
     title: 'Reporting',
     description:
-      'Plotly Dash dashboards for 30+ stakeholders showing forecasts, actuals, and savings attribution.',
+      'Plotly Dash dashboards with FastAPI in-memory caching deliver real-time forecasts, equipment status, and anomaly alerts to 30+ stakeholders. Model outputs are written back to OSIsoft PI hourly for direct operator access.',
   },
 ] as const;
 
 const TECH_STACK = [
-  'Python', 'Databricks', 'Delta Live Tables', 'NARX', 'Prophet',
-  'XGBoost', 'Particle Swarm Optimization', 'OSIsoft PI', 'Azure ML',
-  'Plotly Dash', 'SQL', 'pandas',
+  'Python', 'OSIsoft PI', 'Azure Data Lake Gen2', 'NARX', 'SLIM',
+  'LightGBM', 'SHAP', 'Isolation Forest', 'Databricks',
+  'Plotly Dash', 'FastAPI', 'MLflow', 'pandas', 'SQL',
 ] as const;
 
 const CHALLENGES = [
@@ -69,12 +67,12 @@ const CHALLENGES = [
   {
     title: 'Legacy System Migration',
     description:
-      'Replaced a decades-old rule-based scheduling system with ML-driven optimization. Required building trust with operations teams by running models in shadow mode for 3 months before going live.',
+      'Replaced a decades-old rule-based scheduling system with ML-driven optimization.',
   },
   {
     title: 'Data Quality at Scale',
     description:
-      'Developed anomaly detection (Isolation Forest) across 20,000+ monitoring points that reduced false positive maintenance alerts by 93%, saving operations teams from alert fatigue.',
+      'Replaced a failing alert system, where engineers ignored everything due to noise, with a five-check monitoring framework built around per-equipment thresholds co-designed with plant engineers. When validated by operators, 93% of alerts were confirmed genuine anomalies',
   },
 ] as const;
 
@@ -93,7 +91,6 @@ const EnergyOptimizationPage = () => {
       />
       <a href="#overview" className="skip-link">Skip to content</a>
 
-      <Navigation />
 
       <main className="main-content">
         {/* ---------- Hero ---------- */}
@@ -109,8 +106,8 @@ const EnergyOptimizationPage = () => {
               Energy Optimization Systems
             </h1>
             <p className={styles.heroSubtitle}>
-              ML-driven 96-hour demand forecasting and chiller sequencing optimization
-              for NIH&apos;s Central Utility Plant, contributing to $2.2M in annual energy savings across operations
+              96-hour cooling load forecasting, chiller efficiency analysis, and anomaly detection
+              for NIH&apos;s Central Utility Plant, part of $2.2M in annual energy savings across plant operations
             </p>
           </div>
         </header>
@@ -136,19 +133,22 @@ const EnergyOptimizationPage = () => {
                 NIH&apos;s Bethesda campus operates one of the largest central utility plants in the
                 federal government, providing chilled water to over 70 buildings housing critical
                 biomedical research. The plant&apos;s 62,400-ton cooling infrastructure requires precise
-                load forecasting to sequence chillers efficiently — over-provisioning wastes energy,
+                load forecasting to sequence chillers efficiently. Over-provisioning wastes energy,
                 under-provisioning risks equipment failure.
               </p>
               <p>
-                I designed and deployed an end-to-end ML system that forecasts cooling demand 96 hours
-                in advance, then optimizes chiller sequencing to minimize energy consumption while
-                maintaining safety margins. The system processes 30M+ daily sensor readings across
-                35,000+ monitoring points and delivers actionable recommendations to plant operators
-                via interactive dashboards.
+                I designed and deployed a suite of ML systems across the plant: a 96-hour campus
+                cooling load forecaster that gives operators the lead time they need to sequence
+                chillers days in advance; a chiller efficiency analysis using LightGBM and SHAP to
+                identify which chillers to run at which loads; and a five-check anomaly detection
+                framework monitoring 20,000+ equipment points. Underpinning all of it was a custom
+                Python data pipeline migrating 35,000+ sensor tags from OSIsoft PI to Azure, and
+                Plotly Dash dashboards delivering real-time visibility to 30+ stakeholders.
               </p>
               <p>
                 The forecasting models proved 50% more accurate than the legacy rule-based system and
-                enabled proactive resource scheduling that contributed to $2.2M in annual energy savings.
+                enabled proactive resource scheduling. The analytics work was one part of broader
+                operational improvements that together achieved $2.2M in annual energy savings across the plant.
                 This work was recognized with the <strong>NIH Director&apos;s Award in 2024</strong>,
                 specifically for enabling safe operation during the 2023 El Niño heatwave when demand
                 approached maximum capacity.
@@ -200,7 +200,6 @@ const EnergyOptimizationPage = () => {
           </div>
         </section>
 
-        <ConnectLinks variant="gradient" />
       </main>
     </div>
   );

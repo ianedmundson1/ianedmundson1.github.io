@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react';
-import Navigation from '../../components/Navigation/Navigation';
 import Seo from '../../components/Seo';
 import CameraCapture from './components/CameraCapture';
 import EmotionDetector from './components/EmotionDetector';
@@ -53,7 +52,6 @@ const MITDataSciencePage = () => {
         Skip to interactive demo
       </a>
 
-      <Navigation />
 
       <main className="main-content">
         {/* ---------- Hero ---------- */}

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Navigation from '../../components/Navigation/Navigation';
 import Seo from '../../components/Seo';
 import styles from './NotFoundPage.module.css';
 
@@ -11,7 +10,6 @@ const NotFoundPage: React.FC = () => (
       description="The page you're looking for doesn't exist."
       path="/404"
     />
-    <Navigation />
     <main className="main-content">
       <div className={styles.container}>
         <span className={styles.code}>404</span>
