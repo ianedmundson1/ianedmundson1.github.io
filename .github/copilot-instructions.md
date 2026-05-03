@@ -1,0 +1,140 @@
+# Copilot Repository Instructions
+
+## Project Overview
+
+Personal portfolio and data-science showcase site for Ian Edmundson. Full-stack app with a **React + TypeScript** SPA frontend served by a **Python FastAPI** backend. The backend also exposes API endpoints (e.g., emotion detection via a Databricks model serving endpoint).
+
+## Tech Stack
+
+| Layer | Technology | Version |
+|-------|-----------|---------|
+| Frontend | React, TypeScript, Vite | React 19, TS ~5.9, Vite 7 |
+| Styling | CSS Modules (`.module.css`) + global `index.css` | camelCase convention via Vite |
+| Testing (FE) | Vitest, Testing Library | vitest 3, @testing-library/react 16 |
+| Linting | ESLint (flat config) | eslint 9, typescript-eslint 8 |
+| Backend | FastAPI, Uvicorn | Python ≥3.11 |
+| Testing (BE) | pytest | pytest 9 |
+| Packaging | uv (Python), npm (Node) | — |
+| Container | Docker (multi-stage: node 22 + python 3.11) | — |
+| CI/CD | GitHub Actions → GitHub Pages | — |
+
+## Project Layout
+
+```
+.
+├── frontend/                 # React SPA
+│   ├── index.html            # Vite entry point
+│   ├── vite.config.ts        # Build, dev-server, CSS Modules, and test config
+│   ├── eslint.config.js      # ESLint flat config
+│   ├── tsconfig.app.json
+│   └── src/
+│       ├── main.tsx           # App entry — mounts <App />
+│       ├── App.tsx            # Router setup
+│       ├── index.css          # Global styles, design tokens (:root), shared utilities
+│       ├── App.module.css
+│       ├── components/        # Shared components (e.g., Navigation/)
+│       ├── pages/             # Route pages, each with its own .module.css
+│       ├── context/           # React contexts (ThemeContext)
+│       ├── types/             # Shared TypeScript types
+│       └── utils/             # API helpers
+├── backend/
+│   ├── main.py               # FastAPI app — API routes + static file serving
+│   └── static/               # Vite build output (auto-generated, do not edit)
+├── tests/
+│   └── test_main.py          # Backend tests (pytest)
+├── package.json              # npm scripts for frontend
+├── pyproject.toml            # Python project config (uv)
+├── tsconfig.json             # Root TS config (references frontend)
+├── Dockerfile                # Multi-stage build (node → python)
+├── app.yaml                  # Deployment config
+└── .github/
+    └── workflows/            # Azure Static Web Apps CI/CD
+```
+
+## Build & Run Commands
+
+### Prerequisites
+
+- Node.js 22+, npm
+- Python ≥3.11, uv (`pip install uv` or install via astral-sh)
+
+### Frontend
+
+```bash
+# Install dependencies (always run first after cloning or pulling)
+npm install
+
+# Dev server with hot reload (proxies /api to localhost:8000)
+npm run dev
+
+# Production build (outputs to backend/static/)
+npm run build
+
+# Run tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Lint
+npx eslint frontend/
+```
+
+### Backend
+
+```bash
+# Create/sync virtual environment
+uv sync
+
+# Start dev server with reload
+.venv/bin/uvicorn backend.main:app --reload --port 8000
+
+# Run backend tests
+.venv/bin/pytest tests/ -v
+```
+
+### Full Stack (VS Code tasks)
+
+Use the **Start Full Stack** task to launch both frontend and backend in parallel.
+
+### Docker
+
+```bash
+docker build -t portfolio .
+docker run -p 8000:8000 portfolio
+```
+
+## Coding Conventions
+
+### TypeScript / React
+
+- **Functional components** only — use `React.FC` type annotation.
+- **CSS Modules** for component-specific styles. Import as `import styles from './Component.module.css'` and reference as `className={styles.camelCaseName}`.
+- **Global utility classes** (`skip-link`, `main-content`, `section-container`, `fade-section`, `sr-only`) live in `index.css` and are used as plain string classNames — do NOT put these in module files.
+- Design tokens are CSS custom properties in `:root` within `index.css`. Always reference existing tokens (e.g., `var(--color-primary)`) rather than hardcoding hex values.
+- Page-specific custom properties should reference root tokens: `--hp-accent: var(--color-primary)`.
+- Strict TypeScript — `noUnusedLocals`, `noUnusedParameters`, and `strict` are enabled.
+- Use `as const` for static data arrays/objects.
+- Prefer named exports from `index.ts` barrel files in each component/page folder.
+
+### Python / FastAPI
+
+- Type hints required on all function signatures.
+- Use `logging` module, not `print()`.
+- Keep route handlers in `backend/main.py`.
+- Tests go in `tests/` and use pytest fixtures.
+
+### Accessibility
+
+- Every page must include a skip-link (`<a className="skip-link" ...>`).
+- Use semantic HTML elements (`<main>`, `<section>`, `<nav>`, `<header>`).
+- All sections must have `aria-labelledby` pointing to a heading `id`.
+- Respect `prefers-reduced-motion` in CSS — disable animations in that media query.
+- Include `aria-label` on external links noting they open in a new tab.
+
+### General
+
+- Do not edit files in `backend/static/` — these are auto-generated by `npm run build`.
+- Always run `npm run build` from the repo root (it delegates to vite via `package.json`).
+- The frontend build outputs to `backend/static/` as configured in `vite.config.ts`.
+- Trust these instructions. Only search the codebase if information here is incomplete or incorrect.

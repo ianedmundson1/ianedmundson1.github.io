@@ -1,0 +1,233 @@
+/* ==============================================
+   MIT Data Science Page — scoped custom properties
+   ============================================== */
+.mit-data-science-page {
+  --mit-demo-max-w: 600px;
+  --mit-upload-max-w: 500px;
+  --mit-media-max-w: 480px;
+  --mit-hero-padding: 4rem 0;
+  --mit-section-padding: 4rem 0;
+  --mit-badge-bg: rgba(255, 255, 255, 0.2);
+  --mit-badge-radius: 20px;
+  --mit-color-success: #28a745;
+  --mit-color-success-hover: #218838;
+  --mit-color-success-bg: #d4edda;
+  --mit-color-success-border: #c3e6cb;
+  --mit-color-success-text: #155724;
+  --mit-color-danger-bg: #f8d7da;
+  --mit-color-danger-border: #f5c6cb;
+  --mit-color-danger-text: #721c24;
+  --mit-color-secondary: #6c757d;
+  --mit-color-secondary-hover: #545b62;
+  --mit-color-interactive: #dc3545;
+
+  min-height: 100vh;
+  background-color: var(--color-bg-subtle);
+}
+
+/* ---------- Skip-link override ---------- */
+.mit-data-science-page :global(.skip-link) {
+  border-radius: var(--border-radius);
+}
+
+.mit-data-science-page :global(.skip-link):focus {
+  top: 1rem;
+}
+
+/* ==============================================
+   Hero — paper, left-aligned
+   ============================================== */
+.project-hero {
+  position: relative;
+  background: var(--gradient-paper);
+  color: var(--color-text-primary);
+  padding: 5rem 1rem 4rem;
+  border-bottom: 1px solid var(--color-rule);
+  overflow: hidden;
+}
+
+.project-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, var(--color-border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-border) 1px, transparent 1px);
+  background-size: 64px 64px;
+  opacity: 0.35;
+  pointer-events: none;
+  mask-image: radial-gradient(ellipse at top right, black 10%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse at top right, black 10%, transparent 70%);
+}
+
+.hero-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  text-align: left;
+  position: relative;
+  z-index: 1;
+}
+
+.project-badges {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-start;
+  margin-bottom: 1.25rem;
+}
+
+.project-badge {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  padding: 0.25rem 0.6rem;
+  border-radius: 3px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.project-badge.interactive {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-bg);
+  animation: mit-pulse 2s infinite;
+}
+
+@keyframes mit-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  margin: 0 0 0.5rem;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  color: var(--color-text-primary);
+}
+
+.hero-subtitle {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--color-primary);
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+  max-width: 720px;
+  margin: 0;
+}
+
+/* ==============================================
+   Interactive demo
+   ============================================== */
+.interactive-demo {
+  padding: var(--mit-section-padding);
+  background: var(--color-bg);
+}
+
+.interactive-demo h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--color-text-primary);
+}
+
+.demo-description {
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--color-text-muted);
+  margin-bottom: 3rem;
+}
+
+.demo-container {
+  max-width: var(--mit-demo-max-w);
+  margin: 0 auto;
+}
+
+/* ---------- Input options ---------- */
+.input-options {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* ---------- Shared button styles (used by idle-mode buttons) ---------- */
+.capture-button {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition);
+  margin: 0.5rem;
+}
+
+.capture-button:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.capture-button.primary {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.capture-button.primary:hover {
+  background: var(--color-primary-hover);
+  transform: translateY(-2px);
+}
+
+.capture-button.secondary {
+  background: var(--mit-color-secondary);
+  color: #fff;
+}
+
+.capture-button.secondary:hover {
+  background: var(--mit-color-secondary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+}
+
+/* ==============================================
+   Responsive
+   ============================================== */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .project-badges {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .input-options {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .capture-button {
+    width: 200px;
+  }
+}
+
+/* ==============================================
+   Reduced motion
+   ============================================== */
+@media (prefers-reduced-motion: reduce) {
+  .mit-data-science-page *,
+  .mit-data-science-page *::before,
+  .mit-data-science-page *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

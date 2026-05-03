@@ -1,59 +1,29 @@
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
+# Dependencies
+node_modules
+frontend/node_modules
 
-# Virtual environments
-.env
+# Python virtualenvs
 .venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
 
-# MkDocs
-site/
-.cache/
+# Build output
+build/
+dist/
+backend/static
+*.egg-info/
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
+# Caches
+__pycache__/
+*.pyc
+.pytest_cache
+coverage/
+htmlcov/
 
-# OS
+# Local tooling state
+.databricks
+.vscode
+.idea
 .DS_Store
-Thumbs.db
 
-# Logs
+# Logs and secrets
 *.log
-
-# Temporary files
-*.tmp
-*.temp
-
-# Keep some media files for documentation but ignore common generated ones
-# Uncomment lines below if you want to exclude all media files
-# *.mp4
-# *.avi
-# *.mov
-# *.wmv
+.env

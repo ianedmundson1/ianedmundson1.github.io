@@ -1,0 +1,147 @@
+/* ==============================================
+   ConnectLinks — shared component (editorial)
+   ============================================== */
+
+.connect-section {
+  padding: 5rem 0;
+  text-align: left;
+  border-top: 1px solid var(--color-rule);
+}
+
+.section-title {
+  text-align: left;
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  margin: 0.5rem 0 0.75rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.connect-description {
+  font-size: 1rem;
+  margin-bottom: 2rem;
+  max-width: 560px;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+}
+
+.connect-links {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.connect-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--border-radius);
+  text-decoration: none;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.95rem;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.connect-link:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.connect-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+/* ---------- Variant: gradient (now: ink panel with terracotta accent) ---------- */
+.gradient {
+  background: var(--color-text-primary);
+  color: var(--color-bg);
+  position: relative;
+  overflow: hidden;
+}
+
+.gradient::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 64px 64px;
+  pointer-events: none;
+}
+
+.gradient > * {
+  position: relative;
+  z-index: 1;
+}
+
+.gradient .section-title {
+  color: var(--color-bg);
+}
+
+.gradient .connect-description {
+  color: rgba(247, 243, 236, 0.78);
+}
+
+.gradient .connect-link {
+  background-color: transparent;
+  color: var(--color-bg);
+  border-color: rgba(247, 243, 236, 0.25);
+}
+
+.gradient .connect-link:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background-color: rgba(247, 243, 236, 0.04);
+}
+
+/* ---------- Variant: subtle ---------- */
+.subtle {
+  background: var(--color-bg-subtle);
+}
+
+.subtle .section-title {
+  color: var(--color-text-primary);
+}
+
+.subtle .connect-description {
+  color: var(--color-text-muted);
+}
+
+.subtle .connect-link {
+  background: transparent;
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+}
+
+.subtle .connect-link:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .connect-links {
+    flex-direction: row;
+  }
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .connect-section *,
+  .connect-section *::before,
+  .connect-section *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

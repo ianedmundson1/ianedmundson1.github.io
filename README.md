@@ -1,108 +1,101 @@
-# Ian Edmundson - Portfolio Website
+# Ian Edmundson — Portfolio
 
-[![MkDocs](https://img.shields.io/badge/docs-mkdocs-blue)](https://www.mkdocs.org/)
-[![Material for MkDocs](https://img.shields.io/badge/material-mkdocs-blue)](https://squidfunk.github.io/mkdocs-material/)
-[![GitHub Pages](https://img.shields.io/badge/deployed-github%20pages-brightgreen)](https://ianedmundson1.github.io)
+Personal portfolio and project showcase for Ian Edmundson, Data Scientist & Software Engineer.
 
-This repository contains the source code for my professional portfolio website, showcasing my work in data science, machine learning, and software engineering.
+Built with a **React + TypeScript** frontend and a **FastAPI** backend, containerized with Docker. The frontend is deployed to **GitHub Pages** via GitHub Actions; the full-stack app (frontend + backend) can also be run locally or in Docker.
 
-## 🌐 Live Site
+## Features
 
-Visit the live site at: [ianedmundson1.github.io](https://ianedmundson1.github.io)
+- **Portfolio homepage** — overview of expertise, technical impact, and technologies
+- **Projects page** — showcase of data science and engineering projects
+- **Emotion Classifier** — live computer vision demo backed by a Databricks model-serving endpoint; accepts image uploads or webcam captures and returns emotion predictions
 
-## 🏗️ Built With
+## Tech Stack
 
-- **[MkDocs](https://www.mkdocs.org/)** - Static site generator
-- **[Material for MkDocs](https://squidfunk.github.io/mkdocs-material/)** - Modern theme
-- **[GitHub Pages](https://pages.github.com/)** - Hosting platform
+| Layer | Technology |
+|---|---|
+| Frontend | React 19, TypeScript, Vite |
+| Backend | FastAPI, Python 3.11, uvicorn |
+| ML Inference | Databricks Model Serving (FER2013 emotion classifier) |
+| Containerization | Docker (multi-stage build) |
+| Deployment | GitHub Pages (frontend) |
+| Testing | pytest + FastAPI TestClient, Vitest + Testing Library |
+| Dependencies | uv (Python), npm (JS) |
 
-## 📁 Repository Structure
+## Project Structure
 
-```text
-├── docs/                          # Documentation source files
-│   ├── projects/                  # Project showcases
-│   │   ├── computer-vision/       # CV projects
-│   │   └── data-science/          # Data science projects
-│   ├── books/                     # Book recommendations
-│   ├── assets/                    # Shared images and media
-│   └── scripts/                   # Build and utility scripts
-├── extras/                        # Templates and additional resources
-├── mkdocs.yml                     # MkDocs configuration
-├── requirements.txt               # Python dependencies
-└── README.md                      # This file
+```
+├── backend/          # FastAPI app + compiled frontend assets
+│   ├── main.py       # API routes and Databricks inference
+│   └── static/       # Built React app (output of npm run build)
+├── frontend/         # React + TypeScript source
+│   └── src/
+│       ├── pages/    # Route-level page components
+│       ├── components/  # Reusable components (Navigation)
+│       ├── utils/    # API client
+│       └── types/    # TypeScript types
+├── tests/            # Backend pytest tests
+├── Dockerfile        # Multi-stage build (Node → Python)
+└── .vscode/          # Tasks and launch configs for local dev
 ```
 
-## 🚀 Local Development
+## Local Development
 
-### Prerequisites
-
-- Python 3.8+
-- pip
-
-### Setup
-
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/ianedmundson1/ianedmundson.github.io.git
-   cd ianedmundson.github.io
-   ```
-
-2. Install dependencies:
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. Serve the site locally:
-
-   ```bash
-   mkdocs serve
-   ```
-
-4. Open your browser to `http://127.0.0.1:8000`
-
-### Building for Production
+**Prerequisites:** Python 3.11+, Node.js 22+, [uv](https://docs.astral.sh/uv/)
 
 ```bash
-mkdocs build
+# Install dependencies
+uv sync
+npm install
+
+# Set up environment
+cp .env.example .env  # add DATABRICKS_HOST and DATABRICKS_TOKEN
+
+# Start both servers (VS Code)
+# Ctrl+Shift+P → Tasks: Run Task → Start Full Stack
+
+# Or manually:
+.venv/bin/uvicorn backend.main:app --reload --port 8000  # backend on :8000
+npm run dev                                               # frontend on :5173
 ```
 
-## 📝 Content Management
+The Vite dev server proxies `/api/*` requests to the backend automatically.
 
-### Adding New Projects
+## Running Tests
 
-1. Create a new directory in `docs/projects/`
-2. Add your project documentation and assets
-3. Update the navigation in `mkdocs.yml`
+```bash
+# Backend
+.venv/bin/pytest tests/ -v
 
-### Adding Book Reviews
+# Frontend
+npm test
+```
 
-1. Create a new directory in `docs/books/reviews/`
-2. Use the template from `extras/book_review_template.md`
-3. Update the books index page
+Or use **Ctrl+Shift+P → Tasks: Run Test Task** in VS Code.
 
-## 🔄 Automated Content Updates
+## Docker
 
-The site includes automated fetching of README files from external repositories using the `fetch_readme.py` script and `readme_config.yaml` configuration.
+```bash
+# Build
+docker build -t ianedmundsongithub .
 
-## 🤝 Contributing
+# Run
+docker run -p 8000:8000 \
+  -e DATABRICKS_HOST=https://<your-workspace>.cloud.databricks.com/ \
+  -e DATABRICKS_TOKEN=<your-pat-token> \
+  ianedmundsongithub
+```
 
-While this is a personal portfolio, suggestions and improvements are welcome! Please feel free to:
+Open [http://localhost:8000](http://localhost:8000).
 
-1. Open an issue for bugs or suggestions
-2. Submit a pull request for improvements
-3. Share feedback on the content or structure
+## Environment Variables
 
-## 📧 Contact
+| Variable | Description |
+|---|---|
+| `DATABRICKS_HOST` | Databricks workspace URL |
+| `DATABRICKS_TOKEN` | Personal access token for model serving |
 
-- **GitHub**: [@ianedmundson1](https://github.com/ianedmundson1)
-- **LinkedIn**: [Ian Edmundson](https://linkedin.com/in/ian-edmundson-a0979a178)
+## Links
 
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
-
----
-
-Last updated: August 2025
+- [GitHub](https://github.com/ianedmundson1)
+- [LinkedIn](https://linkedin.com/in/ian-edmundson-a0979a178)
