@@ -22,7 +22,7 @@ function App() {
     <HelmetProvider>
     <ThemeProvider>
     <ErrorBoundary>
-    <Router>
+    <Router basename={import.meta.env.BASE_URL}>
       <RouteAnnouncer />
       <Suspense fallback={<div className={styles.loading}>Loading…</div>}>
       <div className={styles.App}>

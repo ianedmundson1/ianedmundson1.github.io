@@ -7,7 +7,11 @@ import path from 'path'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 // https://vite.dev/config/
+const isGitHubPages = process.env.GITHUB_ACTIONS === 'true';
+const base = isGitHubPages ? '/ianedmundson.github.io/' : '/';
+
 export default defineConfig({
+  base,
   plugins: [
     react(),
     VitePWA({
