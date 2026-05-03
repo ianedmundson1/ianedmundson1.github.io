@@ -4,6 +4,7 @@ FROM node:22-alpine AS frontend-build
 WORKDIR /app
 
 COPY package*.json ./
+COPY frontend/package.json ./frontend/
 RUN npm ci
 
 COPY tsconfig.json ./
