@@ -1,31 +1,29 @@
-
-.databricks
-.vscode
+# Dependencies
 node_modules
-.env
-.DS_Store
-.idea
-*.log
-*.pyc   
-__pycache__/
+frontend/node_modules
+
+# Python virtualenvs
+.venv
+
+# Build output
 build/
 dist/
+backend/static
 *.egg-info/
+
+# Caches
+__pycache__/
+*.pyc
+.pytest_cache
 coverage/
 htmlcov/
 
-.git
-.venv
-node_modules
-frontend/node_modules
+# Local tooling state
 .databricks
-.pytest_cache
-**/__pycache__
-**/*.pyc
-.env
 .vscode
+.idea
 .DS_Store
-backend/static
 
-*.md
-.fake
+# Logs and secrets
+*.log
+.env

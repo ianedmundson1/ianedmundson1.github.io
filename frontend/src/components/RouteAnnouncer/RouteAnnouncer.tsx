@@ -6,8 +6,12 @@ const RouteAnnouncer: React.FC = () => {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    const title = document.title;
-    setMessage(`Navigated to ${title}`);
+    // Defer reading document.title until after react-helmet-async has flushed
+    // the new <title>. A rAF fires too early (before helmet effects settle);
+    // setTimeout yields back to the event loop, giving helmet time to commit.
+    const timer = setTimeout(() => {
+      setMessage(`Navigated to ${document.title}`);
+    }, 50);
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'instant' as ScrollBehavior });
@@ -26,6 +30,8 @@ const RouteAnnouncer: React.FC = () => {
         main.addEventListener('blur', cleanup);
       }
     }
+
+    return () => clearTimeout(timer);
   }, [location.pathname]);
 
   return (

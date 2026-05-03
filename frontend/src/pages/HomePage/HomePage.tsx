@@ -10,6 +10,18 @@ import { EXPERTISE_CARDS, IMPACT_ITEMS, FEATURED_PROJECTS, HERO_DESCRIPTION } fr
 import ProjectCard from '../../components/ProjectCard/ProjectCard';
 import styles from './HomePage.module.css';
 
+const PERSON_JSON_LD = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Ian Edmundson',
+  url: 'https://ianedmundson.github.io',
+  jobTitle: 'Data Scientist & Software Engineer',
+  sameAs: [
+    'https://www.linkedin.com/in/ianedmundson',
+    'https://github.com/ianedmundson1',
+  ],
+} as const;
+
 const HomePage: React.FC = () => {
   const wrapperRef = useFadeOnScroll('fade-section', 'visible');
 
@@ -18,7 +30,7 @@ const HomePage: React.FC = () => {
       <Seo
         title="Ian Edmundson"
         description={HERO_DESCRIPTION}
-        path="/"
+        jsonLd={PERSON_JSON_LD}
       />
       <a className="skip-link" href="#expertise">
         Skip to content
@@ -150,6 +162,7 @@ const HomePage: React.FC = () => {
                   link={project.link}
                   linkLabel={project.linkLabel}
                   external={project.external}
+                  youtube={project.youtube}
                 />
               ))}
             </div>

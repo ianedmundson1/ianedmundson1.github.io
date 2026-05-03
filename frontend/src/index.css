@@ -238,6 +238,7 @@ h4, h5, h6 {
   opacity: 0;
   transform: translateY(30px);
   transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+  transition-delay: calc(var(--stagger-index, 0) * 0.1s);
 }
 
 .fade-section.visible {
@@ -250,5 +251,6 @@ h4, h5, h6 {
     opacity: 1;
     transform: none;
     transition: none;
+    transition-delay: 0s;
   }
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import { PROJECTS as PERSONAL_PROJECTS } from './personalProjects';
 
 /* -------------------------------------------------- */
 /*  Expertise illustrations — wide banner SVGs         */
@@ -133,7 +134,17 @@ export const IMPACT_ITEMS = [
 /* -------------------------------------------------- */
 /*  Featured projects                                  */
 /* -------------------------------------------------- */
-export const FEATURED_PROJECTS = [
+interface FeaturedProject {
+  title: string;
+  badges: string[];
+  description: string;
+  link: string;
+  linkLabel: string;
+  external?: boolean;
+  youtube?: string;
+}
+
+export const FEATURED_PROJECTS: FeaturedProject[] = [
   {
     title: 'MIT Applied Data Science — Emotion Detection',
     badges: ['Machine Learning', 'Interactive Demo'],
@@ -142,24 +153,17 @@ export const FEATURED_PROJECTS = [
     link: '/projects/mit-data-science',
     linkLabel: 'Case study',
   },
-  {
-    title: 'Facial Detection System',
-    badges: ['OpenCV', 'Python'],
-    description:
-      'Real-time face detection using deep learning models and OpenCV for live video processing.',
-    link: 'https://github.com/ianedmundson1/Facial-detection',
-    linkLabel: 'GitHub',
-    external: true,
-  },
-  {
-    title: 'Lane Detection Algorithm',
-    badges: ['Computer Vision', 'Autonomous Vehicles'],
-    description:
-      'Advanced lane detection for autonomous driving using computer vision and image processing techniques.',
-    link: 'https://github.com/ianedmundson1/Lane-detection',
-    linkLabel: 'GitHub',
-    external: true,
-  },
+  ...PERSONAL_PROJECTS
+    .filter((p) => p.title === 'Facial Detection System' || p.title === 'Lane Detection Algorithm')
+    .map((p) => ({
+      title: p.title,
+      badges: p.tech.slice(0, 2),
+      description: p.summary,
+      link: p.href,
+      linkLabel: 'GitHub',
+      external: true,
+      youtube: p.youtube,
+    })),
 ];
 
 /* -------------------------------------------------- */

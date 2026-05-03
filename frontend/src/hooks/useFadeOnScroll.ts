@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef } from 'react';
 
 /**
  * Observes elements matching `fadeClass` inside the returned ref and
@@ -8,7 +8,7 @@ import { useEffect, useRef, useCallback } from 'react';
 export function useFadeOnScroll(fadeClass: string, visibleClass: string) {
   const ref = useRef<HTMLDivElement>(null);
 
-  const observe = useCallback(() => {
+  useEffect(() => {
     const root = ref.current;
     if (!root) return;
 
@@ -27,8 +27,6 @@ export function useFadeOnScroll(fadeClass: string, visibleClass: string) {
     targets.forEach((t) => io.observe(t));
     return () => io.disconnect();
   }, [fadeClass, visibleClass]);
-
-  useEffect(observe, [observe]);
 
   return ref;
 }

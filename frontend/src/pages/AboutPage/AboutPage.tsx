@@ -126,7 +126,6 @@ const AboutPage = () => {
       <Seo
         title="About"
         description="Ian Edmundson's background: federal data scientist at NIH, MIT Applied Data Science alum, and software engineer focused on production ML, forecasting, and analytics infrastructure."
-        path="/about"
       />
       <a href="#about-intro" className="skip-link">
         Skip to content
@@ -170,6 +169,7 @@ const AboutPage = () => {
           id="about-intro"
           className={`${styles.introSection} fade-section`}
           aria-labelledby="intro-heading"
+          style={{ '--stagger-index': 0 } as React.CSSProperties}
         >
           <div className="section-container">
             <h2 id="intro-heading" className="sr-only">
@@ -208,6 +208,7 @@ const AboutPage = () => {
         <section
           className={`${styles.experienceSection} fade-section`}
           aria-labelledby="experience-heading"
+          style={{ '--stagger-index': 1 } as React.CSSProperties}
         >
           <div className="section-container">
             <h2 id="experience-heading" className={styles.sectionTitle}>
@@ -238,6 +239,7 @@ const AboutPage = () => {
         <section
           className={`${styles.capabilitiesSection} fade-section`}
           aria-labelledby="capabilities-heading"
+          style={{ '--stagger-index': 2 } as React.CSSProperties}
         >
           <div className="section-container">
             <h2 id="capabilities-heading" className={styles.sectionTitle}>
@@ -265,6 +267,7 @@ const AboutPage = () => {
         <section
           className={`${styles.educationSection} fade-section`}
           aria-labelledby="education-heading"
+          style={{ '--stagger-index': 3 } as React.CSSProperties}
         >
           <div className="section-container">
             <h2 id="education-heading" className={styles.sectionTitle}>
@@ -286,6 +289,7 @@ const AboutPage = () => {
         <section
           className={`${styles.awardsSection} fade-section`}
           aria-labelledby="awards-heading"
+          style={{ '--stagger-index': 4 } as React.CSSProperties}
         >
           <div className="section-container">
             <h2 id="awards-heading" className={styles.sectionTitle}>

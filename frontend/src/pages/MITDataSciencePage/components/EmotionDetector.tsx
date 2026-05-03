@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import { analyzeEmotionBase64 } from '../../../utils/api';
+import { useEmotionAnalysis, type EmotionApiResponse } from '../../../utils/api';
 import styles from './EmotionDetector.module.css';
 
 interface EmotionDetectorProps {
@@ -12,22 +11,20 @@ interface EmotionDetectorProps {
  * might return into a single { label, confidencePercent } pair.
  */
 const parseModelResponse = (
-  data: unknown,
+  data: EmotionApiResponse,
 ): { label: string; confidencePercent: number } => {
   // The payload may be wrapped in an array
   const result = Array.isArray(data) ? data[0] : data;
-
-  const record = result as Record<string, unknown> | undefined;
   const label =
-    (record?.label as string) ??
-    (record?.emotion as string) ??
-    (record?.prediction as string) ??
+    result?.label ??
+    result?.emotion ??
+    result?.prediction ??
     'Unknown';
 
   const raw =
-    (record?.score as number) ??
-    (record?.confidence as number) ??
-    (record?.probability as number) ??
+    result?.score ??
+    result?.confidence ??
+    result?.probability ??
     0;
 
   const confidencePercent =
@@ -39,41 +36,19 @@ const parseModelResponse = (
 };
 
 const EmotionDetector = ({ capturedImage, onReset }: EmotionDetectorProps) => {
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [prediction, setPrediction] = useState('');
-  const [confidence, setConfidence] = useState(0);
-  const [error, setError] = useState<string | null>(null);
+  const { data, isLoading, error } = useEmotionAnalysis(capturedImage);
 
-  useEffect(() => {
-    let active = true;
+  // We can derive prediction and confidence from data if present
+  let prediction = '';
+  let confidence = 0;
+  
+  if (data) {
+    const parsed = parseModelResponse(data);
+    prediction = parsed.label;
+    confidence = parsed.confidencePercent;
+  }
 
-    const analyzeImage = async () => {
-      setIsAnalyzing(true);
-      setError(null);
-
-      try {
-        const response = await analyzeEmotionBase64(capturedImage);
-        if (!active) return;
-
-        if (response.success && response.data) {
-          const { label, confidencePercent } = parseModelResponse(response.data);
-          setPrediction(label);
-          setConfidence(confidencePercent);
-        } else {
-          setError(response.error ?? 'Analysis failed');
-        }
-      } catch (err) {
-        if (!active) return;
-        setError(err instanceof Error ? err.message : 'Unknown error occurred');
-        console.error('Emotion analysis error:', err);
-      } finally {
-        if (active) setIsAnalyzing(false);
-      }
-    };
-
-    analyzeImage();
-    return () => { active = false; };
-  }, [capturedImage]);
+  const errorMessage = error?.message ?? null;
 
   return (
     <div className={styles.emotionDetector} role="region" aria-label="Emotion analysis results">
@@ -85,14 +60,14 @@ const EmotionDetector = ({ capturedImage, onReset }: EmotionDetectorProps) => {
         />
       </div>
 
-      {isAnalyzing && (
+      {isLoading && (
         <div className={styles.analyzing} aria-live="polite">
           <div className={styles.spinner} role="status" aria-label="Analyzing" />
           <p>Analyzing facial expression…</p>
         </div>
       )}
 
-      {!isAnalyzing && !error && prediction && (
+      {!isLoading && !errorMessage && prediction && (
         <div className={styles.emotionResult} aria-live="polite">
           <h3>Detected Emotion</h3>
           <div className={styles.emotionDisplay}>
@@ -122,10 +97,10 @@ const EmotionDetector = ({ capturedImage, onReset }: EmotionDetectorProps) => {
         </div>
       )}
 
-      {error && (
+      {errorMessage && (
         <div className={styles.errorMessage} role="alert">
           <h3>Analysis Failed</h3>
-          <p>{error}</p>
+          <p>{errorMessage}</p>
           <div className={styles.errorActions}>
             <button className={`${styles.analyzeButton} ${styles.secondary}`} onClick={onReset}>
               Try Again

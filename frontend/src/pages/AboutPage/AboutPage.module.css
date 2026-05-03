@@ -442,8 +442,10 @@
   }
 
   .hero-photo {
-    width: 140px;
-    height: 140px;
+    width: 220px;
+    height: 220px;
+    justify-self: center;
+    margin-top: 0.5rem;
   }
 
   .section-title {
@@ -474,11 +476,6 @@
 @media (max-width: 480px) {
   .hero-title {
     font-size: 2rem;
-  }
-
-  .hero-photo {
-    width: 120px;
-    height: 120px;
   }
 
   .capability-card,

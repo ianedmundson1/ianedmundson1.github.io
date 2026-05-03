@@ -1,20 +1,24 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useLocation } from 'react-router-dom';
 
 interface SeoProps {
   title: string;
   description: string;
-  path: string;
+  /** Override the canonical path. Defaults to the current route. */
+  path?: string;
   image?: string;
+  jsonLd?: Record<string, unknown>;
 }
 
 const SITE_URL = 'https://ianedmundson.github.io';
 const SITE_NAME = 'Ian Edmundson';
 const DEFAULT_IMAGE = '/og-image.jpg';
 
-const Seo: React.FC<SeoProps> = ({ title, description, path, image = DEFAULT_IMAGE }) => {
+const Seo: React.FC<SeoProps> = ({ title, description, path, image = DEFAULT_IMAGE, jsonLd }) => {
+  const location = useLocation();
   const fullTitle = title === SITE_NAME ? title : `${title} — ${SITE_NAME}`;
-  const url = `${SITE_URL}${path}`;
+  const url = `${SITE_URL}${path ?? location.pathname}`;
   const imageUrl = image.startsWith('http') ? image : `${SITE_URL}${image}`;
 
   return (
@@ -34,6 +38,10 @@ const Seo: React.FC<SeoProps> = ({ title, description, path, image = DEFAULT_IMA
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={imageUrl} />
+
+      {jsonLd && (
+        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+      )}
     </Helmet>
   );
 };

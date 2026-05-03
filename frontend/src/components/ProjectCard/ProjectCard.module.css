@@ -56,11 +56,17 @@
   flex: 1;
 }
 
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.5rem;
+  margin-top: 1.25rem;
+}
+
 .link {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  margin-top: 1.25rem;
   color: var(--color-primary);
   font-family: var(--font-mono);
   font-weight: 500;
@@ -73,4 +79,12 @@
 
 .link:hover {
   gap: 0.7rem;
+}
+
+.linkSecondary {
+  color: var(--color-text-secondary);
+}
+
+.linkSecondary:hover {
+  color: var(--color-primary);
 }

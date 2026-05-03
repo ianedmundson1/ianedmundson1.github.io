@@ -32,7 +32,6 @@ const BooksPage: React.FC = () => {
       <Seo
         title="Books"
         description="A reading list and notes from Ian Edmundson — books on machine learning, software engineering, and data infrastructure."
-        path="/books"
       />
       <a className="skip-link" href="#book-reviews">
         Skip to book reviews

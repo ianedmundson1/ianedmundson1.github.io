@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom';
 import Seo from '../../components/Seo';
 import { useFadeOnScroll } from '../../hooks/useFadeOnScroll';
+import { getWorkProject } from '../../data/workProjects';
 import styles from './EnergyOptimizationPage.module.css';
+
+const META = getWorkProject('energy-optimization');
 
 /* -------------------------------------------------- */
 /*  Static data                                        */
@@ -87,7 +90,6 @@ const EnergyOptimizationPage = () => {
       <Seo
         title="Energy Optimization at NIH"
         description="ML-driven energy optimization at NIH's Central Utility Plant: 96-hour cooling demand forecasting, anomaly detection across 20,000+ points, and $2.2M in annual savings."
-        path="/projects/energy-optimization"
       />
       <a href="#overview" className="skip-link">Skip to content</a>
 
@@ -98,16 +100,15 @@ const EnergyOptimizationPage = () => {
           <div className={styles.heroContainer}>
             <Link to="/projects" className={styles.backLink}>&larr; Back to Projects</Link>
             <div className={styles.heroBadges}>
-              <span className={styles.badge}>Forecasting</span>
-              <span className={styles.badge}>Optimization</span>
-              <span className={styles.badge}>NIH</span>
+              {META.badges.map((b) => (
+                <span key={b} className={styles.badge}>{b}</span>
+              ))}
             </div>
             <h1 id="hero-title" className={styles.heroTitle}>
-              Energy Optimization Systems
+              {META.title}
             </h1>
             <p className={styles.heroSubtitle}>
-              96-hour cooling load forecasting, chiller efficiency analysis, and anomaly detection
-              for NIH&apos;s Central Utility Plant, part of $2.2M in annual energy savings across plant operations
+              {META.summary}
             </p>
           </div>
         </header>

@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom';
 import Seo from '../../components/Seo';
 import { useFadeOnScroll } from '../../hooks/useFadeOnScroll';
+import { getWorkProject } from '../../data/workProjects';
 import styles from './CloudMigrationPage.module.css';
+
+const META = getWorkProject('cloud-migration');
 
 /* -------------------------------------------------- */
 /*  Static data                                        */
@@ -87,7 +90,6 @@ const CloudMigrationPage = () => {
       <Seo
         title="Cloud Migration"
         description="Migrating 6 years of sensor data and 35,000+ monitoring points to cloud infrastructure with custom open-source tooling — 83% faster than vendor solutions."
-        path="/projects/cloud-migration"
       />
       <a href="#overview" className="skip-link">Skip to content</a>
 
@@ -98,16 +100,15 @@ const CloudMigrationPage = () => {
           <div className={styles.heroContainer}>
             <Link to="/projects" className={styles.backLink}>&larr; Back to Projects</Link>
             <div className={styles.heroBadges}>
-              <span className={styles.badge}>Azure</span>
-              <span className={styles.badge}>ETL</span>
-              <span className={styles.badge}>NIH</span>
+              {META.badges.map((b) => (
+                <span key={b} className={styles.badge}>{b}</span>
+              ))}
             </div>
             <h1 id="hero-title" className={styles.heroTitle}>
-              Cloud Data Migration
+              {META.title}
             </h1>
             <p className={styles.heroSubtitle}>
-              Large-scale migration of 6 years of sensor data from OSIsoft PI to Azure Data Lake Gen2 —
-              with custom tooling that outperformed the vendor solution by 83%
+              {META.summary}
             </p>
           </div>
         </header>

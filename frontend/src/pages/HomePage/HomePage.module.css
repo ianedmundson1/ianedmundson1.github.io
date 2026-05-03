@@ -486,8 +486,10 @@
     gap: 2.5rem;
   }
   .heroPhoto {
-    width: 180px;
-    height: 180px;
+    width: 220px;
+    height: 220px;
+    justify-self: center;
+    margin-top: 0.5rem;
   }
   .heroActions {
     flex-direction: row;

@@ -17,7 +17,6 @@ const ProjectsPage: React.FC = () => {
       <Seo
         title="Projects"
         description="Selected projects by Ian Edmundson: emotion detection with VGG16 transfer learning, energy forecasting at NIH, cloud migration tooling, and computer vision systems."
-        path="/projects"
       />
       <a className="skip-link" href="#projects-overview">
         Skip to content
@@ -47,10 +46,11 @@ const ProjectsPage: React.FC = () => {
           </h2>
           <div className="section-container">
             <div className={styles.projectCategories}>
-              {CATEGORIES.map((category) => (
+              {CATEGORIES.map((category, index) => (
                 <article
                   key={category.title}
                   className={`${styles.categorySection} fade-section`}
+                  style={{ '--stagger-index': index } as React.CSSProperties}
                 >
                   <h2 className={styles.categoryTitle}>
                     {category.title}
@@ -70,6 +70,7 @@ const ProjectsPage: React.FC = () => {
                         linkLabel={project.linkLabel}
                         external={project.external}
                         interactive={project.interactive}
+                        youtube={project.youtube}
                       />
                     ))}
                   </div>

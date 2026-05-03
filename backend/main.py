@@ -9,6 +9,13 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from databricks.sdk import WorkspaceClient
 from databricks.sdk.service.serving import DataframeSplitInput
+import sentry_sdk
+
+sentry_sdk.init(
+    dsn=os.environ.get("SENTRY_DSN", ""),
+    traces_sample_rate=0.1,
+    profiles_sample_rate=0.1,
+)
 
 # --- Logging Setup ---
 logging.basicConfig(

@@ -10,6 +10,7 @@ export interface ProjectCardProps {
   linkLabel?: string;
   external?: boolean;
   interactive?: boolean;
+  youtube?: string;
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({
@@ -20,6 +21,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   linkLabel = 'View Project',
   external = false,
   interactive = false,
+  youtube,
 }) => (
   <article className={styles.card}>
     <div className={styles.badges}>
@@ -32,21 +34,36 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     </div>
     <h3 className={styles.title}>{title}</h3>
     <p className={styles.description}>{description}</p>
-    {link && (
-      external ? (
-        <a
-          href={link}
-          className={styles.link}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {linkLabel} &rarr;
-        </a>
-      ) : (
-        <Link to={link} className={styles.link}>
-          {linkLabel} &rarr;
-        </Link>
-      )
+    {(link || youtube) && (
+      <div className={styles.actions}>
+        {link && (
+          external ? (
+            <a
+              href={link}
+              className={styles.link}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {linkLabel} &rarr;
+            </a>
+          ) : (
+            <Link to={link} className={styles.link}>
+              {linkLabel} &rarr;
+            </Link>
+          )
+        )}
+        {youtube && (
+          <a
+            href={youtube}
+            className={`${styles.link} ${styles.linkSecondary}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`${title} demo on YouTube (opens in new tab)`}
+          >
+            Watch demo &rarr;
+          </a>
+        )}
+      </div>
     )}
   </article>
 );

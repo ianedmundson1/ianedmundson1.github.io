@@ -1,4 +1,6 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
+import * as Sentry from '@sentry/react';
+import styles from './ErrorBoundary.module.css';
 
 interface Props {
   children: ReactNode;
@@ -17,6 +19,7 @@ class ErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, info: ErrorInfo): void {
     console.error('ErrorBoundary caught:', error, info);
+    Sentry.captureException(error, { extra: { info } });
   }
 
   private handleReload = () => {
@@ -26,22 +29,13 @@ class ErrorBoundary extends Component<Props, State> {
   render() {
     if (this.state.hasError) {
       return (
-        <main className="main-content" style={{ textAlign: 'center', padding: '4rem 1rem' }}>
+        <main className={`main-content ${styles.fallback}`}>
           <h1>Something went wrong</h1>
           <p>An unexpected error occurred. Try reloading the page.</p>
           <button
             type="button"
             onClick={this.handleReload}
-            style={{
-              marginTop: '1.5rem',
-              padding: '0.75rem 1.5rem',
-              borderRadius: 4,
-              border: 'none',
-              background: 'var(--color-primary)',
-              color: '#fdfaf4',
-              fontWeight: 600,
-              cursor: 'pointer',
-            }}
+            className={styles.reloadButton}
           >
             Reload page
           </button>

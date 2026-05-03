@@ -1,14 +1,19 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import MITDataSciencePage from '../MITDataSciencePage';
 
 describe('MITDataSciencePage', () => {
-  const renderPage = () =>
-    render(
-      <MemoryRouter>
-        <MITDataSciencePage />
-      </MemoryRouter>,
+  const renderPage = () => {
+    const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+    return render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <MITDataSciencePage />
+        </MemoryRouter>
+      </QueryClientProvider>,
     );
+  };
 
   it('renders the hero title', () => {
     renderPage();
@@ -23,24 +28,13 @@ describe('MITDataSciencePage', () => {
     expect(skipLink).toHaveAttribute('href', '#demo');
   });
 
-  it('renders the demo section heading', () => {
+  it('shows the demo-down notice instead of the interactive demo', () => {
     renderPage();
     expect(
-      screen.getByRole('heading', { level: 2, name: 'Try the Emotion Detection Model' }),
+      screen.getByRole('heading', { level: 2, name: /demo temporarily offline/i }),
     ).toBeInTheDocument();
-  });
-
-  it('shows camera and upload buttons in idle mode', () => {
-    renderPage();
-    expect(screen.getByRole('button', { name: /open camera/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /upload an image/i })).toBeInTheDocument();
-  });
-
-  it('switches to upload mode when upload button is clicked', () => {
-    renderPage();
-    fireEvent.click(screen.getByRole('button', { name: /upload an image/i }));
-    expect(screen.getByText('Upload an Image')).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /open camera/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /upload an image/i })).not.toBeInTheDocument();
   });
 
   it('renders project badges', () => {

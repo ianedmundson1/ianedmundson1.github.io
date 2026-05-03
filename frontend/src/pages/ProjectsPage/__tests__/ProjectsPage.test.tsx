@@ -36,12 +36,11 @@ describe('ProjectsPage', () => {
   });
 
   it('renders external links with proper attributes', () => {
-    renderPage();
-    const externalLinks = screen.getAllByText('View Project');
-    const externalLink = externalLinks.find(
-      (link) => link.closest('a')?.getAttribute('href') === 'https://github.com/ianedmundson1/Facial-detection',
+    const { container } = renderPage();
+    const link = container.querySelector(
+      'a[href="https://github.com/ianedmundson1/Facial-detection"]',
     );
-    expect(externalLink?.closest('a')).toHaveAttribute('target', '_blank');
-    expect(externalLink?.closest('a')).toHaveAttribute('rel', 'noopener noreferrer');
+    expect(link).toHaveAttribute('target', '_blank');
+    expect(link).toHaveAttribute('rel', 'noopener noreferrer');
   });
 });
