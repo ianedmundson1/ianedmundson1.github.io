@@ -109,6 +109,8 @@ async def post_emotion_classification(file: UploadFile = File(...)):
         
         return result
 
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error in emotion classification: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
