@@ -77,7 +77,7 @@ const Navigation: React.FC<NavigationProps> = ({ className }) => {
 
         <div className={styles.navActions}>
           <a
-            href="/resume_ian_edmundson.pdf"
+            href={`${import.meta.env.BASE_URL}resume_ian_edmundson.pdf`}
             className={styles.resumeLink}
             target="_blank"
             rel="noopener noreferrer"
