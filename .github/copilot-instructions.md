@@ -16,7 +16,7 @@ Personal portfolio and data-science showcase site for Ian Edmundson. Full-stack 
 | Testing (BE) | pytest | pytest 9 |
 | Packaging | uv (Python), npm (Node) | — |
 | Container | Docker (multi-stage: node 22 + python 3.11) | — |
-| CI/CD | GitHub Actions → Azure Static Web Apps | — |
+| CI/CD | GitHub Actions → GitHub Pages | — |
 
 ## Project Layout
 
