@@ -14,7 +14,7 @@ const RouteAnnouncer: React.FC = () => {
     }, 50);
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'instant' as ScrollBehavior });
+    window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
 
     const main = document.querySelector('main') as HTMLElement | null;
     if (main) {

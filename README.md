@@ -2,7 +2,7 @@
 
 Personal portfolio and project showcase for Ian Edmundson, Data Scientist & Software Engineer.
 
-Built with a **React + TypeScript** frontend and a **FastAPI** backend, containerized with Docker and deployed to **Azure Container Apps**.
+Built with a **React + TypeScript** frontend and a **FastAPI** backend, containerized with Docker. The frontend is deployed to **GitHub Pages** via GitHub Actions; the full-stack app (frontend + backend) can also be run locally or in Docker.
 
 ## Features
 
@@ -18,7 +18,7 @@ Built with a **React + TypeScript** frontend and a **FastAPI** backend, containe
 | Backend | FastAPI, Python 3.11, uvicorn |
 | ML Inference | Databricks Model Serving (FER2013 emotion classifier) |
 | Containerization | Docker (multi-stage build) |
-| Deployment | Azure Container Apps |
+| Deployment | GitHub Pages (frontend) |
 | Testing | pytest + FastAPI TestClient, Vitest + Testing Library |
 | Dependencies | uv (Python), npm (JS) |
 

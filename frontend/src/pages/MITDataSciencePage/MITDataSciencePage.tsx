@@ -80,6 +80,7 @@ const MITDataSciencePage = () => {
 
         {/* ---------- Interactive demo ---------- */}
         <SectionDownNotice
+          id="demo"
           title="Demo Temporarily Offline"
           message="The emotion detection backend is paused. The full project write-up is below."
         >

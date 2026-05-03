@@ -10,6 +10,8 @@ interface SectionDownNoticeProps {
   message?: string;
   /** Optional eyebrow label. */
   eyebrow?: string;
+  /** Optional id applied to the notice section, so skip-link targets remain valid even when the wrapped content is hidden. */
+  id?: string;
   children: React.ReactNode;
 }
 
@@ -24,12 +26,13 @@ const SectionDownNotice: React.FC<SectionDownNoticeProps> = ({
   title = 'Section Temporarily Unavailable',
   message = 'This part of the site is paused. Please check back soon.',
   eyebrow = 'Temporarily offline',
+  id,
   children,
 }) => {
   if (!down) return <>{children}</>;
 
   return (
-    <section className={styles.notice} role="status" aria-live="polite">
+    <section id={id} className={styles.notice} role="status" aria-live="polite">
       <div className={styles.inner}>
         <span className={styles.eyebrow}>{eyebrow}</span>
         <h2 className={styles.title}>{title}</h2>
