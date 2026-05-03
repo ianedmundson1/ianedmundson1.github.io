@@ -6,7 +6,7 @@ interface ImageUploadProps {
   onCancel: () => void;
 }
 
-const ACCEPTED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+const ACCEPTED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
 const ImageUpload = ({ onUpload, onCancel }: ImageUploadProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -21,7 +21,7 @@ const ImageUpload = ({ onUpload, onCancel }: ImageUploadProps) => {
       reader.onload = (e) => setPreviewUrl(e.target?.result as string);
       reader.readAsDataURL(file);
     } else {
-      setFileError('Please select a valid image file (JPG, PNG, GIF, or WebP).');
+      setFileError('Please select a valid image file (JPG, PNG, or WebP).');
     }
   }, []);
 
@@ -84,12 +84,12 @@ const ImageUpload = ({ onUpload, onCancel }: ImageUploadProps) => {
             <div className={styles.uploadIcon} aria-hidden="true">📁</div>
             <p>Drag &amp; drop an image here</p>
             <p className={styles.uploadSubtext}>or click to browse</p>
-            <p className={styles.fileTypes}>Supports: JPG, PNG, GIF, WebP</p>
+            <p className={styles.fileTypes}>Supports: JPG, PNG, WebP</p>
           </div>
           <input
             ref={fileInputRef}
             type="file"
-            accept="image/*"
+            accept=".jpg,.jpeg,.png,.webp"
             onChange={handleFileChange}
             className="sr-only"
             aria-label="Choose image file"
