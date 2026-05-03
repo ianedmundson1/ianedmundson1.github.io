@@ -74,7 +74,7 @@ jobs:
 
   deploy:
     if: github.ref == 'refs/heads/main'
-    needs: test
+    needs: build
     runs-on: ubuntu-latest
     name: Deploy to GitHub Pages
     permissions:
