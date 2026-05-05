@@ -1,14 +1,16 @@
 /* ==============================================
-   MIT Data Science Page — scoped custom properties
+   MIT Data Science Page — page-specific styles only.
+   Shared editorial theme lives in
+   src/styles/project-page.css.
    ============================================== */
-.mit-data-science-page {
+
+/* ---------- Interactive demo ---------- */
+.interactive-demo {
+  /* Custom properties consumed by demo sub-components
+     (CameraCapture, ImageUpload, EmotionDetector). */
   --mit-demo-max-w: 600px;
   --mit-upload-max-w: 500px;
   --mit-media-max-w: 480px;
-  --mit-hero-padding: 4rem 0;
-  --mit-section-padding: 4rem 0;
-  --mit-badge-bg: rgba(255, 255, 255, 0.2);
-  --mit-badge-radius: 20px;
   --mit-color-success: #28a745;
   --mit-color-success-hover: #218838;
   --mit-color-success-bg: #d4edda;
@@ -19,26 +21,8 @@
   --mit-color-danger-text: #721c24;
   --mit-color-secondary: #6c757d;
   --mit-color-secondary-hover: #545b62;
-  --mit-color-interactive: #dc3545;
 
-  min-height: 100vh;
-  background-color: var(--color-bg-subtle);
-}
-
-/* ---------- Skip-link override ---------- */
-.mit-data-science-page :global(.skip-link) {
-  border-radius: var(--border-radius);
-}
-
-.mit-data-science-page :global(.skip-link):focus {
-  top: 1rem;
-}
-
-/* ==============================================
-   Interactive demo
-   ============================================== */
-.interactive-demo {
-  padding: var(--mit-section-padding);
+  padding: 4rem 0;
   background: var(--color-bg);
 }
 
@@ -70,7 +54,6 @@
   flex-wrap: wrap;
 }
 
-/* ---------- Shared button styles (used by idle-mode buttons) ---------- */
 .capture-button {
   padding: 1rem 2rem;
   font-size: 1.1rem;
@@ -107,9 +90,49 @@
   box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
 }
 
-/* ==============================================
-   Responsive
-   ============================================== */
+/* ---------- Future work + GitHub link (rendered via afterTech slot) ---------- */
+.future-heading {
+  margin-top: 3rem;
+}
+
+.future-work-list {
+  color: var(--color-text-secondary);
+  line-height: 1.8;
+  padding-left: 1.5rem;
+  margin: 0 0 2rem;
+  max-width: 720px;
+}
+
+.future-work-list li {
+  margin-bottom: 0.5rem;
+}
+
+.project-links {
+  margin-top: 2rem;
+}
+
+.project-link {
+  display: inline-block;
+  padding: 0.85rem 1.75rem;
+  background: var(--color-primary);
+  color: #fff;
+  text-decoration: none;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.project-link:hover {
+  background: var(--color-primary-hover);
+  transform: translateY(-2px);
+}
+
+.project-link:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ---------- Responsive ---------- */
 @media (max-width: 768px) {
   .input-options {
     flex-direction: column;
@@ -121,15 +144,15 @@
   }
 }
 
-/* ==============================================
-   Reduced motion
-   ============================================== */
+/* ---------- Reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
-  .mit-data-science-page *,
-  .mit-data-science-page *::before,
-  .mit-data-science-page *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+  .capture-button,
+  .project-link {
+    transition: none;
+  }
+
+  .capture-button:hover,
+  .project-link:hover {
+    transform: none;
   }
 }

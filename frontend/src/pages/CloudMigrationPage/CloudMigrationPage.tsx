@@ -82,28 +82,30 @@ const CloudMigrationPage = () => (
         'Migrating 6 years of sensor data and 35,000+ monitoring points to cloud infrastructure with custom open-source tooling — 83% faster than vendor solutions.',
     }}
     highlights={HIGHLIGHTS}
-    overview={
-      <>
-        <p>
-          NIH&apos;s Central Utility Plant relied on an on-premises OSIsoft PI historian
-          storing 6 years of operational data across 35,000+ monitoring points. The system was
-          reaching capacity limits and couldn&apos;t support the advanced analytics workloads
-          needed for energy optimization and predictive maintenance.
-        </p>
-        <p>
-          I led the data migration to Azure Data Lake Gen2 with Delta Lake, establishing a
-          modern lakehouse architecture that enabled downstream ML pipelines, real-time
-          dashboards, and automated reporting. The migration required careful coordination
-          to maintain data continuity for critical facility operations.
-        </p>
-        <p>
-          A key challenge was the vendor-provided migration tool&apos;s poor performance. I
-          built custom open-source extraction tooling in Python that parallelized data pulls
-          and achieved 83% faster transfer speeds. This approach also gave us full control
-          over data transformation and quality checks during migration.
-        </p>
-      </>
-    }
+    overview={{
+      content: (
+        <>
+          <p>
+            NIH&apos;s Central Utility Plant relied on an on-premises OSIsoft PI historian
+            storing 6 years of operational data across 35,000+ monitoring points. The system was
+            reaching capacity limits and couldn&apos;t support the advanced analytics workloads
+            needed for energy optimization and predictive maintenance.
+          </p>
+          <p>
+            I led the data migration to Azure Data Lake Gen2 with Delta Lake, establishing a
+            modern lakehouse architecture that enabled downstream ML pipelines, real-time
+            dashboards, and automated reporting. The migration required careful coordination
+            to maintain data continuity for critical facility operations.
+          </p>
+          <p>
+            A key challenge was the vendor-provided migration tool&apos;s poor performance. I
+            built custom open-source extraction tooling in Python that parallelized data pulls
+            and achieved 83% faster transfer speeds. This approach also gave us full control
+            over data transformation and quality checks during migration.
+          </p>
+        </>
+      ),
+    }}
     pipeline={{ title: 'Migration Pipeline', steps: PIPELINE_STEPS }}
     features={{ title: 'Key Outcomes', ariaId: 'outcomes-heading', cards: OUTCOMES }}
     techStack={TECH_STACK}

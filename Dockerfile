@@ -10,6 +10,10 @@ RUN npm ci
 COPY tsconfig.json ./
 COPY frontend/ ./frontend/
 
+# VITE_SENTRY_DSN is baked into the JS bundle at build time
+ARG VITE_SENTRY_DSN=""
+ENV VITE_SENTRY_DSN=${VITE_SENTRY_DSN}
+
 # Outputs to backend/static/ as configured in frontend/vite.config.ts
 RUN npm run build
 

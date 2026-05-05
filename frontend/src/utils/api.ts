@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { logger } from './logger';
 
 export interface EmotionRecord {
   label?: string;
@@ -26,7 +27,7 @@ const analyzeEmotion = async (imageFile: File, signal?: AbortSignal): Promise<Em
   const formData = new FormData();
   formData.append('file', imageFile);
 
-  if (import.meta.env.DEV) console.log('Sending image to backend /api/emotion_classification');
+  logger.debug('Sending image to backend /api/emotion_classification');
 
   const res = await fetch('/api/emotion_classification', {
     method: 'POST',
@@ -47,7 +48,7 @@ const analyzeEmotion = async (imageFile: File, signal?: AbortSignal): Promise<Em
   }
 
   const json = await res.json();
-  if (import.meta.env.DEV) console.log('Backend Response:', json);
+  logger.debug('Backend Response:', json);
 
   // Databricks/MLflow may return predictions/outputs/raw — normalize here.
   return (json.predictions ?? json.outputs ?? json) as EmotionApiResponse;

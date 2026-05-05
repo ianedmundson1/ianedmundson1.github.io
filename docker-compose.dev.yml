@@ -1,0 +1,18 @@
+# Local development stack
+#
+# Usage:
+#   1. Copy .env.example to .env and fill in values
+#   2. docker compose -f docker-compose.dev.yml up -d
+
+services:
+  app:
+    build:
+      context: .
+      args:
+        VITE_SENTRY_DSN: ${VITE_SENTRY_DSN:-}
+    ports:
+      - "8000:8000"
+    environment:
+      SENTRY_DSN: ${SENTRY_DSN:-}
+      DATABRICKS_HOST: ${DATABRICKS_HOST:?Set DATABRICKS_HOST in .env}
+      DATABRICKS_TOKEN: ${DATABRICKS_TOKEN:?Set DATABRICKS_TOKEN in .env}

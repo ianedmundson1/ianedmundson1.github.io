@@ -17,7 +17,6 @@
     "noFallthroughCasesInSwitch": true,
     "declaration": false
   },
-  "include": ["./frontend/src"],
   "files": [],
   "references": [
     { "path": "./frontend/tsconfig.app.json" },

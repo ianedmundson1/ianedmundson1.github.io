@@ -82,34 +82,36 @@ const EnergyOptimizationPage = () => (
         "ML-driven energy optimization at NIH's Central Utility Plant: 96-hour cooling demand forecasting, anomaly detection across 20,000+ points, and $2.2M in annual savings.",
     }}
     highlights={HIGHLIGHTS}
-    overview={
-      <>
-        <p>
-          NIH&apos;s Bethesda campus operates one of the largest central utility plants in the
-          federal government, providing chilled water to over 70 buildings housing critical
-          biomedical research. The plant&apos;s 62,400-ton cooling infrastructure requires precise
-          load forecasting to sequence chillers efficiently. Over-provisioning wastes energy,
-          under-provisioning risks equipment failure.
-        </p>
-        <p>
-          I designed and deployed a suite of ML systems across the plant: a 96-hour campus
-          cooling load forecaster that gives operators the lead time they need to sequence
-          chillers days in advance; a chiller efficiency analysis using LightGBM and SHAP to
-          identify which chillers to run at which loads; and a five-check anomaly detection
-          framework monitoring 20,000+ equipment points. Underpinning all of it was a custom
-          Python data pipeline migrating 35,000+ sensor tags from OSIsoft PI to Azure, and
-          Plotly Dash dashboards delivering real-time visibility to 30+ stakeholders.
-        </p>
-        <p>
-          The forecasting models proved 50% more accurate than the legacy rule-based system and
-          enabled proactive resource scheduling. The analytics work was one part of broader
-          operational improvements that together achieved $2.2M in annual energy savings across the plant.
-          This work was recognized with the <strong>NIH Director&apos;s Award in 2024</strong>,
-          specifically for enabling safe operation during the 2023 El Niño heatwave when demand
-          approached maximum capacity.
-        </p>
-      </>
-    }
+    overview={{
+      content: (
+        <>
+          <p>
+            NIH&apos;s Bethesda campus operates one of the largest central utility plants in the
+            federal government, providing chilled water to over 70 buildings housing critical
+            biomedical research. The plant&apos;s 62,400-ton cooling infrastructure requires precise
+            load forecasting to sequence chillers efficiently. Over-provisioning wastes energy,
+            under-provisioning risks equipment failure.
+          </p>
+          <p>
+            I designed and deployed a suite of ML systems across the plant: a 96-hour campus
+            cooling load forecaster that gives operators the lead time they need to sequence
+            chillers days in advance; a chiller efficiency analysis using LightGBM and SHAP to
+            identify which chillers to run at which loads; and a five-check anomaly detection
+            framework monitoring 20,000+ equipment points. Underpinning all of it was a custom
+            Python data pipeline migrating 35,000+ sensor tags from OSIsoft PI to Azure, and
+            Plotly Dash dashboards delivering real-time visibility to 30+ stakeholders.
+          </p>
+          <p>
+            The forecasting models proved 50% more accurate than the legacy rule-based system and
+            enabled proactive resource scheduling. The analytics work was one part of broader
+            operational improvements that together achieved $2.2M in annual energy savings across the plant.
+            This work was recognized with the <strong>NIH Director&apos;s Award in 2024</strong>,
+            specifically for enabling safe operation during the 2023 El Niño heatwave when demand
+            approached maximum capacity.
+          </p>
+        </>
+      ),
+    }}
     pipeline={{ title: 'How It Works', steps: PIPELINE_STEPS }}
     features={{ title: 'Key Challenges', ariaId: 'challenges-heading', cards: CHALLENGES }}
     techStack={TECH_STACK}
