@@ -55,24 +55,24 @@ const MITDataSciencePage = () => {
 
       <main className="main-content">
         {/* ---------- Hero ---------- */}
-        <section className={styles.projectHero} aria-labelledby="mit-hero-title">
-          <div className={styles.heroContainer}>
-            <div className={styles.projectBadges} aria-hidden="true">
+        <section className="project-hero" aria-labelledby="mit-hero-title">
+          <div className="project-hero-container">
+            <div className="project-hero-badges" aria-hidden="true">
               {BADGES.map((b) => (
                 <span
                   key={b.label}
-                  className={`${styles.projectBadge}${b.variant ? ` ${styles[b.variant]}` : ''}`}
+                  className={`project-hero-badge${b.variant === 'interactive' ? ' is-interactive' : ''}`}
                 >
                   {b.label}
                 </span>
               ))}
             </div>
 
-            <h1 id="mit-hero-title" className={styles.heroTitle}>
+            <h1 id="mit-hero-title" className="project-hero-title">
               MIT Applied Data Science
             </h1>
 
-            <p className={styles.heroSubtitle}>
+            <p className="project-hero-subtitle">
               Facial Emotion Detection using Deep Learning and Transfer Learning
             </p>
           </div>

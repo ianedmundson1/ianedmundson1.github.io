@@ -12,6 +12,8 @@
 @import '@fontsource/jetbrains-mono/400.css';
 @import '@fontsource/jetbrains-mono/500.css';
 
+@import './styles/project-page.css';
+
 :root {
   /* ==========================================
      PALETTE — editorial, warm, restrained

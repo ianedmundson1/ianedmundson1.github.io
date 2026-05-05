@@ -1,7 +1,11 @@
 /* ==========================================
-   CUSTOM PROPERTIES
+   PROJECT DETAIL PAGE — shared editorial theme
+   Used by CloudMigrationPage, EnergyOptimizationPage,
+   and MITDataSciencePage.
    ========================================== */
-.page {
+
+/* ---------- Page wrapper ---------- */
+.project-page {
   --pg-accent: var(--color-primary);
   --pg-accent-secondary: var(--color-primary-dark);
   --pg-gradient: var(--gradient-accent);
@@ -11,10 +15,8 @@
   background-color: var(--color-bg-subtle);
 }
 
-/* ==========================================
-   HERO
-   ========================================== */
-.hero {
+/* ---------- Hero ---------- */
+.project-hero {
   position: relative;
   padding: 5rem 1rem 4rem;
   background: var(--gradient-paper);
@@ -23,7 +25,7 @@
   overflow: hidden;
 }
 
-.hero::before {
+.project-hero::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -37,11 +39,7 @@
   -webkit-mask-image: radial-gradient(ellipse at top right, black 10%, transparent 70%);
 }
 
-.hero::after {
-  display: none;
-}
-
-.hero-container {
+.project-hero-container {
   max-width: 1100px;
   margin: 0 auto;
   padding: 0 2rem;
@@ -50,7 +48,7 @@
   text-align: left;
 }
 
-.back-link {
+.project-back-link {
   display: inline-block;
   margin-bottom: 1.5rem;
   color: var(--color-text-muted);
@@ -59,18 +57,18 @@
   transition: color 0.2s ease;
 }
 
-.back-link:hover {
+.project-back-link:hover {
   color: var(--color-primary);
 }
 
-.hero-badges {
+.project-hero-badges {
   display: flex;
   justify-content: flex-start;
   gap: 0.5rem;
   margin-bottom: 1.5rem;
 }
 
-.badge {
+.project-hero-badge {
   background: transparent;
   border: 1px solid var(--color-border);
   color: var(--color-text-muted);
@@ -83,7 +81,19 @@
   text-transform: uppercase;
 }
 
-.hero-title {
+.project-hero-badge.is-interactive {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-bg);
+  animation: project-hero-badge-pulse 2s infinite;
+}
+
+@keyframes project-hero-badge-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.project-hero-title {
   font-family: var(--font-display);
   font-size: clamp(2.5rem, 5vw, 4rem);
   font-weight: 600;
@@ -91,10 +101,10 @@
   letter-spacing: -0.035em;
   line-height: 1;
   color: var(--color-text-primary);
-  animation: fadeInUp 0.6s ease-out both;
+  animation: project-fade-in-up 0.6s ease-out both;
 }
 
-.hero-subtitle {
+.project-hero-subtitle {
   font-family: var(--font-display);
   font-size: clamp(1.1rem, 2vw, 1.4rem);
   font-style: italic;
@@ -104,18 +114,21 @@
   line-height: 1.4;
   max-width: 720px;
   margin: 0;
-  animation: fadeInUp 0.6s ease-out 0.15s both;
+  animation: project-fade-in-up 0.6s ease-out 0.15s both;
 }
 
-/* ==========================================
-   HIGHLIGHTS BAR
-   ========================================== */
-.highlights-bar {
+@keyframes project-fade-in-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Highlights bar ---------- */
+.project-highlights-bar {
   background: var(--gradient-primary);
   padding: 2.5rem 1rem;
 }
 
-.highlights-grid {
+.project-highlights-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
@@ -125,16 +138,16 @@
   padding: 0 2rem;
 }
 
-.highlight-card {
+.project-highlight-card {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
   color: #fff;
   padding-left: 1rem;
-  border-left: 1px solid rgba(255,255,255,0.2);
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.highlight-value {
+.project-highlight-value {
   font-family: var(--font-mono);
   font-feature-settings: 'tnum';
   font-size: 1.85rem;
@@ -143,7 +156,7 @@
   letter-spacing: -0.02em;
 }
 
-.highlight-label {
+.project-highlight-label {
   font-family: var(--font-mono);
   font-size: 0.7rem;
   opacity: 0.8;
@@ -151,10 +164,8 @@
   letter-spacing: 0.08em;
 }
 
-/* ==========================================
-   SECTION TITLE
-   ========================================== */
-.section-title {
+/* ---------- Section title ---------- */
+.project-section-title {
   text-align: left;
   font-family: var(--font-display);
   font-size: clamp(2rem, 4vw, 2.75rem);
@@ -165,39 +176,35 @@
   line-height: 1.1;
 }
 
-/* ==========================================
-   CONTENT / PROSE
-   ========================================== */
-.content-section {
+/* ---------- Content / prose ---------- */
+.project-content-section {
   padding: 5rem 0;
   background: var(--color-bg);
 }
 
-.prose {
+.project-prose {
   max-width: 720px;
   margin: 0 auto;
 }
 
-.prose p {
+.project-prose p {
   color: var(--color-text-secondary);
   font-size: 1.05rem;
   line-height: 1.8;
   margin-bottom: 1.25rem;
 }
 
-.prose p:last-child {
+.project-prose p:last-child {
   margin-bottom: 0;
 }
 
-/* ==========================================
-   PIPELINE
-   ========================================== */
-.pipeline-section {
+/* ---------- Pipeline ---------- */
+.project-pipeline-section {
   padding: 5rem 0;
   background: var(--color-bg-subtle);
 }
 
-.pipeline-grid {
+.project-pipeline-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
@@ -205,7 +212,7 @@
   margin: 0 auto;
 }
 
-.pipeline-card {
+.project-pipeline-card {
   background: var(--color-bg-elevated);
   border-radius: var(--border-radius-lg);
   padding: 1.75rem;
@@ -214,11 +221,11 @@
   transition: border-color 0.2s ease;
 }
 
-.pipeline-card:hover {
+.project-pipeline-card:hover {
   border-color: var(--color-primary);
 }
 
-.pipeline-step {
+.project-pipeline-step {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -234,7 +241,7 @@
   margin-bottom: 1rem;
 }
 
-.pipeline-card h3 {
+.project-pipeline-card h3 {
   font-family: var(--font-display);
   font-size: 1.15rem;
   color: var(--color-text-primary);
@@ -243,21 +250,19 @@
   letter-spacing: -0.015em;
 }
 
-.pipeline-card p {
+.project-pipeline-card p {
   font-size: 0.9rem;
   color: var(--color-text-muted);
   line-height: 1.6;
 }
 
-/* ==========================================
-   CHALLENGES
-   ========================================== */
-.challenges-section {
+/* ---------- Feature cards (outcomes / challenges) ---------- */
+.project-feature-section {
   padding: 5rem 0;
   background: var(--color-bg);
 }
 
-.challenges-grid {
+.project-feature-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
@@ -265,7 +270,7 @@
   margin: 0 auto;
 }
 
-.challenge-card {
+.project-feature-card {
   background: var(--color-bg-subtle);
   border-radius: var(--border-radius-lg);
   padding: 2rem;
@@ -275,7 +280,7 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.challenge-card::before {
+.project-feature-card::before {
   content: '';
   position: absolute;
   top: 0;
@@ -288,37 +293,35 @@
   transition: transform 0.4s ease;
 }
 
-.challenge-card:hover::before {
+.project-feature-card:hover::before {
   transform: scaleX(1);
 }
 
-.challenge-card:hover {
+.project-feature-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 12px 30px rgba(var(--pg-accent-rgb), 0.1);
 }
 
-.challenge-card h3 {
+.project-feature-card h3 {
   font-size: 1.15rem;
   color: var(--color-text-primary);
   margin-bottom: 0.75rem;
   font-weight: 700;
 }
 
-.challenge-card p {
+.project-feature-card p {
   font-size: 0.95rem;
   color: var(--color-text-secondary);
   line-height: 1.7;
 }
 
-/* ==========================================
-   TECH STACK
-   ========================================== */
-.tech-section {
+/* ---------- Tech stack ---------- */
+.project-tech-section {
   padding: 5rem 0;
   background: var(--color-bg-subtle);
 }
 
-.tech-grid {
+.project-tech-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
@@ -327,88 +330,84 @@
   margin: 0 auto;
 }
 
-.tech-tag {
-  background: rgba(var(--pg-accent-rgb), 0.1);
-  color: var(--pg-accent);
-  border: 1px solid rgba(var(--pg-accent-rgb), 0.15);
+.project-tech-tag {
+  background: rgba(var(--color-primary-rgb), 0.08);
+  color: var(--color-primary);
+  border: 1px solid rgba(var(--color-primary-rgb), 0.18);
   padding: 0.5rem 1.1rem;
   border-radius: var(--border-radius);
   font-size: 0.9rem;
   font-weight: 600;
-  transition: all 0.25s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
-.tech-tag:hover {
-  background: var(--pg-gradient);
-  color: white;
-  border-color: transparent;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(var(--pg-accent-rgb), 0.25);
+.project-tech-tag:hover {
+  background: rgba(var(--color-primary-rgb), 0.14);
+  border-color: var(--color-primary);
 }
 
-/* ==========================================
-   RESPONSIVE
-   ========================================== */
+/* ---------- Responsive ---------- */
 @media (max-width: 768px) {
-  .hero-title {
+  .project-hero-title {
     font-size: 2.5rem;
   }
 
-  .highlights-grid {
+  .project-highlights-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .pipeline-grid,
-  .challenges-grid {
+  .project-pipeline-grid {
     grid-template-columns: 1fr;
     max-width: 540px;
   }
 
-  .section-title {
+  .project-section-title {
     font-size: 2rem;
   }
 
-  .content-section,
-  .pipeline-section,
-  .challenges-section,
-  .tech-section {
+  .project-content-section,
+  .project-pipeline-section,
+  .project-feature-section,
+  .project-tech-section {
     padding: 4rem 0;
+  }
+
+  .project-feature-grid {
+    grid-template-columns: 1fr;
+    max-width: 540px;
   }
 }
 
 @media (max-width: 480px) {
-  .hero {
+  .project-hero {
     padding: 3.5rem 1rem 3rem;
   }
 
-  .hero-title {
+  .project-hero-title {
     font-size: 2rem;
   }
 
-  .hero-badges {
+  .project-hero-badges {
     flex-wrap: wrap;
-    justify-content: center;
   }
 }
 
-/* ==========================================
-   REDUCED MOTION
-   ========================================== */
+/* ---------- Reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
-  .hero {
-    animation: none;
-  }
-
-  .hero-title,
-  .hero-subtitle {
+  .project-hero-title,
+  .project-hero-subtitle {
     animation: none;
     opacity: 1;
     transform: none;
   }
 
-  .pipeline-card,
-  .challenge-card,
-  .tech-tag {
+  .project-pipeline-card,
+  .project-tech-tag,
+  .project-feature-card {
     transition: none;
+  }
+
+  .project-hero-badge.is-interactive {
+    animation: none;
   }
 }

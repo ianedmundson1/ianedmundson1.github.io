@@ -23,7 +23,7 @@ const PERSON_JSON_LD = {
 } as const;
 
 const HomePage: React.FC = () => {
-  const wrapperRef = useFadeOnScroll('fade-section', 'visible');
+  const wrapperRef = useFadeOnScroll();
 
   return (
     <div className={styles.homepage} ref={wrapperRef}>

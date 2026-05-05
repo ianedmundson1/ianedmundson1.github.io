@@ -25,7 +25,7 @@ const StarRating: React.FC<{ rating: number }> = ({ rating }) => (
 /*  Component                                          */
 /* -------------------------------------------------- */
 const BooksPage: React.FC = () => {
-  const wrapperRef = useFadeOnScroll('fade-section', 'visible');
+  const wrapperRef = useFadeOnScroll();
 
   return (
     <div className={styles.booksPage} ref={wrapperRef}>

@@ -61,25 +61,22 @@ const TECH_STACK = [
 const ProjectDetails = () => (
   <>
     {/* ---------- At-a-glance stats ---------- */}
-    <section className={styles.highlights} aria-label="Project highlights">
-      <div className={styles.highlightsGrid}>
+    <section className="project-highlights-bar" aria-label="Project highlights">
+      <div className="project-highlights-grid">
         {HIGHLIGHTS.map((h) => (
-          <div key={h.label} className={styles.highlightCard}>
-            <span className={styles.highlightValue}>{h.value}</span>
-            <span className={styles.highlightLabel}>{h.label}</span>
+          <div key={h.label} className="project-highlight-card">
+            <span className="project-highlight-value">{h.value}</span>
+            <span className="project-highlight-label">{h.label}</span>
           </div>
         ))}
       </div>
     </section>
 
     {/* ---------- About ---------- */}
-    <section
-      className={styles.projectDetails}
-      aria-labelledby="about-heading"
-    >
+    <section className="project-content-section" aria-labelledby="about-heading">
       <div className="section-container">
-        <div className={styles.projectContent}>
-          <h2 id="about-heading">About the Project</h2>
+        <h2 id="about-heading" className="project-section-title">About the Project</h2>
+        <div className="project-prose">
           <p>
             Built as the capstone for the{' '}
             <strong>MIT Applied Data Science Program</strong>, this project
@@ -100,16 +97,13 @@ const ProjectDetails = () => (
     </section>
 
     {/* ---------- Pipeline ---------- */}
-    <section
-      className={styles.pipelineSection}
-      aria-labelledby="pipeline-heading"
-    >
+    <section className="project-pipeline-section" aria-labelledby="pipeline-heading">
       <div className="section-container">
-        <h2 id="pipeline-heading">How It Works</h2>
-        <div className={styles.pipelineGrid}>
+        <h2 id="pipeline-heading" className="project-section-title">How It Works</h2>
+        <div className="project-pipeline-grid">
           {PIPELINE_STEPS.map((s) => (
-            <div key={s.step} className={styles.pipelineCard}>
-              <span className={styles.pipelineStep} aria-hidden="true">
+            <div key={s.step} className="project-pipeline-card">
+              <span className="project-pipeline-step" aria-hidden="true">
                 {s.step}
               </span>
               <h3>{s.title}</h3>
@@ -121,21 +115,18 @@ const ProjectDetails = () => (
     </section>
 
     {/* ---------- Tech & links ---------- */}
-    <section
-      className={styles.techSection}
-      aria-labelledby="tech-heading"
-    >
+    <section className="project-tech-section" aria-labelledby="tech-heading">
       <div className="section-container">
-        <h2 id="tech-heading" className={styles.sectionTitle}>Tech Stack</h2>
-        <div className={styles.techGrid}>
+        <h2 id="tech-heading" className="project-section-title">Tech Stack</h2>
+        <div className="project-tech-grid">
           {TECH_STACK.map((tech) => (
-            <span key={tech} className={styles.techTag}>
+            <span key={tech} className="project-tech-tag">
               {tech}
             </span>
           ))}
         </div>
 
-        <h2 id="future-heading" className={styles.futureHeading}>
+        <h2 id="future-heading" className={`project-section-title ${styles.futureHeading}`}>
           What&rsquo;s Next
         </h2>
         <ul className={styles.futureWorkList}>

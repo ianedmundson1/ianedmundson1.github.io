@@ -10,7 +10,7 @@ import styles from './ProjectsPage.module.css';
 /*  Component                                          */
 /* -------------------------------------------------- */
 const ProjectsPage: React.FC = () => {
-  const wrapperRef = useFadeOnScroll('fade-section', 'visible');
+  const wrapperRef = useFadeOnScroll();
 
   return (
     <div className={styles.projectsPage} ref={wrapperRef}>

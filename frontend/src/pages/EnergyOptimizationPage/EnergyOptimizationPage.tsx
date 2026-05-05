@@ -1,14 +1,8 @@
-import { Link } from 'react-router-dom';
-import Seo from '../../components/Seo';
-import { useFadeOnScroll } from '../../hooks/useFadeOnScroll';
+import ProjectDetailLayout from '../../components/ProjectDetailLayout';
 import { getWorkProject } from '../../data/workProjects';
-import styles from './EnergyOptimizationPage.module.css';
 
 const META = getWorkProject('energy-optimization');
 
-/* -------------------------------------------------- */
-/*  Static data                                        */
-/* -------------------------------------------------- */
 const HIGHLIGHTS = [
   { value: '$2.2M', label: 'Annual Savings' },
   { value: '96-hr', label: 'Forecast Horizon' },
@@ -45,7 +39,7 @@ const PIPELINE_STEPS = [
     step: 5,
     title: 'Anomaly Detection',
     description:
-    'Five-check monitoring framework (sampling rate, out-of-range, missing rate, stale rate, outlier rate) across 20,000+ equipment points. Per-equipment thresholds and alert suppression rules stored in a dedicated parameters SQL table co-designed with plant engineers.',
+      'Five-check monitoring framework (sampling rate, out-of-range, missing rate, stale rate, outlier rate) across 20,000+ equipment points. Per-equipment thresholds and alert suppression rules stored in a dedicated parameters SQL table co-designed with plant engineers.',
   },
   {
     step: 6,
@@ -79,131 +73,47 @@ const CHALLENGES = [
   },
 ] as const;
 
-/* -------------------------------------------------- */
-/*  Component                                          */
-/* -------------------------------------------------- */
-const EnergyOptimizationPage = () => {
-  const wrapperRef = useFadeOnScroll('fade-section', 'visible');
-
-  return (
-    <div className={styles.page} ref={wrapperRef}>
-      <Seo
-        title="Energy Optimization at NIH"
-        description="ML-driven energy optimization at NIH's Central Utility Plant: 96-hour cooling demand forecasting, anomaly detection across 20,000+ points, and $2.2M in annual savings."
-      />
-      <a href="#overview" className="skip-link">Skip to content</a>
-
-
-      <main className="main-content">
-        {/* ---------- Hero ---------- */}
-        <header className={styles.hero} aria-labelledby="hero-title">
-          <div className={styles.heroContainer}>
-            <Link to="/projects" className={styles.backLink}>&larr; Back to Projects</Link>
-            <div className={styles.heroBadges}>
-              {META.badges.map((b) => (
-                <span key={b} className={styles.badge}>{b}</span>
-              ))}
-            </div>
-            <h1 id="hero-title" className={styles.heroTitle}>
-              {META.title}
-            </h1>
-            <p className={styles.heroSubtitle}>
-              {META.summary}
-            </p>
-          </div>
-        </header>
-
-        {/* ---------- Highlights ---------- */}
-        <section className={styles.highlightsBar} aria-label="Key metrics">
-          <div className={styles.highlightsGrid}>
-            {HIGHLIGHTS.map((h) => (
-              <div key={h.label} className={styles.highlightCard}>
-                <span className={styles.highlightValue}>{h.value}</span>
-                <span className={styles.highlightLabel}>{h.label}</span>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ---------- Overview ---------- */}
-        <section id="overview" className={`${styles.contentSection} fade-section`} aria-labelledby="overview-heading">
-          <div className="section-container">
-            <h2 id="overview-heading" className={styles.sectionTitle}>Overview</h2>
-            <div className={styles.prose}>
-              <p>
-                NIH&apos;s Bethesda campus operates one of the largest central utility plants in the
-                federal government, providing chilled water to over 70 buildings housing critical
-                biomedical research. The plant&apos;s 62,400-ton cooling infrastructure requires precise
-                load forecasting to sequence chillers efficiently. Over-provisioning wastes energy,
-                under-provisioning risks equipment failure.
-              </p>
-              <p>
-                I designed and deployed a suite of ML systems across the plant: a 96-hour campus
-                cooling load forecaster that gives operators the lead time they need to sequence
-                chillers days in advance; a chiller efficiency analysis using LightGBM and SHAP to
-                identify which chillers to run at which loads; and a five-check anomaly detection
-                framework monitoring 20,000+ equipment points. Underpinning all of it was a custom
-                Python data pipeline migrating 35,000+ sensor tags from OSIsoft PI to Azure, and
-                Plotly Dash dashboards delivering real-time visibility to 30+ stakeholders.
-              </p>
-              <p>
-                The forecasting models proved 50% more accurate than the legacy rule-based system and
-                enabled proactive resource scheduling. The analytics work was one part of broader
-                operational improvements that together achieved $2.2M in annual energy savings across the plant.
-                This work was recognized with the <strong>NIH Director&apos;s Award in 2024</strong>,
-                specifically for enabling safe operation during the 2023 El Niño heatwave when demand
-                approached maximum capacity.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* ---------- Pipeline ---------- */}
-        <section className={`${styles.pipelineSection} fade-section`} aria-labelledby="pipeline-heading">
-          <div className="section-container">
-            <h2 id="pipeline-heading" className={styles.sectionTitle}>How It Works</h2>
-            <div className={styles.pipelineGrid}>
-              {PIPELINE_STEPS.map((s) => (
-                <div key={s.step} className={styles.pipelineCard}>
-                  <span className={styles.pipelineStep} aria-hidden="true">{s.step}</span>
-                  <h3>{s.title}</h3>
-                  <p>{s.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ---------- Challenges ---------- */}
-        <section className={`${styles.challengesSection} fade-section`} aria-labelledby="challenges-heading">
-          <div className="section-container">
-            <h2 id="challenges-heading" className={styles.sectionTitle}>Key Challenges</h2>
-            <div className={styles.challengesGrid}>
-              {CHALLENGES.map((c) => (
-                <article key={c.title} className={styles.challengeCard}>
-                  <h3>{c.title}</h3>
-                  <p>{c.description}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ---------- Tech Stack ---------- */}
-        <section className={`${styles.techSection} fade-section`} aria-labelledby="tech-heading">
-          <div className="section-container">
-            <h2 id="tech-heading" className={styles.sectionTitle}>Tech Stack</h2>
-            <div className={styles.techGrid}>
-              {TECH_STACK.map((t) => (
-                <span key={t} className={styles.techTag}>{t}</span>
-              ))}
-            </div>
-          </div>
-        </section>
-
-      </main>
-    </div>
-  );
-};
+const EnergyOptimizationPage = () => (
+  <ProjectDetailLayout
+    meta={META}
+    seo={{
+      title: 'Energy Optimization at NIH',
+      description:
+        "ML-driven energy optimization at NIH's Central Utility Plant: 96-hour cooling demand forecasting, anomaly detection across 20,000+ points, and $2.2M in annual savings.",
+    }}
+    highlights={HIGHLIGHTS}
+    overview={
+      <>
+        <p>
+          NIH&apos;s Bethesda campus operates one of the largest central utility plants in the
+          federal government, providing chilled water to over 70 buildings housing critical
+          biomedical research. The plant&apos;s 62,400-ton cooling infrastructure requires precise
+          load forecasting to sequence chillers efficiently. Over-provisioning wastes energy,
+          under-provisioning risks equipment failure.
+        </p>
+        <p>
+          I designed and deployed a suite of ML systems across the plant: a 96-hour campus
+          cooling load forecaster that gives operators the lead time they need to sequence
+          chillers days in advance; a chiller efficiency analysis using LightGBM and SHAP to
+          identify which chillers to run at which loads; and a five-check anomaly detection
+          framework monitoring 20,000+ equipment points. Underpinning all of it was a custom
+          Python data pipeline migrating 35,000+ sensor tags from OSIsoft PI to Azure, and
+          Plotly Dash dashboards delivering real-time visibility to 30+ stakeholders.
+        </p>
+        <p>
+          The forecasting models proved 50% more accurate than the legacy rule-based system and
+          enabled proactive resource scheduling. The analytics work was one part of broader
+          operational improvements that together achieved $2.2M in annual energy savings across the plant.
+          This work was recognized with the <strong>NIH Director&apos;s Award in 2024</strong>,
+          specifically for enabling safe operation during the 2023 El Niño heatwave when demand
+          approached maximum capacity.
+        </p>
+      </>
+    }
+    pipeline={{ title: 'How It Works', steps: PIPELINE_STEPS }}
+    features={{ title: 'Key Challenges', ariaId: 'challenges-heading', cards: CHALLENGES }}
+    techStack={TECH_STACK}
+  />
+);
 
 export default EnergyOptimizationPage;

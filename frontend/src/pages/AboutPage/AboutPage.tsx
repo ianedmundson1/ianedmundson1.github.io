@@ -119,7 +119,7 @@ const CERTIFICATIONS = [
 /*  Component                                          */
 /* -------------------------------------------------- */
 const AboutPage = () => {
-  const wrapperRef = useFadeOnScroll('fade-section', 'visible');
+  const wrapperRef = useFadeOnScroll();
 
   return (
     <div className={styles.aboutPage} ref={wrapperRef}>

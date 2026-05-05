@@ -1,23 +1,25 @@
 import { useEffect, useRef } from 'react';
 
+const FADE_CLASS = 'fade-section';
+const VISIBLE_CLASS = 'visible';
+
 /**
- * Observes elements matching `fadeClass` inside the returned ref and
- * adds `visibleClass` when they scroll into view (15 % visible).
- * Each element is observed only once.
+ * Adds `visible` to descendants with class `fade-section` when they
+ * scroll into view (15% threshold). Each element is observed once.
  */
-export function useFadeOnScroll(fadeClass: string, visibleClass: string) {
+export function useFadeOnScroll() {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const root = ref.current;
     if (!root) return;
 
-    const targets = root.querySelectorAll<HTMLElement>(`.${fadeClass}`);
+    const targets = root.querySelectorAll<HTMLElement>(`.${FADE_CLASS}`);
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add(visibleClass);
+            entry.target.classList.add(VISIBLE_CLASS);
             io.unobserve(entry.target);
           }
         });
@@ -26,7 +28,7 @@ export function useFadeOnScroll(fadeClass: string, visibleClass: string) {
     );
     targets.forEach((t) => io.observe(t));
     return () => io.disconnect();
-  }, [fadeClass, visibleClass]);
+  }, []);
 
   return ref;
 }

@@ -35,95 +35,6 @@
 }
 
 /* ==============================================
-   Hero — paper, left-aligned
-   ============================================== */
-.project-hero {
-  position: relative;
-  background: var(--gradient-paper);
-  color: var(--color-text-primary);
-  padding: 5rem 1rem 4rem;
-  border-bottom: 1px solid var(--color-rule);
-  overflow: hidden;
-}
-
-.project-hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(to right, var(--color-border) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--color-border) 1px, transparent 1px);
-  background-size: 64px 64px;
-  opacity: 0.35;
-  pointer-events: none;
-  mask-image: radial-gradient(ellipse at top right, black 10%, transparent 70%);
-  -webkit-mask-image: radial-gradient(ellipse at top right, black 10%, transparent 70%);
-}
-
-.hero-container {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 2rem;
-  text-align: left;
-  position: relative;
-  z-index: 1;
-}
-
-.project-badges {
-  display: flex;
-  gap: 0.5rem;
-  justify-content: flex-start;
-  margin-bottom: 1.25rem;
-}
-
-.project-badge {
-  background: transparent;
-  border: 1px solid var(--color-border);
-  color: var(--color-text-muted);
-  padding: 0.25rem 0.6rem;
-  border-radius: 3px;
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  font-weight: 500;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-.project-badge.interactive {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
-  color: var(--color-bg);
-  animation: mit-pulse 2s infinite;
-}
-
-@keyframes mit-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
-}
-
-.hero-title {
-  font-family: var(--font-display);
-  font-size: clamp(2.5rem, 5vw, 4rem);
-  margin: 0 0 0.5rem;
-  font-weight: 600;
-  letter-spacing: -0.035em;
-  line-height: 1;
-  color: var(--color-text-primary);
-}
-
-.hero-subtitle {
-  font-family: var(--font-display);
-  font-size: clamp(1.1rem, 2vw, 1.4rem);
-  font-style: italic;
-  font-weight: 400;
-  color: var(--color-primary);
-  letter-spacing: -0.01em;
-  line-height: 1.4;
-  max-width: 720px;
-  margin: 0;
-}
-
-/* ==============================================
    Interactive demo
    ============================================== */
 .interactive-demo {
@@ -200,15 +111,6 @@
    Responsive
    ============================================== */
 @media (max-width: 768px) {
-  .hero-title {
-    font-size: 2rem;
-  }
-
-  .project-badges {
-    flex-direction: column;
-    align-items: center;
-  }
-
   .input-options {
     flex-direction: column;
     gap: 1rem;
