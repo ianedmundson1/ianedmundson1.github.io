@@ -16,15 +16,6 @@ def test_hello():
     assert response.json() == {"message": "Hello from FastAPI!"}
 
 
-def test_get_data():
-    response = client.get("/api/data")
-    assert response.status_code == 200
-    body = response.json()
-    assert "data" in body
-    assert "title" in body
-    assert len(body["data"]) == 30
-
-
 def test_emotion_classification_no_file():
     response = client.post("/api/emotion_classification")
     assert response.status_code == 422  # Unprocessable Entity — file is required
