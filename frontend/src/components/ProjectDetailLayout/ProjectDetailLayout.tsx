@@ -31,6 +31,8 @@ type ProjectDetailLayoutProps = {
   /** When omitted, the Features section is skipped. */
   features?: { title: string; ariaId: string; cards: readonly FeatureCard[] };
   techStack: readonly string[];
+  /** Optional content rendered before the tech section. */
+  beforeTech?: ReactNode;
   /** Optional content rendered inside the tech section, after the tag list. */
   afterTech?: ReactNode;
 };
@@ -50,6 +52,7 @@ const ProjectDetailLayout = ({
   pipeline,
   features,
   techStack,
+  beforeTech,
   afterTech,
 }: ProjectDetailLayoutProps) => {
   const wrapperRef = useFadeOnScroll();
@@ -135,6 +138,12 @@ const ProjectDetailLayout = ({
                 ))}
               </div>
             </div>
+          </section>
+        )}
+
+        {beforeTech && (
+          <section className="project-content-section fade-section">
+            <div className="section-container">{beforeTech}</div>
           </section>
         )}
 
