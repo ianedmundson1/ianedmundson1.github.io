@@ -1,16 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { logger } from './logger';
 
-export interface EmotionRecord {
-  label?: string;
-  emotion?: string;
-  prediction?: string;
-  score?: number;
-  confidence?: number;
-  probability?: number;
+export interface EmotionApiResponse {
+  label: string;
+  confidencePercent: number;
 }
-
-export type EmotionApiResponse = EmotionRecord | EmotionRecord[];
 
 const dataURItoBlob = (dataURI: string) => {
   const byteString = atob(dataURI.split(',')[1]);
@@ -47,11 +41,9 @@ const analyzeEmotion = async (imageFile: File, signal?: AbortSignal): Promise<Em
     throw new Error(`HTTP ${res.status}: ${errorMessage}`);
   }
 
-  const json = await res.json();
+  const json = (await res.json()) as EmotionApiResponse;
   logger.debug('Backend Response:', json);
-
-  // Databricks/MLflow may return predictions/outputs/raw — normalize here.
-  return (json.predictions ?? json.outputs ?? json) as EmotionApiResponse;
+  return json;
 };
 
 const analyzeEmotionBase64 = (imageDataUrl: string, signal?: AbortSignal): Promise<EmotionApiResponse> => {
