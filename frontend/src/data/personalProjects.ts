@@ -3,6 +3,10 @@ export interface PersonalProject {
   summary: string;
   tech: string[];
   href: string;
+  /** When true (default), `href` is treated as an external URL (e.g. GitHub). When false, it's an internal route. */
+  external?: boolean;
+  /** Overrides the default link label. */
+  linkLabel?: string;
   youtube?: string;
 }
 
@@ -29,5 +33,14 @@ export const PROJECTS: PersonalProject[] = [
       'Raspberry Pi-based security camera with motion detection, cloud storage, and automated notifications for end-to-end home surveillance.',
     tech: ['Raspberry Pi', 'IoT', 'Motion Detection', 'Cloud Storage'],
     href: 'https://github.com/ianedmundson1/Security-camera',
+  },
+  {
+    title: 'RAG Demo',
+    summary:
+      'Retrieval-Augmented Generation walkthrough combining a vector store with an LLM to ground answers in source documents. Packaged as a Jupyter notebook with a companion presentation.',
+    tech: ['Python', 'LangChain', 'FAISS', 'RAG'],
+    href: '/projects/rag-demo',
+    external: false,
+    linkLabel: 'View Details',
   },
 ];

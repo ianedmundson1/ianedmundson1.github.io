@@ -24,18 +24,21 @@ const PersonalProjectsPage: React.FC = () => {
         <section className={styles.projectsSection}>
           <div className={styles.sectionContainer}>
             <div className={styles.projectsGrid}>
-              {PROJECTS.map((project) => (
-                <ProjectCard
-                  key={project.title}
-                  title={project.title}
-                  badges={project.tech.slice(0, 2)}
-                  description={project.summary}
-                  link={project.href}
-                  linkLabel="View on GitHub"
-                  external
-                  youtube={project.youtube}
-                />
-              ))}
+              {PROJECTS.map((project) => {
+                const isExternal = project.external ?? true;
+                return (
+                  <ProjectCard
+                    key={project.title}
+                    title={project.title}
+                    badges={project.tech.slice(0, 2)}
+                    description={project.summary}
+                    link={project.href}
+                    linkLabel={project.linkLabel ?? (isExternal ? 'View on GitHub' : 'View Details')}
+                    external={isExternal}
+                    youtube={project.youtube}
+                  />
+                );
+              })}
             </div>
           </div>
         </section>

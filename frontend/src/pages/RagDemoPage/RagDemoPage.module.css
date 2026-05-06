@@ -1,0 +1,174 @@
+/* ==============================================
+   RAG Demo Page — page-specific styles only.
+   Shared editorial theme lives in
+   src/styles/project-page.css.
+   ============================================== */
+
+.future-heading {
+  margin-top: 3rem;
+}
+
+.future-work-list {
+  color: var(--color-text-secondary);
+  line-height: 1.8;
+  padding-left: 1.5rem;
+  margin: 0 0 2rem;
+  max-width: 720px;
+}
+
+.future-work-list li {
+  margin-bottom: 0.5rem;
+}
+
+.project-links {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.project-link {
+  display: inline-block;
+  padding: 0.85rem 1.75rem;
+  background: var(--color-primary);
+  color: #fff;
+  text-decoration: none;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.project-link:hover {
+  background: var(--color-primary-hover);
+  transform: translateY(-2px);
+}
+
+.project-link:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ---------- Embedding visualizations ---------- */
+.viz-section {
+  padding: 3rem 0 1rem;
+}
+
+.viz-lead {
+  color: var(--color-text-secondary);
+  margin: 0 0 2rem;
+  max-width: 720px;
+  line-height: 1.7;
+}
+
+.viz-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+.viz-card {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  background: transparent;
+  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+.viz-card figcaption {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
+}
+
+.viz-card h3 {
+  margin: 0 0 0.25rem;
+  font-size: 1.05rem;
+  color: var(--color-text-primary);
+}
+
+.viz-card figcaption p {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.viz-frame {
+  width: 100%;
+  height: 600px;
+  border: 0;
+  display: block;
+  background: transparent;
+}
+
+@media (max-width: 640px) {
+  .viz-frame {
+    height: 460px;
+  }
+}
+
+/* ---------- Evaluation results ---------- */
+.results-lead {
+  color: var(--color-text-secondary);
+  margin: 0 0 1.25rem;
+  max-width: 720px;
+}
+
+.results-table-wrapper {
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+}
+
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  color: var(--color-text-primary);
+}
+
+.results-table thead th {
+  text-align: left;
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+  border-bottom: 2px solid var(--color-border, rgba(0, 0, 0, 0.15));
+}
+
+.results-table tbody th {
+  text-align: left;
+  font-weight: 500;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--color-border, rgba(0, 0, 0, 0.08));
+  white-space: nowrap;
+}
+
+.results-table tbody td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--color-border, rgba(0, 0, 0, 0.08));
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.score-cell {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: var(--color-primary) !important;
+  white-space: nowrap;
+}
+
+.results-takeaway {
+  color: var(--color-text-secondary);
+  margin: 0 0 2rem;
+  max-width: 720px;
+  line-height: 1.7;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-link {
+    transition: none;
+  }
+
+  .project-link:hover {
+    transform: none;
+  }
+}
