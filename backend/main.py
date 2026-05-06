@@ -50,6 +50,30 @@ def score_model(dataset):
 
     return result.as_dict()
 
+def normalize_prediction(raw: dict) -> dict:
+    payload = raw.get("predictions", raw.get("outputs", raw))
+    record = payload[0] if isinstance(payload, list) and payload else payload
+    if not isinstance(record, dict):
+        record = {}
+
+    label = record.get("label") or record.get("emotion") or record.get("prediction") or "Unknown"
+
+    score = record.get("score")
+    if score is None:
+        score = record.get("confidence")
+    if score is None:
+        score = record.get("probability")
+    if score is None:
+        score = 0
+
+    try:
+        score = float(score)
+    except (TypeError, ValueError):
+        score = 0.0
+
+    confidence_percent = round(score * 100) if score <= 1 else round(score)
+    return {"label": label, "confidencePercent": confidence_percent}
+
 # --- API Routes ---
 @app.get("/api/hello")
 async def hello():
@@ -60,17 +84,6 @@ async def hello():
 async def health_check():
     logger.info("Health check at /api/health")
     return {"status": "healthy"}
-
-@app.get("/api/data")
-async def get_data():
-    logger.info("Data requested at /api/data")
-    data = [{"x": x, "y": 2 ** x} for x in range(30)]
-    return {
-        "data": data,
-        "title": "Hello world!",
-        "x_title": "Apps",
-        "y_title": "Fun with data"
-    }
 
 @app.post("/api/emotion_classification")
 async def post_emotion_classification(file: UploadFile = File(...)):
@@ -106,8 +119,8 @@ async def post_emotion_classification(file: UploadFile = File(...)):
         # 3. Call the Databricks model
         logger.info(f"Calling Databricks model with shape: {input_data.shape}")
         result = score_model(input_data)
-        
-        return result
+
+        return normalize_prediction(result)
 
     except HTTPException:
         raise

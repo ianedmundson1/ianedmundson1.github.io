@@ -1,4 +1,4 @@
-import { useEmotionAnalysis, type EmotionApiResponse } from '../../../utils/api';
+import { useEmotionAnalysis } from '../../../utils/api';
 import styles from './EmotionDetector.module.css';
 
 interface EmotionDetectorProps {
@@ -6,48 +6,11 @@ interface EmotionDetectorProps {
   onReset: () => void;
 }
 
-/**
- * Normalise the varied shapes a Databricks / MLflow model endpoint
- * might return into a single { label, confidencePercent } pair.
- */
-const parseModelResponse = (
-  data: EmotionApiResponse,
-): { label: string; confidencePercent: number } => {
-  // The payload may be wrapped in an array
-  const result = Array.isArray(data) ? data[0] : data;
-  const label =
-    result?.label ??
-    result?.emotion ??
-    result?.prediction ??
-    'Unknown';
-
-  const raw =
-    result?.score ??
-    result?.confidence ??
-    result?.probability ??
-    0;
-
-  const confidencePercent =
-    typeof raw === 'number' && raw <= 1
-      ? Math.round(raw * 100)
-      : Math.round(raw || 0);
-
-  return { label, confidencePercent };
-};
-
 const EmotionDetector = ({ capturedImage, onReset }: EmotionDetectorProps) => {
   const { data, isLoading, error } = useEmotionAnalysis(capturedImage);
 
-  // We can derive prediction and confidence from data if present
-  let prediction = '';
-  let confidence = 0;
-  
-  if (data) {
-    const parsed = parseModelResponse(data);
-    prediction = parsed.label;
-    confidence = parsed.confidencePercent;
-  }
-
+  const prediction = data?.label ?? '';
+  const confidence = data?.confidencePercent ?? 0;
   const errorMessage = error?.message ?? null;
 
   return (
