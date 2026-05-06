@@ -1,8 +1,10 @@
-"""Re-theme Plotly-exported HTML files for embedding on the dark site.
+"""Extract Plotly figure data from notebook-exported HTML and emit theme-neutral JSON.
 
-Reads each input HTML, extracts the `data` and `layout` JSON arguments from
-the embedded `Plotly.newPlot(...)` call, applies a dark/transparent theme,
-and overwrites the file with a minimal responsive shell.
+Reads each input HTML from `frontend/public/`, pulls the `data` and `layout`
+JSON arguments out of the embedded `Plotly.newPlot(...)` call, strips
+theme-specific styling (fonts, axis colors, templates) so the React layer
+can apply light or dark theming at render time, and writes the result to
+`frontend/public/plots/<name>.json`.
 
 Usage:
     python scripts/theme_plotly_html.py
@@ -17,44 +19,12 @@ import re
 from pathlib import Path
 
 PUBLIC = Path(__file__).resolve().parent.parent / "frontend" / "public"
+PLOTS_OUT = PUBLIC / "plots"
 
 TARGETS = [
     {"file": "encoding_plot.html", "show_legend": False, "keep_title": False},
     {"file": "retrieval_visualization.html", "show_legend": True, "keep_title": False},
 ]
-
-DARK_AXIS = {
-    "backgroundcolor": "rgba(0,0,0,0)",
-    "gridcolor": "rgba(255,255,255,0.12)",
-    "linecolor": "rgba(255,255,255,0.25)",
-    "zerolinecolor": "rgba(255,255,255,0.25)",
-    "showbackground": False,
-}
-FONT_COLOR = "#d6d3d1"
-
-SITE_BG_DARK = "#1c1917"
-
-HTML_SHELL = """<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8" />
-<meta name="color-scheme" content="dark" />
-<style>
-html,body{{margin:0;padding:0;height:100%;width:100%;overflow:hidden;background:{bg};}}
-#plot{{height:100vh;width:100vw;}}
-.plotly,.plotly .main-svg{{background:transparent!important;}}
-</style>
-<script src="https://cdn.plot.ly/plotly-3.3.0.min.js" charset="utf-8"></script>
-</head>
-<body>
-<div id="plot"></div>
-<script>
-Plotly.newPlot("plot", {data}, {layout}, {{responsive: true, displaylogo: false}});
-window.addEventListener('resize', () => Plotly.Plots.resize('plot'));
-</script>
-</body>
-</html>
-"""
 
 
 def split_top_level_args(text: str, paren_open: int) -> list[tuple[int, int]]:
@@ -106,58 +76,45 @@ def extract_data_layout(html: str) -> tuple[list, dict]:
     return json.loads(data_raw), json.loads(layout_raw)
 
 
-def apply_dark_theme(layout: dict, *, show_legend: bool, keep_title: bool) -> dict:
-    layout["paper_bgcolor"] = "rgba(0,0,0,0)"
-    layout["plot_bgcolor"] = "rgba(0,0,0,0)"
-    layout["font"] = {**layout.get("font", {}), "color": FONT_COLOR}
+def normalize_layout(layout: dict, *, show_legend: bool, keep_title: bool) -> dict:
+    """Strip theme styling and lock down sizing so the React layer owns the look."""
     layout["margin"] = {"l": 0, "r": 0, "t": 10, "b": 0}
     layout["autosize"] = True
     layout["showlegend"] = show_legend
     layout.pop("width", None)
     layout.pop("height", None)
+    layout.pop("paper_bgcolor", None)
+    layout.pop("plot_bgcolor", None)
+    layout.pop("font", None)
+    layout.pop("template", None)
     if not keep_title:
         layout.pop("title", None)
 
     scene = layout.get("scene") or {}
     for axis_key in ("xaxis", "yaxis", "zaxis"):
         ax = scene.get(axis_key) or {}
-        ax.update(DARK_AXIS)
+        for color_key in ("backgroundcolor", "gridcolor", "linecolor", "zerolinecolor", "color"):
+            ax.pop(color_key, None)
         scene[axis_key] = ax
-    layout["scene"] = scene
+    if scene:
+        layout["scene"] = scene
 
-    # Plotly's default white template bleeds through scene defaults; override it.
-    template = layout.get("template") or {}
-    tlayout = template.get("layout") or {}
-    tlayout["paper_bgcolor"] = "rgba(0,0,0,0)"
-    tlayout["plot_bgcolor"] = "rgba(0,0,0,0)"
-    tlayout["font"] = {**tlayout.get("font", {}), "color": FONT_COLOR}
-    tscene = tlayout.get("scene") or {}
-    for axis_key in ("xaxis", "yaxis", "zaxis"):
-        ax = tscene.get(axis_key) or {}
-        ax.update(DARK_AXIS)
-        tscene[axis_key] = ax
-    tlayout["scene"] = tscene
-    template["layout"] = tlayout
-    layout["template"] = template
     return layout
 
 
 def rewrite(target: dict) -> None:
-    path = PUBLIC / target["file"]
-    html = path.read_text()
+    src = PUBLIC / target["file"]
+    html = src.read_text()
     data, layout = extract_data_layout(html)
-    layout = apply_dark_theme(
+    layout = normalize_layout(
         layout,
         show_legend=target["show_legend"],
         keep_title=target["keep_title"],
     )
-    out = HTML_SHELL.format(
-        bg=SITE_BG_DARK,
-        data=json.dumps(data, separators=(",", ":")),
-        layout=json.dumps(layout, separators=(",", ":")),
-    )
-    path.write_text(out)
-    print(f"rewrote {path.relative_to(PUBLIC.parent.parent)} ({len(out):,} bytes)")
+    PLOTS_OUT.mkdir(parents=True, exist_ok=True)
+    out_path = PLOTS_OUT / (Path(target["file"]).stem + ".json")
+    out_path.write_text(json.dumps({"data": data, "layout": layout}, separators=(",", ":")))
+    print(f"wrote {out_path.relative_to(PUBLIC.parent.parent)} ({out_path.stat().st_size:,} bytes)")
 
 
 def main() -> None:

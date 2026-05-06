@@ -32,10 +32,19 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,jpg,woff2}'],
+        globIgnores: ['**/plotly*'],
         runtimeCaching: [
           {
             urlPattern: /^\/api\//,
             handler: 'NetworkOnly',
+          },
+          {
+            urlPattern: /\/assets\/plotly[^/]*\.js$/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'plotly-bundle',
+              expiration: { maxEntries: 2, maxAgeSeconds: 60 * 60 * 24 * 30 },
+            },
           },
         ],
       },

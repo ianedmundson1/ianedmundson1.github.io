@@ -1,3 +1,4 @@
+import PlotlyEmbed from '../../components/PlotlyEmbed';
 import ProjectDetailLayout from '../../components/ProjectDetailLayout';
 import styles from './RagDemoPage.module.css';
 
@@ -177,11 +178,9 @@ const RagDemoPage = () => (
               <h3>Indexed chunks</h3>
               <p>Every Wikipedia chunk in the corpus, positioned by semantic similarity.</p>
             </figcaption>
-            <iframe
-              className={styles.vizFrame}
-              src={`${import.meta.env.BASE_URL}encoding_plot.html`}
-              title="3D UMAP projection of embedded SQuAD chunks"
-              loading="lazy"
+            <PlotlyEmbed
+              src={`${import.meta.env.BASE_URL}plots/encoding_plot.json`}
+              ariaLabel="3D UMAP projection of embedded SQuAD chunks"
             />
           </figure>
           <figure className={styles.vizCard}>
@@ -189,11 +188,9 @@ const RagDemoPage = () => (
               <h3>Query and top-5 retrievals</h3>
               <p>The query vector overlaid on the index, with the top-5 nearest neighbours coloured by rank.</p>
             </figcaption>
-            <iframe
-              className={styles.vizFrame}
-              src={`${import.meta.env.BASE_URL}retrieval_visualization.html`}
-              title="3D UMAP projection showing query vector and top-5 retrieved chunks"
-              loading="lazy"
+            <PlotlyEmbed
+              src={`${import.meta.env.BASE_URL}plots/retrieval_visualization.json`}
+              ariaLabel="3D UMAP projection showing query vector and top-5 retrieved chunks"
             />
           </figure>
         </div>
