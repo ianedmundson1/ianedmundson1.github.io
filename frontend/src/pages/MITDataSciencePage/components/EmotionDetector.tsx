@@ -1,4 +1,4 @@
-import { useEmotionAnalysis } from '../../../utils/api';
+import { useEmotionAnalysis } from '../../../api/emotion';
 import styles from './EmotionDetector.module.css';
 
 interface EmotionDetectorProps {

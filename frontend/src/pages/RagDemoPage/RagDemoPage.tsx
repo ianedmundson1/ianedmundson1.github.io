@@ -24,37 +24,37 @@ const PIPELINE_STEPS = [
     step: 1,
     title: 'Load',
     description:
-      'Pull the first 100 examples of SQuAD via the Hugging Face datasets library. Deduplicate by hashing the context field. 100 QA pairs collapse to 21 unique Wikipedia passages about the University of Notre Dame, each wrapped in a LangChain Document with a UUID.',
+      'Pull SQuAD via Hugging Face datasets and deduplicate by context hash. 100 QA pairs collapse to 21 unique Wikipedia passages about Notre Dame.',
   },
   {
     step: 2,
     title: 'Chunk',
     description:
-      'Split documents with RecursiveCharacterTextSplitter.from_tiktoken_encoder (chunk_size=250 tokens, no overlap) so chunk boundaries respect the embedding model\'s tokenizer rather than raw character counts.',
+      'Split with RecursiveCharacterTextSplitter at 250 tokens, no overlap, using the embedding model\'s tokenizer rather than raw character counts.',
   },
   {
     step: 3,
     title: 'Embed & Index',
     description:
-      'Encode every chunk with Azure text-embedding-ada-002 (1536-dim) and load into an in-memory FAISS index using L2 distance. UMAP projects the index to 3D so the embedding space can be inspected in a Plotly scatter plot.',
+      'Encode each chunk with Azure text-embedding-ada-002 (1536-dim) into a FAISS L2 index. UMAP projects to 3D for visual inspection.',
   },
   {
     step: 4,
     title: 'Retrieve',
     description:
-      'Wrap FAISS as a LangChain retriever with search_type="similarity" and k=5. A second UMAP plot overlays the query vector and highlights the top-5 retrieved chunks with a rank gradient so retrieval quality is visually inspectable.',
+      'Wrap FAISS as a LangChain retriever (similarity, k=5). A UMAP overlay shows the query vector and top-5 retrieved chunks coloured by rank.',
   },
   {
     step: 5,
     title: 'Generate',
     description:
-      'LCEL chain: `{context: retriever, question: RunnablePassthrough()} | RunnablePassthrough.assign(answer=prompt | llm | StrOutputParser())`. The prompt instructs GPT-4o (temperature=0) to answer only from context and refuse otherwise. Batch-invoked at max_concurrency=25.',
+      'LCEL chain pipes retriever, prompt, GPT-4o (temperature 0), and parser. Batch-invoked at max_concurrency=25.',
   },
   {
     step: 6,
     title: 'Evaluate',
     description:
-      'Sample 20% of the questions and score with RAGAS using GPT-4o as judge: answer_correctness, answer_relevancy, context_precision, context_recall, and faithfulness. Retrieval quality is reported separately from generation quality.',
+      'Score a 20% sample with RAGAS using GPT-4o as judge across five retrieval and generation metrics.',
   },
 ] as const;
 

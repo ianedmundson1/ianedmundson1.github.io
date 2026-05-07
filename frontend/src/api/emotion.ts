@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { logger } from './logger';
+import { apiFetch } from './client';
+import { logger } from '../utils/logger';
 
 export interface EmotionApiResponse {
   label: string;
@@ -17,51 +18,31 @@ const dataURItoBlob = (dataURI: string) => {
   return new Blob([ab], { type: mimeString });
 };
 
-const analyzeEmotion = async (imageFile: File, signal?: AbortSignal): Promise<EmotionApiResponse> => {
+const analyzeEmotion = async (
+  imageDataUrl: string,
+  signal?: AbortSignal,
+): Promise<EmotionApiResponse> => {
+  const blob = dataURItoBlob(imageDataUrl);
+  const file = new File([blob], 'webcam-capture.jpg', { type: 'image/jpeg' });
   const formData = new FormData();
-  formData.append('file', imageFile);
+  formData.append('file', file);
 
   logger.debug('Sending image to backend /api/emotion_classification');
-
-  const res = await fetch('/api/emotion_classification', {
+  const json = await apiFetch<EmotionApiResponse>('/api/emotion_classification', {
     method: 'POST',
     body: formData,
     signal,
   });
-
-  if (!res.ok) {
-    const errorText = await res.text();
-    let errorMessage: string;
-    try {
-      const errorJson = JSON.parse(errorText);
-      errorMessage = errorJson.detail || errorJson.message || errorText;
-    } catch {
-      errorMessage = errorText;
-    }
-    throw new Error(`HTTP ${res.status}: ${errorMessage}`);
-  }
-
-  const json = (await res.json()) as EmotionApiResponse;
   logger.debug('Backend Response:', json);
   return json;
 };
 
-const analyzeEmotionBase64 = (imageDataUrl: string, signal?: AbortSignal): Promise<EmotionApiResponse> => {
-  const blob = dataURItoBlob(imageDataUrl);
-  const file = new File([blob], 'webcam-capture.jpg', { type: 'image/jpeg' });
-  return analyzeEmotion(file, signal);
-};
-
-/**
- * React Query hook for emotion analysis.
- * Caches by image data URL so identical captures don't re-fetch.
- */
 export const useEmotionAnalysis = (imageDataUrl: string | null) => {
   return useQuery({
     queryKey: ['emotionAnalysis', imageDataUrl],
     queryFn: ({ signal }) => {
       if (!imageDataUrl) throw new Error('No image data provided');
-      return analyzeEmotionBase64(imageDataUrl, signal);
+      return analyzeEmotion(imageDataUrl, signal);
     },
     enabled: !!imageDataUrl,
     retry: 2,

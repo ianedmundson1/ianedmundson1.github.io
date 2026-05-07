@@ -1,23 +1,26 @@
-import { Suspense, lazy, useEffect, useMemo, useState } from 'react';
-import type { Data, Layout, Config } from 'plotly.js';
+import { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react';
+import type { Layout, Config } from 'plotly.js';
 import { useTheme } from '../../context/ThemeContext';
+import { usePlotlyFigure, type Figure } from '../../api/plots';
 import styles from './PlotlyEmbed.module.css';
 
 const Plot = lazy(async () => {
   const [{ default: createPlotlyComponent }, plotlyMod] = await Promise.all([
     import('react-plotly.js/factory'),
-    import('plotly.js-dist-min'),
+    import('plotly.js-gl3d-dist-min'),
   ]);
   return { default: createPlotlyComponent(plotlyMod.default) };
 });
 
-type Figure = { data: Data[]; layout: Partial<Layout> };
-
-type PlotlyEmbedProps = {
-  src: string;
+type CommonProps = {
   ariaLabel: string;
   height?: number;
   mobileHeight?: number;
+};
+
+type PlotlyEmbedProps = CommonProps & {
+  src?: string;
+  figure?: Figure;
 };
 
 const baseConfig: Partial<Config> = {
@@ -67,22 +70,46 @@ const themedLayout = (
   };
 };
 
-const PlotlyEmbed = ({ src, ariaLabel, height = 600, mobileHeight = 360 }: PlotlyEmbedProps) => {
+const PlotlyEmbed = ({
+  src,
+  figure: providedFigure,
+  ariaLabel,
+  height = 600,
+  mobileHeight = 360,
+}: PlotlyEmbedProps) => {
+  if (!src && !providedFigure) {
+    throw new Error('PlotlyEmbed requires either `src` or `figure`');
+  }
+
   const { theme } = useTheme();
-  const [figure, setFigure] = useState<Figure | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const [inView, setInView] = useState(false);
   const [activated, setActivated] = useState(false);
 
   useEffect(() => {
-    const ctrl = new AbortController();
-    fetch(src, { signal: ctrl.signal })
-      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
-      .then((j: Figure) => setFigure(j))
-      .catch((e: Error) => {
-        if (!ctrl.signal.aborted) setError(e.message);
-      });
-    return () => ctrl.abort();
-  }, [src]);
+    if (inView) return;
+    const el = wrapperRef.current;
+    if (!el) return;
+    if (typeof IntersectionObserver === 'undefined') {
+      setInView(true);
+      return;
+    }
+    const obs = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setInView(true);
+          obs.disconnect();
+        }
+      },
+      { rootMargin: '200px' },
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [inView]);
+
+  const query = usePlotlyFigure(providedFigure || !inView ? null : src ?? null);
+  const figure = providedFigure ?? query.data ?? null;
+  const errorMessage = providedFigure ? null : query.error?.message ?? null;
 
   const layout = useMemo(
     () => (figure ? themedLayout(figure.layout, theme) : null),
@@ -94,24 +121,30 @@ const PlotlyEmbed = ({ src, ariaLabel, height = 600, mobileHeight = 360 }: Plotl
     ['--plot-h-mobile' as string]: `${mobileHeight}px`,
   } as React.CSSProperties;
 
-  if (error) {
+  if (errorMessage) {
     return (
-      <div className={styles.wrap} style={cssVars} role="alert">
-        <div className={styles.message}>Could not load plot: {error}</div>
+      <div ref={wrapperRef} className={styles.wrap} style={cssVars} role="alert">
+        <div className={styles.message}>Could not load plot: {errorMessage}</div>
       </div>
     );
   }
 
-  if (!figure || !layout) {
+  if (!inView || !figure || !layout) {
     return (
-      <div className={styles.wrap} style={cssVars} aria-busy="true" aria-label={`Loading ${ariaLabel}`}>
+      <div
+        ref={wrapperRef}
+        className={styles.wrap}
+        style={cssVars}
+        aria-busy="true"
+        aria-label={`Loading ${ariaLabel}`}
+      >
         <div className={styles.skeleton} />
       </div>
     );
   }
 
   return (
-    <div className={styles.wrap} style={cssVars}>
+    <div ref={wrapperRef} className={styles.wrap} style={cssVars}>
       <Suspense fallback={<div className={styles.skeleton} aria-busy="true" />}>
         <Plot
           data={figure.data}

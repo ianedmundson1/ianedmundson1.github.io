@@ -149,6 +149,61 @@
   line-height: 1.7;
 }
 
+@media (max-width: 640px) {
+  .results-table-wrapper {
+    overflow-x: visible;
+  }
+
+  .results-table thead {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+
+  .results-table,
+  .results-table tbody,
+  .results-table tr,
+  .results-table th,
+  .results-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .results-table tr {
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--color-border, rgba(0, 0, 0, 0.08));
+  }
+
+  .results-table tr:last-child {
+    border-bottom: none;
+  }
+
+  .results-table tbody th {
+    padding: 0 0 0.25rem;
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-bottom: none;
+    white-space: normal;
+  }
+
+  .results-table tbody td {
+    padding: 0.25rem 0;
+    border-bottom: none;
+  }
+
+  .score-cell {
+    font-size: 1.6rem;
+    padding: 0.1rem 0 0.4rem !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .project-link {
     transition: none;

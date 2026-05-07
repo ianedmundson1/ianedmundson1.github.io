@@ -23,6 +23,15 @@ export interface Award {
   description: string;
 }
 
+export const HERO_SUBTITLE =
+  'Data scientist with a background in federal ML infrastructure. I build the systems that hold up when it actually matters.';
+
+export const INTRO_PARAGRAPHS: readonly string[] = [
+  "Data scientist with 3+ years at NIH's Central Utility Plant, where I built production ML systems for one of the federal government's largest central utility operations: forecasting, anomaly detection, chiller efficiency analysis, and the data infrastructure to make them reliable. The analytics work was one piece of broader operational improvements that together achieved $2.2M in annual energy savings across the plant, recognized with an NIH Director's Award.",
+  'My work spans the full stack: ML modeling in Python (LightGBM, NARX, SHAP), FastAPI services, React front-ends, and data pipelines connecting OSIsoft PI to Azure. I care most about systems that hold up under pressure: a 96-hour forecast during a heatwave, an alert system engineers actually trust.',
+  'I care about data done right in the public sector: responsible deployment, clear governance, and tools people can actually use. Currently volunteering with the UW Botanic Gardens, modernizing their seed conservation web application, and with Peace Peloton, enhancing their management workflows.',
+];
+
 export const EXPERIENCE: readonly Experience[] = [
   {
     role: 'Technical Volunteer',
