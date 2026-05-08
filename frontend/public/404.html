@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Redirecting…</title>
+    <script>
+      // GitHub Pages SPA fallback. Pages serves this file for any unknown
+      // path; we stash the requested location and redirect to "/", where
+      // the bootstrap script in index.html restores it via history.replaceState
+      // before React boots. Without this, deep-link refreshes 404.
+      (function () {
+        var path = location.pathname + location.search + location.hash;
+        sessionStorage.setItem('spa-redirect', path);
+        location.replace('/');
+      })();
+    </script>
+  </head>
+  <body></body>
+</html>

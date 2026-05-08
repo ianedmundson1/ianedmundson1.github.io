@@ -39,6 +39,16 @@
         }
         document.documentElement.setAttribute('data-theme', theme);
       })();
+      // Restore deep-link path stashed by 404.html on GitHub Pages.
+      (function () {
+        var redirect = sessionStorage.getItem('spa-redirect');
+        if (redirect) {
+          sessionStorage.removeItem('spa-redirect');
+          if (redirect !== location.pathname + location.search + location.hash) {
+            history.replaceState(null, '', redirect);
+          }
+        }
+      })();
     </script>
   </head>
   <body>
