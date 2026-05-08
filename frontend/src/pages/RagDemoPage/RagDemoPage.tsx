@@ -180,6 +180,10 @@ const RagDemoPage = () => (
             </figcaption>
             <PlotlyEmbed
               src={`${import.meta.env.BASE_URL}plots/encoding_plot.json`}
+              poster={{
+                light: `${import.meta.env.BASE_URL}plots/encoding_plot-light.webp`,
+                dark: `${import.meta.env.BASE_URL}plots/encoding_plot-dark.webp`,
+              }}
               ariaLabel="3D UMAP projection of embedded SQuAD chunks"
             />
           </figure>
@@ -190,6 +194,10 @@ const RagDemoPage = () => (
             </figcaption>
             <PlotlyEmbed
               src={`${import.meta.env.BASE_URL}plots/retrieval_visualization.json`}
+              poster={{
+                light: `${import.meta.env.BASE_URL}plots/retrieval_visualization-light.webp`,
+                dark: `${import.meta.env.BASE_URL}plots/retrieval_visualization-dark.webp`,
+              }}
               ariaLabel="3D UMAP projection showing query vector and top-5 retrieved chunks"
             />
           </figure>

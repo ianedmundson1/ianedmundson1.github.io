@@ -5,17 +5,35 @@ import { usePlotlyFigure, type Figure } from '../../api/plots';
 import styles from './PlotlyEmbed.module.css';
 
 const Plot = lazy(async () => {
-  const [{ default: createPlotlyComponent }, plotlyMod] = await Promise.all([
-    import('react-plotly.js/factory'),
-    import('plotly.js-gl3d-dist-min'),
-  ]);
-  return { default: createPlotlyComponent(plotlyMod.default) };
+  const Sentry = await import('@sentry/react').catch(() => null);
+  const load = async () => {
+    const [{ default: createPlotlyComponent }, plotlyMod] = await Promise.all([
+      import('react-plotly.js/factory'),
+      import('plotly.js-gl3d-dist-min'),
+    ]);
+    return createPlotlyComponent(plotlyMod.default);
+  };
+  const Component = Sentry
+    ? await Sentry.startSpan(
+        { name: 'plotly.lazy-import', op: 'resource.script', forceTransaction: true },
+        load,
+      )
+    : await load();
+  return { default: Component };
 });
+
+type Poster = string | { light: string; dark: string };
 
 type CommonProps = {
   ariaLabel: string;
   height?: number;
   mobileHeight?: number;
+  poster?: Poster;
+};
+
+const resolvePoster = (poster: Poster | undefined, theme: 'light' | 'dark') => {
+  if (!poster) return null;
+  return typeof poster === 'string' ? poster : poster[theme];
 };
 
 type PlotlyEmbedProps = CommonProps & {
@@ -70,12 +88,18 @@ const themedLayout = (
   };
 };
 
+const isCoarsePointer = () =>
+  typeof window !== 'undefined' &&
+  typeof window.matchMedia === 'function' &&
+  window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+
 const PlotlyEmbed = ({
   src,
   figure: providedFigure,
   ariaLabel,
   height = 600,
   mobileHeight = 360,
+  poster,
 }: PlotlyEmbedProps) => {
   if (!src && !providedFigure) {
     throw new Error('PlotlyEmbed requires either `src` or `figure`');
@@ -84,7 +108,9 @@ const PlotlyEmbed = ({
   const { theme } = useTheme();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
-  const [activated, setActivated] = useState(false);
+  // Coarse-pointer (touch) devices wait for an explicit tap before fetching the
+  // figure JSON or loading the Plotly bundle. Desktop activates immediately.
+  const [activated, setActivated] = useState(() => !isCoarsePointer());
 
   useEffect(() => {
     if (inView) return;
@@ -107,7 +133,8 @@ const PlotlyEmbed = ({
     return () => obs.disconnect();
   }, [inView]);
 
-  const query = usePlotlyFigure(providedFigure || !inView ? null : src ?? null);
+  const shouldFetch = !providedFigure && inView && activated;
+  const query = usePlotlyFigure(shouldFetch ? src ?? null : null);
   const figure = providedFigure ?? query.data ?? null;
   const errorMessage = providedFigure ? null : query.error?.message ?? null;
 
@@ -121,10 +148,45 @@ const PlotlyEmbed = ({
     ['--plot-h-mobile' as string]: `${mobileHeight}px`,
   } as React.CSSProperties;
 
+  const posterSrc = resolvePoster(poster, theme);
+  const placeholder = posterSrc ? (
+    <img
+      src={posterSrc}
+      alt=""
+      className={styles.poster}
+      loading="lazy"
+      decoding="async"
+      aria-hidden="true"
+    />
+  ) : (
+    <div className={styles.skeleton} />
+  );
+
   if (errorMessage) {
     return (
       <div ref={wrapperRef} className={styles.wrap} style={cssVars} role="alert">
         <div className={styles.message}>Could not load plot: {errorMessage}</div>
+      </div>
+    );
+  }
+
+  if (!activated) {
+    return (
+      <div
+        ref={wrapperRef}
+        className={styles.wrap}
+        style={cssVars}
+        aria-label={ariaLabel}
+      >
+        {placeholder}
+        <button
+          type="button"
+          className={styles.scrim}
+          onClick={() => setActivated(true)}
+          aria-label={`Activate interactive controls for ${ariaLabel}`}
+        >
+          <span className={styles.scrimLabel}>Tap to interact</span>
+        </button>
       </div>
     );
   }
@@ -138,14 +200,14 @@ const PlotlyEmbed = ({
         aria-busy="true"
         aria-label={`Loading ${ariaLabel}`}
       >
-        <div className={styles.skeleton} />
+        {placeholder}
       </div>
     );
   }
 
   return (
     <div ref={wrapperRef} className={styles.wrap} style={cssVars}>
-      <Suspense fallback={<div className={styles.skeleton} aria-busy="true" />}>
+      <Suspense fallback={placeholder}>
         <Plot
           data={figure.data}
           layout={layout}
@@ -155,16 +217,6 @@ const PlotlyEmbed = ({
           aria-label={ariaLabel}
         />
       </Suspense>
-      {!activated && (
-        <button
-          type="button"
-          className={styles.scrim}
-          onClick={() => setActivated(true)}
-          aria-label={`Activate interactive controls for ${ariaLabel}`}
-        >
-          <span className={styles.scrimLabel}>Tap to interact</span>
-        </button>
-      )}
     </div>
   );
 };
