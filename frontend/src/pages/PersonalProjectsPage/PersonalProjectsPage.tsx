@@ -2,8 +2,10 @@ import React from 'react';
 import Seo from '../../components/Seo';
 import Hero from '../../components/Hero/Hero';
 import ProjectCard from '../../components/ProjectCard/ProjectCard';
-import { PROJECTS } from '../../data/personalProjects';
+import { getProjectsByKind } from '../../data/projects';
 import styles from './PersonalProjectsPage.module.css';
+
+const PERSONAL_PROJECTS = getProjectsByKind('personal');
 
 const PersonalProjectsPage: React.FC = () => {
   return (
@@ -21,17 +23,8 @@ const PersonalProjectsPage: React.FC = () => {
         <section className={styles.projectsSection}>
           <div className={styles.sectionContainer}>
             <div className={styles.projectsGrid}>
-              {PROJECTS.map((project) => (
-                <ProjectCard
-                  key={project.title}
-                  title={project.title}
-                  badges={project.tech.slice(0, 2)}
-                  description={project.summary}
-                  link={project.href}
-                  linkLabel={project.linkLabel}
-                  external={project.external ?? true}
-                  youtube={project.youtube}
-                />
+              {PERSONAL_PROJECTS.map((project) => (
+                <ProjectCard key={project.id} project={project} />
               ))}
             </div>
           </div>

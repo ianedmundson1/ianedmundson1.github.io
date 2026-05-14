@@ -6,7 +6,10 @@ import { useFadeOnScroll } from '../../hooks/useFadeOnScroll';
 import headshot400 from '../../assets/headshot-400.jpg';
 import headshot400Webp from '../../assets/headshot-400.webp';
 import headshot800Webp from '../../assets/headshot-800.webp';
-import { EXPERTISE_CARDS, IMPACT_ITEMS, FEATURED_PROJECTS, HERO_DESCRIPTION } from '../../data/home';
+import { EXPERTISE_CARDS, IMPACT_ITEMS, HERO_DESCRIPTION } from '../../data/home';
+import { getFeaturedProjects } from '../../data/projects';
+import { ROUTES } from '../../data/routes';
+import { EXPERTISE_ICONS } from '../../components/ExpertiseIcons';
 import ProjectCard from '../../components/ProjectCard/ProjectCard';
 import styles from './HomePage.module.css';
 
@@ -21,6 +24,8 @@ const PERSON_JSON_LD = {
     'https://github.com/ianedmundson1',
   ],
 } as const;
+
+const FEATURED_PROJECTS = getFeaturedProjects();
 
 const HomePage: React.FC = () => {
   const wrapperRef = useFadeOnScroll();
@@ -52,10 +57,10 @@ const HomePage: React.FC = () => {
                 {HERO_DESCRIPTION}
               </p>
               <div className={styles.heroActions}>
-                <Link to="/projects" className={`${styles.btn} ${styles.btnPrimary}`}>
+                <Link to={ROUTES.projects} className={`${styles.btn} ${styles.btnPrimary}`}>
                   View projects &rarr;
                 </Link>
-                <Link to="/about" className={`${styles.btn} ${styles.btnSecondary}`}>
+                <Link to={ROUTES.about} className={`${styles.btn} ${styles.btnSecondary}`}>
                   About
                 </Link>
                 <a
@@ -102,15 +107,18 @@ const HomePage: React.FC = () => {
               the analytics stack.
             </p>
             <div className={styles.expertiseGrid}>
-              {EXPERTISE_CARDS.map((card) => (
-                <article key={card.title} className={styles.expertiseCard}>
-                  <div className={styles.expertiseIcon}>{card.icon}</div>
-                  <div className={styles.expertiseCardBody}>
-                    <h3>{card.title}</h3>
-                    <p>{card.summary}</p>
-                  </div>
-                </article>
-              ))}
+              {EXPERTISE_CARDS.map((card) => {
+                const Icon = EXPERTISE_ICONS[card.iconId];
+                return (
+                  <article key={card.title} className={styles.expertiseCard}>
+                    <div className={styles.expertiseIcon}><Icon /></div>
+                    <div className={styles.expertiseCardBody}>
+                      <h3>{card.title}</h3>
+                      <p>{card.summary}</p>
+                    </div>
+                  </article>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -154,20 +162,11 @@ const HomePage: React.FC = () => {
             </p>
             <div className={styles.featuredGrid}>
               {FEATURED_PROJECTS.map((project) => (
-                <ProjectCard
-                  key={project.title}
-                  title={project.title}
-                  badges={[...project.badges]}
-                  description={project.description}
-                  link={project.link}
-                  linkLabel={project.linkLabel}
-                  external={project.external}
-                  youtube={project.youtube}
-                />
+                <ProjectCard key={project.id} project={project} />
               ))}
             </div>
             <div className={styles.featuredFooter}>
-              <Link to="/projects" className={styles.viewAllBtn}>
+              <Link to={ROUTES.projects} className={styles.viewAllBtn}>
                 View all projects &rarr;
               </Link>
             </div>

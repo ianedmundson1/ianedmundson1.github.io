@@ -1,7 +1,7 @@
 import ProjectDetailLayout from '../../components/ProjectDetailLayout';
-import { getWorkProject } from '../../data/workProjects';
+import { getProject } from '../../data/projects';
 
-const META = getWorkProject('cloud-migration');
+const META = getProject('cloud-migration');
 
 const HIGHLIGHTS = [
   { value: '35,000+', label: 'Data Points Migrated' },

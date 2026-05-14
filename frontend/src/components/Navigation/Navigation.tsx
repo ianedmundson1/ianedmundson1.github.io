@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
+import { ROUTES } from '../../data/routes';
 import styles from './Navigation.module.css';
 
 interface NavigationProps {
@@ -8,10 +9,9 @@ interface NavigationProps {
 }
 
 const NAV_ITEMS = [
-  { to: '/', label: 'Home' },
-  { to: '/projects', label: 'Projects' },
-  { to: '/books', label: 'Books' },
-  { to: '/about', label: 'About' },
+  { to: ROUTES.home, label: 'Home' },
+  { to: ROUTES.projects, label: 'Projects' },
+  { to: ROUTES.about, label: 'About' },
 ] as const;
 
 const Navigation: React.FC<NavigationProps> = ({ className }) => {

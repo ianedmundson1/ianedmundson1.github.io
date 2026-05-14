@@ -1,7 +1,7 @@
 import ProjectDetailLayout from '../../components/ProjectDetailLayout';
-import { getWorkProject } from '../../data/workProjects';
+import { getProject } from '../../data/projects';
 
-const META = getWorkProject('energy-optimization');
+const META = getProject('energy-optimization');
 
 const HIGHLIGHTS = [
   { value: '$2.2M', label: 'Annual Savings' },

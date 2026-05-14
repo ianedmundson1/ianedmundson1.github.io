@@ -5,6 +5,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import ErrorBoundary from './components/ErrorBoundary';
 import RouteAnnouncer from './components/RouteAnnouncer';
 import Layout from './components/Layout/Layout';
+import { ROUTES } from './data/routes';
 import styles from './App.module.css';
 
 const HomePage = lazy(() => import('./pages/HomePage'));
@@ -14,36 +15,34 @@ const MITDataSciencePage = lazy(() => import('./pages/MITDataSciencePage'));
 const RagDemoPage = lazy(() => import('./pages/RagDemoPage'));
 const EnergyOptimizationPage = lazy(() => import('./pages/EnergyOptimizationPage'));
 const CloudMigrationPage = lazy(() => import('./pages/CloudMigrationPage'));
-const BooksPage = lazy(() => import('./pages/BooksPage'));
 const AboutPage = lazy(() => import('./pages/AboutPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 function App() {
   return (
     <HelmetProvider>
-    <ThemeProvider>
-    <ErrorBoundary>
-    <Router basename={import.meta.env.BASE_URL}>
-      <RouteAnnouncer />
-      <div className={styles.App}>
-        <Routes>
-          <Route element={<Layout />}>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/projects" element={<ProjectsPage />} />
-            <Route path="/projects/personal" element={<PersonalProjectsPage />} />
-            <Route path="/projects/mit-data-science" element={<MITDataSciencePage />} />
-            <Route path="/projects/rag-demo" element={<RagDemoPage />} />
-            <Route path="/projects/energy-optimization" element={<EnergyOptimizationPage />} />
-            <Route path="/projects/cloud-migration" element={<CloudMigrationPage />} />
-            <Route path="/books" element={<BooksPage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="*" element={<NotFoundPage />} />
-          </Route>
-        </Routes>
-      </div>
-    </Router>
-    </ErrorBoundary>
-    </ThemeProvider>
+      <ThemeProvider>
+        <ErrorBoundary>
+          <Router basename={import.meta.env.BASE_URL}>
+            <RouteAnnouncer />
+            <div className={styles.App}>
+              <Routes>
+                <Route element={<Layout />}>
+                  <Route path={ROUTES.home} element={<HomePage />} />
+                  <Route path={ROUTES.projects} element={<ProjectsPage />} />
+                  <Route path={ROUTES.personalProjects} element={<PersonalProjectsPage />} />
+                  <Route path={ROUTES.mitDataScience} element={<MITDataSciencePage />} />
+                  <Route path={ROUTES.ragDemo} element={<RagDemoPage />} />
+                  <Route path={ROUTES.energyOptimization} element={<EnergyOptimizationPage />} />
+                  <Route path={ROUTES.cloudMigration} element={<CloudMigrationPage />} />
+                  <Route path={ROUTES.about} element={<AboutPage />} />
+                  <Route path="*" element={<NotFoundPage />} />
+                </Route>
+              </Routes>
+            </div>
+          </Router>
+        </ErrorBoundary>
+      </ThemeProvider>
     </HelmetProvider>
   );
 }
