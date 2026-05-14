@@ -25,8 +25,8 @@ const personalProjectCards: Project[] = PERSONAL_PROJECTS.map((p) => ({
   badges: p.tech.slice(0, 2),
   description: p.summary,
   link: p.href,
-  linkLabel: 'View Project',
-  external: true,
+  linkLabel: p.linkLabel,
+  external: p.external ?? true,
   youtube: p.youtube,
 }));
 

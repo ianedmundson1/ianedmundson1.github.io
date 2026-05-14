@@ -18,11 +18,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   badges,
   description,
   link,
-  linkLabel = 'View Project',
+  linkLabel,
   external = false,
   interactive = false,
   youtube,
-}) => (
+}) => {
+  const resolvedLabel = linkLabel ?? (external ? 'View on GitHub' : 'View Details');
+  return (
   <article className={styles.card}>
     <div className={styles.badges}>
       {badges.map((badge) => (
@@ -44,11 +46,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
               target="_blank"
               rel="noopener noreferrer"
             >
-              {linkLabel} &rarr;
+              {resolvedLabel} &rarr;
             </a>
           ) : (
             <Link to={link} className={styles.link}>
-              {linkLabel} &rarr;
+              {resolvedLabel} &rarr;
             </Link>
           )
         )}
@@ -66,6 +68,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
       </div>
     )}
   </article>
-);
+  );
+};
 
 export default ProjectCard;
