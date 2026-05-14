@@ -23,5 +23,12 @@ export const apiFetch = async <T>(path: string, init?: RequestInit): Promise<T> 
     }
     throw new ApiError(res.status, `HTTP ${res.status}: ${detail}`);
   }
+  if (res.status === 204 || res.headers.get('content-length') === '0') {
+    return undefined as T;
+  }
+  const ctype = res.headers.get('content-type') ?? '';
+  if (!ctype.includes('application/json')) {
+    return undefined as T;
+  }
   return res.json() as Promise<T>;
 };

@@ -9,9 +9,38 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 // https://vite.dev/config/
 const base = '/';
 
+// Strict CSP, injected only into the production build so dev HMR (inline
+// scripts, websockets) keeps working. Inline scripts have been moved to
+// public/bootstrap.js and public/spa-redirect.js, so script-src can be 'self'.
+const PROD_CSP = [
+  "default-src 'self'",
+  "script-src 'self'",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob:",
+  "font-src 'self'",
+  "connect-src 'self' https://*.ingest.sentry.io https://*.ingest.us.sentry.io",
+  "worker-src 'self' blob:",
+  "manifest-src 'self'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "object-src 'none'",
+].join('; ')
+
+const cspPlugin = {
+  name: 'inject-csp',
+  apply: 'build' as const,
+  transformIndexHtml(html: string) {
+    return html.replace(
+      '<meta charset="UTF-8" />',
+      `<meta charset="UTF-8" />\n    <meta http-equiv="Content-Security-Policy" content="${PROD_CSP}" />`,
+    )
+  },
+}
+
 export default defineConfig({
   base,
   plugins: [
+    cspPlugin,
     react(),
     VitePWA({
       registerType: 'autoUpdate',

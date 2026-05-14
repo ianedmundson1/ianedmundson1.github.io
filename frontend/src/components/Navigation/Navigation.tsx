@@ -1,6 +1,7 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
+import { useFocusTrap } from '../../hooks/useFocusTrap';
 import { ROUTES } from '../../data/routes';
 import styles from './Navigation.module.css';
 
@@ -18,6 +19,8 @@ const Navigation: React.FC<NavigationProps> = ({ className }) => {
   const { theme, toggleTheme } = useTheme();
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
+  const navListRef = useRef<HTMLUListElement>(null);
+  const hamburgerRef = useRef<HTMLButtonElement>(null);
 
   const toggleMenu = useCallback(() => setMenuOpen((o) => !o), []);
 
@@ -37,6 +40,8 @@ const Navigation: React.FC<NavigationProps> = ({ className }) => {
     }
   }, [menuOpen]);
 
+  useFocusTrap(menuOpen, navListRef, hamburgerRef);
+
   const isActive = (path: string) => {
     if (path === '/') return location.pathname === '/';
     return location.pathname.startsWith(path);
@@ -50,6 +55,7 @@ const Navigation: React.FC<NavigationProps> = ({ className }) => {
         </div>
 
         <button
+          ref={hamburgerRef}
           type="button"
           className={`${styles.hamburger} ${menuOpen ? styles.hamburgerOpen : ''}`}
           onClick={toggleMenu}
@@ -62,7 +68,7 @@ const Navigation: React.FC<NavigationProps> = ({ className }) => {
           <span className={styles.hamburgerBar} />
         </button>
 
-        <ul id="primary-nav" className={`${styles.navLinks} ${menuOpen ? styles.navLinksOpen : ''}`}>
+        <ul ref={navListRef} id="primary-nav" className={`${styles.navLinks} ${menuOpen ? styles.navLinksOpen : ''}`}>
           {NAV_ITEMS.map((item) => (
             <li key={item.to}>
               <Link

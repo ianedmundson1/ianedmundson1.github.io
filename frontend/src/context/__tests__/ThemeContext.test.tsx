@@ -1,4 +1,5 @@
 import { render, screen, fireEvent, act } from '@testing-library/react';
+import { vi } from 'vitest';
 import { ThemeProvider, useTheme } from '../ThemeContext';
 
 const ThemeConsumer = () => {
@@ -83,5 +84,11 @@ describe('ThemeContext', () => {
       fireEvent.click(screen.getByRole('button', { name: 'Toggle' }));
     });
     expect(localStorage.getItem('theme')).toBe('dark');
+  });
+
+  it('throws when useTheme is called outside ThemeProvider', () => {
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    expect(() => render(<ThemeConsumer />)).toThrow(/within ThemeProvider/);
+    spy.mockRestore();
   });
 });

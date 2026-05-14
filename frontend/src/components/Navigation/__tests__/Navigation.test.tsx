@@ -1,4 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import Navigation from '../Navigation';
 import { ThemeProvider } from '../../../context/ThemeContext';
@@ -47,5 +48,19 @@ describe('Navigation', () => {
     renderNavigation({ className: 'custom-class' });
     const nav = screen.getByRole('navigation');
     expect(nav.className).toContain('custom-class');
+  });
+
+  it('moves focus into the menu when opened and traps Tab inside it', async () => {
+    renderNavigation();
+    const hamburger = screen.getByRole('button', { name: /open menu/i });
+    await userEvent.click(hamburger);
+
+    const homeLink = screen.getByRole('link', { name: 'Home' });
+    expect(document.activeElement).toBe(homeLink);
+
+    const aboutLink = screen.getByRole('link', { name: 'About' });
+    aboutLink.focus();
+    await userEvent.tab();
+    expect(document.activeElement).toBe(homeLink);
   });
 });

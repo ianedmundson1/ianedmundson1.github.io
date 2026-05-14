@@ -62,8 +62,8 @@ const AboutPage = () => {
           <div className="section-container">
             <h2 id="intro-heading" className="sr-only">Introduction</h2>
             <div className={styles.introContent}>
-              {INTRO_PARAGRAPHS.map((p, i) => (
-                <p key={i}>{p}</p>
+              {INTRO_PARAGRAPHS.map((p) => (
+                <p key={p.slice(0, 40)}>{p}</p>
               ))}
             </div>
           </div>

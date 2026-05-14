@@ -111,6 +111,7 @@
 
 body {
   min-height: 100vh;
+  min-height: 100dvh;
   color: var(--color-text-primary);
   background-color: var(--color-bg);
   font-family: var(--font-body);

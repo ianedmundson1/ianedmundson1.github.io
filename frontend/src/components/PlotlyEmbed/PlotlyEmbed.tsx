@@ -37,10 +37,8 @@ const resolvePoster = (poster: Poster | undefined, theme: 'light' | 'dark') => {
   return typeof poster === 'string' ? poster : poster[theme];
 };
 
-type PlotlyEmbedProps = CommonProps & {
-  src?: string;
-  figure?: Figure;
-};
+type PlotlyEmbedProps = CommonProps &
+  ({ src: string; figure?: never } | { figure: Figure; src?: never });
 
 const baseConfig: Partial<Config> = {
   displaylogo: false,
@@ -93,10 +91,6 @@ const PlotlyEmbed = ({
   mobileHeight = 360,
   poster,
 }: PlotlyEmbedProps) => {
-  if (!src && !providedFigure) {
-    throw new Error('PlotlyEmbed requires either `src` or `figure`');
-  }
-
   const { theme } = useTheme();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);

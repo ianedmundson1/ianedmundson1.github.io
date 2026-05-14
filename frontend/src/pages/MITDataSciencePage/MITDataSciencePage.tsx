@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { Camera, Upload } from 'lucide-react';
 import ProjectDetailLayout from '../../components/ProjectDetailLayout';
 import SectionDownNotice from '../../components/SectionDownNotice';
 import CameraCapture from './components/CameraCapture';
@@ -112,14 +113,14 @@ const MITDataSciencePage = () => {
                   onClick={() => setMode('camera')}
                   aria-label="Open camera to capture a photo"
                 >
-                  <span aria-hidden="true">📸</span> Use Camera
+                  <Camera size={18} aria-hidden="true" /> Use Camera
                 </button>
                 <button
                   className={`${styles.captureButton} ${styles.secondary}`}
                   onClick={() => setMode('upload')}
                   aria-label="Upload an image file"
                 >
-                  <span aria-hidden="true">📁</span> Upload Image
+                  <Upload size={18} aria-hidden="true" /> Upload Image
                 </button>
               </div>
             )}

@@ -31,25 +31,7 @@
     <meta name="twitter:image" content="https://ianedmundson.github.io/og-image.jpg" />
 
     <title>Ian Edmundson — Data Scientist & Software Engineer</title>
-    <script>
-      (function() {
-        var theme = localStorage.getItem('theme');
-        if (!theme) {
-          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        }
-        document.documentElement.setAttribute('data-theme', theme);
-      })();
-      // Restore deep-link path stashed by 404.html on GitHub Pages.
-      (function () {
-        var redirect = sessionStorage.getItem('spa-redirect');
-        if (redirect) {
-          sessionStorage.removeItem('spa-redirect');
-          if (redirect !== location.pathname + location.search + location.hash) {
-            history.replaceState(null, '', redirect);
-          }
-        }
-      })();
-    </script>
+    <script src="/bootstrap.js"></script>
   </head>
   <body>
     <div id="root"></div>

@@ -1,5 +1,6 @@
 import { useRef, useCallback } from 'react';
 import Webcam from 'react-webcam';
+import { Camera } from 'lucide-react';
 import styles from './CameraCapture.module.css';
 
 interface CameraCaptureProps {
@@ -32,7 +33,7 @@ const CameraCapture = ({ onCapture, onCancel }: CameraCaptureProps) => {
           onClick={capture}
           aria-label="Capture photo from camera"
         >
-          <span aria-hidden="true">📸</span> Capture Photo
+          <Camera size={18} aria-hidden="true" /> Capture Photo
         </button>
         <button
           className={`${styles.captureButton} ${styles.secondary}`}

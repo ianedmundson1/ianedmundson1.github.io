@@ -9,6 +9,7 @@
   --pp-accent-rgb: var(--color-primary-rgb);
 
   min-height: 100vh;
+  min-height: 100dvh;
   background-color: var(--color-bg-subtle);
 }
 
