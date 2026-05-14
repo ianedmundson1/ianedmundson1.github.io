@@ -76,8 +76,27 @@ Kaleido (used for PNG rendering in the poster script) needs Chrome: `plotly_get_
 
 ### Sentry — two DSNs, two lifecycles
 
-- `SENTRY_DSN` is read at FastAPI startup (`backend/main.py`), runtime config, can be changed via env without rebuilding.
+- `SENTRY_DSN` is read at FastAPI startup (`backend/main.py`), runtime config, settable via the active `backend/.env.{APP_ENV}` file or any env var that beats it (Docker `ENV`, shell export).
 - `VITE_SENTRY_DSN` is **baked into the JS bundle at build time** (see Dockerfile `ARG`/`ENV`). Changing it requires `npm run build` (or a Docker rebuild). Both should normally point at the same project.
+
+### Environments: dev / test / prod per tier
+
+Frontend and backend each have independent `development`, `test`, and `production` envs. "Fullstack" is a build target (the Docker image bundling both tiers), not an environment.
+
+**Frontend** uses Vite's native `MODE`:
+
+- `vite` (dev server) → `MODE=development`, loads `frontend/.env.development`.
+- `vitest` / `vite --mode test` → `MODE=test`, loads `frontend/.env.test`.
+- `vite build` → `MODE=production`, loads `frontend/.env.production`. Used by both the GitHub Pages CI deploy and the Docker build stage.
+- The committed `.env.{mode}` files hold safe defaults (no secrets). Use `frontend/.env.{mode}.local` (gitignored) for local secrets and overrides.
+
+**Backend** uses `APP_ENV` (default `development`). `backend/main.py` calls `load_dotenv(backend/.env.{APP_ENV})` at startup with `override=False`, so values already in the process environment (Docker `ENV`, CI workflow `env:`, shell exports) always win over the file.
+
+- Templates are committed at `backend/.env.{development,test,production}.example`. Copy to `backend/.env.{env}` (gitignored) and fill in real values.
+- The CI test job sets `APP_ENV=test`.
+- The Dockerfile sets `APP_ENV=production` at runtime.
+
+**Feature flags are orthogonal to env.** `VITE_ENABLE_EMOTION_DEMO` gates the emotion-detection UI on the MIT page. Defaults to `false` in every committed `.env.{mode}` (safe for Pages, which has no backend). The Dockerfile sets `VITE_ENABLE_EMOTION_DEMO=true` in the build stage so the fullstack image keeps the demo live. When adding a backend-dependent feature, follow the same pattern: gate it on a `VITE_ENABLE_*` flag, default off in the committed env files, override `true` where the backend is present.
 
 ## Conventions
 

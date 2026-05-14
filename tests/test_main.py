@@ -1,13 +1,54 @@
+import os
+
+import pytest
 from fastapi.testclient import TestClient
-from backend.main import app, normalize_prediction
+from backend.main import app, limiter, normalize_prediction
 
 client = TestClient(app)
+
+
+@pytest.fixture(autouse=True)
+def _reset_rate_limiter():
+    # slowapi keeps state across requests; clear between tests so one test's
+    # bucket doesn't leak into another.
+    limiter.reset()
+    yield
 
 
 def test_health_check():
     response = client.get("/api/health")
     assert response.status_code == 200
     assert response.json() == {"status": "healthy"}
+
+
+def test_ready_check_without_credentials(monkeypatch):
+    monkeypatch.delenv("DATABRICKS_HOST", raising=False)
+    monkeypatch.delenv("DATABRICKS_TOKEN", raising=False)
+    response = client.get("/api/ready")
+    assert response.status_code == 503
+
+
+def test_ready_check_with_credentials(monkeypatch):
+    monkeypatch.setenv("DATABRICKS_HOST", "https://example.databricks.com")
+    monkeypatch.setenv("DATABRICKS_TOKEN", "fake-token")
+    response = client.get("/api/ready")
+    assert response.status_code == 200
+    assert response.json() == {"status": "ready"}
+
+
+def test_emotion_rate_limited():
+    # 11th call within the 10/minute window should be rejected before reaching
+    # the Databricks-backed handler.
+    for _ in range(10):
+        client.post(
+            "/api/emotion_classification",
+            files={"file": ("a.txt", b"x", "text/plain")},
+        )
+    response = client.post(
+        "/api/emotion_classification",
+        files={"file": ("a.txt", b"x", "text/plain")},
+    )
+    assert response.status_code == 429
 
 
 def test_hello():

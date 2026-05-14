@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { ThemeProvider } from './context/ThemeContext';
@@ -25,7 +25,6 @@ function App() {
     <ErrorBoundary>
     <Router basename={import.meta.env.BASE_URL}>
       <RouteAnnouncer />
-      <Suspense fallback={<div className={styles.loading}>Loading…</div>}>
       <div className={styles.App}>
         <Routes>
           <Route element={<Layout />}>
@@ -42,7 +41,6 @@ function App() {
           </Route>
         </Routes>
       </div>
-      </Suspense>
     </Router>
     </ErrorBoundary>
     </ThemeProvider>

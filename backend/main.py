@@ -1,14 +1,29 @@
 import os
 import logging
 import io
+from pathlib import Path
 import numpy as np
 import pandas as pd
+from dotenv import load_dotenv
 from PIL import Image
 from fastapi import FastAPI, HTTPException, Request, UploadFile, File
 from fastapi.responses import FileResponse
 from databricks.sdk import WorkspaceClient
 from databricks.sdk.service.serving import DataframeSplitInput
+from slowapi import Limiter
+from slowapi.errors import RateLimitExceeded
+from slowapi.util import get_remote_address
+from slowapi.middleware import SlowAPIMiddleware
+from starlette.responses import JSONResponse
 import sentry_sdk
+
+# Each tier has independent dev/test/prod envs. APP_ENV selects which
+# backend/.env.<env> file to layer on top of the process environment. Values
+# already in os.environ win (so Docker/CI overrides are not clobbered).
+APP_ENV = os.environ.get("APP_ENV", "development")
+_env_file = Path(__file__).parent / f".env.{APP_ENV}"
+if _env_file.is_file():
+    load_dotenv(_env_file, override=False)
 
 sentry_sdk.init(
     dsn=os.environ.get("SENTRY_DSN", ""),
@@ -23,6 +38,17 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 app = FastAPI(title="Simple FastAPI + React App")
+
+# Rate limiter protects the paid Databricks endpoint from abuse. The default
+# limit applies globally; per-route decorators tighten further (see emotion).
+limiter = Limiter(key_func=get_remote_address, default_limits=["60/minute"])
+app.state.limiter = limiter
+app.add_middleware(SlowAPIMiddleware)
+
+
+@app.exception_handler(RateLimitExceeded)
+async def _rate_limit_handler(_request: Request, exc: RateLimitExceeded):
+    return JSONResponse(status_code=429, content={"detail": f"Rate limit exceeded: {exc.detail}"})
 
 ALLOWED_IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp", "image/jpg"}
 MAX_UPLOAD_BYTES = 10 * 1024 * 1024  # 10 MB
@@ -92,11 +118,24 @@ async def hello():
 
 @app.get("/api/health")
 async def health_check():
-    logger.info("Health check at /api/health")
     return {"status": "healthy"}
 
 
+@app.get("/api/ready")
+async def readiness_check():
+    # Liveness vs. readiness: this confirms the Databricks credentials are
+    # configured so traffic-routing systems can hold back from the pod until
+    # an actual call to the model would have a chance of succeeding. We do
+    # NOT call the model here, that would burn paid quota on every probe.
+    host = os.environ.get("DATABRICKS_HOST")
+    token = os.environ.get("DATABRICKS_TOKEN")
+    if not host or not token:
+        raise HTTPException(status_code=503, detail="Databricks credentials not configured")
+    return {"status": "ready"}
+
+
 @app.post("/api/emotion_classification")
+@limiter.limit("10/minute")
 async def post_emotion_classification(request: Request, file: UploadFile = File(...)):
     logger.info("Processing emotion classification request")
     try:

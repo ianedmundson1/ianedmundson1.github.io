@@ -1,9 +1,14 @@
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { vi } from 'vitest';
 import MITDataSciencePage from '../MITDataSciencePage';
 
 describe('MITDataSciencePage', () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
   const renderPage = () => {
     const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
     return render(

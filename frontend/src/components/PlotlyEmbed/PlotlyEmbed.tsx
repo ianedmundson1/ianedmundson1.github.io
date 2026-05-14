@@ -2,6 +2,7 @@ import { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react';
 import type { Layout, Config } from 'plotly.js';
 import { useTheme } from '../../context/ThemeContext';
 import { usePlotlyFigure, type Figure } from '../../api/plots';
+import { PLOTLY_THEME_TOKENS } from '../../theme/plotlyTokens';
 import styles from './PlotlyEmbed.module.css';
 
 const Plot = lazy(async () => {
@@ -47,24 +48,11 @@ const baseConfig: Partial<Config> = {
   responsive: true,
 };
 
-const THEME_TOKENS = {
-  light: {
-    fontColor: '#1c1917',
-    grid: 'rgba(28, 25, 23, 0.18)',
-    line: 'rgba(28, 25, 23, 0.45)',
-  },
-  dark: {
-    fontColor: '#d6d3d1',
-    grid: 'rgba(255, 255, 255, 0.12)',
-    line: 'rgba(255, 255, 255, 0.25)',
-  },
-} as const;
-
 const themedLayout = (
   layout: Partial<Layout>,
   theme: 'light' | 'dark',
 ): Partial<Layout> => {
-  const t = THEME_TOKENS[theme];
+  const t = PLOTLY_THEME_TOKENS[theme];
   const axisOverrides = {
     backgroundcolor: 'rgba(0,0,0,0)',
     gridcolor: t.grid,
@@ -74,6 +62,10 @@ const themedLayout = (
     showbackground: false,
   };
   const scene = layout.scene as Record<string, unknown> | undefined;
+  const sceneAxis = (key: 'xaxis' | 'yaxis' | 'zaxis'): Record<string, unknown> => {
+    const v = scene?.[key];
+    return typeof v === 'object' && v !== null ? (v as Record<string, unknown>) : {};
+  };
   return {
     ...layout,
     paper_bgcolor: 'rgba(0,0,0,0)',
@@ -81,9 +73,9 @@ const themedLayout = (
     font: { ...(layout.font ?? {}), color: t.fontColor },
     scene: {
       ...(scene ?? {}),
-      xaxis: { ...((scene?.xaxis as object) ?? {}), ...axisOverrides },
-      yaxis: { ...((scene?.yaxis as object) ?? {}), ...axisOverrides },
-      zaxis: { ...((scene?.zaxis as object) ?? {}), ...axisOverrides },
+      xaxis: { ...sceneAxis('xaxis'), ...axisOverrides },
+      yaxis: { ...sceneAxis('yaxis'), ...axisOverrides },
+      zaxis: { ...sceneAxis('zaxis'), ...axisOverrides },
     },
   };
 };

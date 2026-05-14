@@ -14,6 +14,11 @@ COPY frontend/ ./frontend/
 ARG VITE_SENTRY_DSN=""
 ENV VITE_SENTRY_DSN=${VITE_SENTRY_DSN}
 
+# Backend is present in this image, so enable the demo. Vite's `.env.production`
+# defaults this to false (safe for Pages deploys that have no backend); this
+# ENV overrides for the fullstack build.
+ENV VITE_ENABLE_EMOTION_DEMO=true
+
 # Outputs to backend/static/ as configured in frontend/vite.config.ts
 RUN npm run build
 
@@ -41,6 +46,9 @@ COPY --from=frontend-build /app/backend/static/ ./backend/static/
 RUN chown -R appuser:appuser /app
 
 USER appuser
+
+# Runtime environment for backend/main.py. Selects backend/.env.production.
+ENV APP_ENV=production
 
 EXPOSE 8000
 

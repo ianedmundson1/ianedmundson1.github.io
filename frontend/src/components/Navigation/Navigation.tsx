@@ -10,6 +10,7 @@ interface NavigationProps {
 const NAV_ITEMS = [
   { to: '/', label: 'Home' },
   { to: '/projects', label: 'Projects' },
+  { to: '/books', label: 'Books' },
   { to: '/about', label: 'About' },
 ] as const;
 

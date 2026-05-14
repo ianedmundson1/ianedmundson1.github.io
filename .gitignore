@@ -27,3 +27,10 @@ htmlcov/
 # Logs and secrets
 *.log
 .env
+.env.local
+.env.*.local
+# Per-env files contain real credentials, only the .example templates and the
+# Vite mode defaults (.env.{development,test,production}) are committed.
+backend/.env.development
+backend/.env.test
+backend/.env.production

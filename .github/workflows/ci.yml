@@ -24,7 +24,7 @@ jobs:
       - name: Install frontend dependencies
         run: npm ci
 
-      - name: Build frontend (Pages layout)
+      - name: Build frontend (production, Pages layout)
         run: npx vite build --outDir dist
         working-directory: frontend
 
@@ -77,6 +77,8 @@ jobs:
         run: uv sync
 
       - name: Run backend tests
+        env:
+          APP_ENV: test
         run: .venv/bin/pytest tests/ -v
 
   deploy:

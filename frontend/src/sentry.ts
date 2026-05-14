@@ -15,8 +15,8 @@ export const initSentryDeferred = () => {
           Sentry.browserTracingIntegration(),
           Sentry.replayIntegration(),
         ],
-        tracesSampleRate: 1.0,
-        replaysSessionSampleRate: 1.0,
+        tracesSampleRate: 0.1,
+        replaysSessionSampleRate: 0.0,
         replaysOnErrorSampleRate: 1.0,
       });
     });

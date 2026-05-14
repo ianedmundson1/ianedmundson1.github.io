@@ -83,9 +83,13 @@ const MITDataSciencePage = () => {
     setMode('idle');
   }, []);
 
+  const demoExplicitlyEnabled = import.meta.env.VITE_ENABLE_EMOTION_DEMO === 'true';
+  const demoDown = !demoExplicitlyEnabled;
+
   const interactiveDemo = (
     <SectionDownNotice
       id="demo"
+      down={demoDown}
       title="Demo Temporarily Offline"
       message="The emotion detection backend is paused. The full project write-up is below."
     >

@@ -1,5 +1,6 @@
 import React from 'react';
 import Seo from '../../components/Seo';
+import Hero from '../../components/Hero/Hero';
 import { useFadeOnScroll } from '../../hooks/useFadeOnScroll';
 import { BOOK_REVIEWS } from '../../data/books';
 import styles from './BooksPage.module.css';
@@ -39,18 +40,12 @@ const BooksPage: React.FC = () => {
 
 
       <main className="main-content">
-        {/* ---------- Hero ---------- */}
-        <header className={styles.hero} aria-labelledby="books-hero-title">
-          <div className={styles.heroContainer}>
-            <h1 id="books-hero-title" className={styles.heroTitle}>
-              Book Reviews
-            </h1>
-            <p className={styles.heroSubtitle}>
-              Notes and takeaways from books on data science, engineering, and
-              technology
-            </p>
-          </div>
-        </header>
+        <Hero
+          title="Book Reviews"
+          subtitle="Notes and takeaways from books on data science, engineering, and technology"
+          titleId="books-hero-title"
+          ariaLabelledBy="books-hero-title"
+        />
 
         {/* ---------- Reviews ---------- */}
         <section

@@ -5,9 +5,10 @@ during the lazy bundle/JSON load, so the page paints something meaningful
 without booting WebGL or downloading ~1 MB of Plotly.
 
 Reads `frontend/public/plots/<name>.json`, applies styling that mirrors
-`THEME_TOKENS` in `PlotlyEmbed.tsx`, renders a PNG via Kaleido, and re-encodes
-it to WebP (quality 80, method 6). WebP at this quality is roughly 4-6x
-smaller than the source PNG with no visible loss at poster scale.
+`PLOTLY_THEME_TOKENS` in `frontend/src/theme/plotlyTokens.ts` (the in-app
+source of truth), renders a PNG via Kaleido, and re-encodes it to WebP
+(quality 80, method 6). WebP at this quality is roughly 4-6x smaller than
+the source PNG with no visible loss at poster scale.
 
 Usage:
     pip install plotly kaleido pillow
@@ -28,8 +29,9 @@ PLOTS_DIR = Path(__file__).resolve().parent.parent / "frontend" / "public" / "pl
 
 TARGETS = ["encoding_plot", "retrieval_visualization"]
 
-# Mirrors THEME_TOKENS in frontend/src/components/PlotlyEmbed/PlotlyEmbed.tsx,
-# plus a paper background sampled from the site's dark/light surface tokens.
+# Mirrors PLOTLY_THEME_TOKENS in frontend/src/theme/plotlyTokens.ts (in-app
+# source of truth), plus a paper background sampled from the site's dark/light
+# surface tokens. Keep values in sync when colors change in the TS module.
 THEMES = {
     "light": {
         "font_color": "#1c1917",

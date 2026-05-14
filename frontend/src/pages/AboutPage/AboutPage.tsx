@@ -1,4 +1,5 @@
 import Seo from '../../components/Seo';
+import Hero from '../../components/Hero/Hero';
 import { useFadeOnScroll } from '../../hooks/useFadeOnScroll';
 import {
   HERO_SUBTITLE,
@@ -14,8 +15,6 @@ import headshot400Webp from '../../assets/headshot-400.webp';
 import headshot800Webp from '../../assets/headshot-800.webp';
 import styles from './AboutPage.module.css';
 
-const stagger = (i: number) => ({ '--stagger-index': i } as React.CSSProperties);
-
 const AboutPage = () => {
   const wrapperRef = useFadeOnScroll();
 
@@ -28,12 +27,12 @@ const AboutPage = () => {
       <a href="#about-intro" className="skip-link">Skip to content</a>
 
       <main className="main-content">
-        <header className={styles.hero} aria-labelledby="about-hero-title">
-          <div className={styles.heroContainer}>
-            <div className={styles.heroText}>
-              <h1 id="about-hero-title" className={styles.heroTitle}>About</h1>
-              <p className={styles.heroSubtitle}>{HERO_SUBTITLE}</p>
-            </div>
+        <Hero
+          title="About"
+          subtitle={HERO_SUBTITLE}
+          titleId="about-hero-title"
+          ariaLabelledBy="about-hero-title"
+          media={
             <div className={styles.heroPhoto}>
               <div className={styles.heroPhotoRing} aria-hidden="true" />
               <picture>
@@ -52,14 +51,13 @@ const AboutPage = () => {
                 />
               </picture>
             </div>
-          </div>
-        </header>
+          }
+        />
 
         <section
           id="about-intro"
           className={`${styles.introSection} fade-section`}
           aria-labelledby="intro-heading"
-          style={stagger(0)}
         >
           <div className="section-container">
             <h2 id="intro-heading" className="sr-only">Introduction</h2>
@@ -74,7 +72,6 @@ const AboutPage = () => {
         <section
           className={`${styles.experienceSection} fade-section`}
           aria-labelledby="experience-heading"
-          style={stagger(1)}
         >
           <div className="section-container">
             <h2 id="experience-heading" className={styles.sectionTitle}>Experience</h2>
@@ -98,7 +95,6 @@ const AboutPage = () => {
         <section
           className={`${styles.capabilitiesSection} fade-section`}
           aria-labelledby="capabilities-heading"
-          style={stagger(2)}
         >
           <div className="section-container">
             <h2 id="capabilities-heading" className={styles.sectionTitle}>Technical Capabilities</h2>
@@ -121,7 +117,6 @@ const AboutPage = () => {
         <section
           className={`${styles.educationSection} fade-section`}
           aria-labelledby="education-heading"
-          style={stagger(3)}
         >
           <div className="section-container">
             <h2 id="education-heading" className={styles.sectionTitle}>Education</h2>
@@ -140,7 +135,6 @@ const AboutPage = () => {
         <section
           className={`${styles.awardsSection} fade-section`}
           aria-labelledby="awards-heading"
-          style={stagger(4)}
         >
           <div className="section-container">
             <h2 id="awards-heading" className={styles.sectionTitle}>Awards & Certifications</h2>

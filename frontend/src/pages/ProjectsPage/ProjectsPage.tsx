@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Seo from '../../components/Seo';
+import Hero from '../../components/Hero/Hero';
 import ProjectCard from '../../components/ProjectCard/ProjectCard';
 import { useFadeOnScroll } from '../../hooks/useFadeOnScroll';
 import { CATEGORIES } from '../../data/projects';
@@ -24,16 +25,10 @@ const ProjectsPage: React.FC = () => {
 
 
       <main className="main-content">
-        {/* ---- Hero ---- */}
-        <header className={styles.projectsHero}>
-          <div className={styles.heroContainer}>
-            <h1 className={styles.heroTitle}>Projects</h1>
-            <p className={styles.heroSubtitle}>
-              Explore my work in data science, machine learning, and computer
-              vision
-            </p>
-          </div>
-        </header>
+        <Hero
+          title="Projects"
+          subtitle="Explore my work in data science, machine learning, and computer vision"
+        />
 
         {/* ---- Projects Overview ---- */}
         <section
@@ -46,11 +41,10 @@ const ProjectsPage: React.FC = () => {
           </h2>
           <div className="section-container">
             <div className={styles.projectCategories}>
-              {CATEGORIES.map((category, index) => (
+              {CATEGORIES.map((category) => (
                 <article
                   key={category.title}
                   className={`${styles.categorySection} fade-section`}
-                  style={{ '--stagger-index': index } as React.CSSProperties}
                 >
                   <h2 className={styles.categoryTitle}>
                     {category.title}
