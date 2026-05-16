@@ -39,8 +39,8 @@ The pre-commit hook runs `lint-staged` (eslint --fix on staged TS/TSX) and `type
 
 This is the load-bearing fact. The same React app ships to two places, and they have different capabilities:
 
-1. **GitHub Pages** (`.github/workflows/ci.yml` `deploy` job, on push to `main`) — frontend only, built to `frontend/dist/`. **No backend, no `/api/*`.** The Emotion Classifier and any future backend-dependent features will not work here.
-2. **Docker / local full stack** — FastAPI serves the same React bundle as static files plus the `/api/*` routes. This is what the Dockerfile, `docker-compose.dev.yml`, and `app.yaml` build.
+1. **GitHub Pages** (`.github/workflows/ci.yml` `deploy` job, on push to `main`): frontend only, built to `frontend/dist/`. **No backend, no `/api/*`.** The Emotion Classifier and any future backend-dependent features will not work here.
+2. **Docker / local full stack**: FastAPI serves the same React bundle as static files plus the `/api/*` routes. This is what the Dockerfile, `docker-compose.dev.yml`, and `app.yaml` build.
 
 When adding a feature, decide up front which target it must work on. Pages-only features must be self-contained in the frontend (no backend calls).
 
@@ -68,13 +68,13 @@ The theme tokens in `export_plot_posters.py` (`THEMES`) **mirror** `THEME_TOKENS
 
 Kaleido (used for PNG rendering in the poster script) needs Chrome: `plotly_get_chrome` once before first run.
 
-### Databricks emotion model — preprocessing gotcha
+### Databricks emotion model, preprocessing gotcha
 
 `backend/main.py` `post_emotion_classification` resizes uploads to 48x48 RGB and passes **raw 0-255 float pixel values** to the model. Do not add `/ 255.0` normalization, the Databricks `emotional-identifier` endpoint does its own scaling internally. There's a comment at the call site reinforcing this; it has been wrong before.
 
-`normalize_prediction` is defensive on purpose — the upstream response shape has shifted between `predictions` / `outputs`, and label/score key names vary (`label`/`emotion`/`prediction`, `score`/`confidence`/`probability`). Keep the fallbacks when extending.
+`normalize_prediction` is defensive on purpose: the upstream response shape has shifted between `predictions` / `outputs`, and label/score key names vary (`label`/`emotion`/`prediction`, `score`/`confidence`/`probability`). Keep the fallbacks when extending.
 
-### Sentry — two DSNs, two lifecycles
+### Sentry, two DSNs, two lifecycles
 
 - `SENTRY_DSN` is read at FastAPI startup (`backend/main.py`), runtime config, settable via the active `backend/.env.{APP_ENV}` file or any env var that beats it (Docker `ENV`, shell export).
 - `VITE_SENTRY_DSN` is **baked into the JS bundle at build time** (see Dockerfile `ARG`/`ENV`). Changing it requires `npm run build` (or a Docker rebuild). Both should normally point at the same project.
