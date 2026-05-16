@@ -183,6 +183,20 @@ async def post_emotion_classification(request: Request, file: UploadFile = File(
 static_dir = os.path.realpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "static"))
 os.makedirs(static_dir, exist_ok=True)
 
+@app.get("/api/resume")
+async def get_resume():
+    
+    resume_name = "resume_ian_edmundson.pdf"
+    
+    file_path = os.path.join(static_dir, resume_name)
+    
+    if os.path.isfile(file_path):
+        return FileResponse(file_path, media_type="application/pdf", filename=resume_name)
+
+    raise HTTPException(
+        status_code=404,
+        detail="Resume not found."
+    )
 
 @app.get("/{full_path:path}")
 async def serve_react(full_path: str):
@@ -207,18 +221,5 @@ async def serve_react(full_path: str):
     )
 
 
-@app.get("/api/resume")
-async def get_resume():
-    
-    resume_name = "resume_ian_edmundson.pdf"
-    
-    file_path = os.path.join(static_dir, resume_name)
-    
-    if os.path.isfile(file_path):
-        return FileResponse(file_path, media_type="application/pdf", filename=resume_name)
 
-    raise HTTPException(
-        status_code=404,
-        detail="Resume not found."
-    )
     
