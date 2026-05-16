@@ -205,3 +205,20 @@ async def serve_react(full_path: str):
         status_code=404,
         detail="Frontend not built. Please run 'npm run build' first."
     )
+
+
+@app.get("/api/resume")
+async def get_resume():
+    
+    resume_name = "resume_ian_edmundson.pdf"
+    
+    file_path = os.path.join(static_dir, resume_name)
+    
+    if os.path.isfile(file_path):
+        return FileResponse(file_path, media_type="application/pdf", filename=resume_name)
+
+    raise HTTPException(
+        status_code=404,
+        detail="Resume not found."
+    )
+    
