@@ -6,16 +6,19 @@ import numpy as np
 import pandas as pd
 from dotenv import load_dotenv
 from PIL import Image
-from fastapi import FastAPI, HTTPException, Request, UploadFile, File
+from fastapi import FastAPI, HTTPException, Request, UploadFile, File 
 from fastapi.responses import FileResponse
 from databricks.sdk import WorkspaceClient
 from databricks.sdk.service.serving import DataframeSplitInput
+from pydantic import NameEmail, SecretStr, BaseModel
 from slowapi import Limiter
 from slowapi.errors import RateLimitExceeded
 from slowapi.util import get_remote_address
 from slowapi.middleware import SlowAPIMiddleware
-from starlette.responses import JSONResponse
+from fastapi.responses import JSONResponse
 import sentry_sdk
+from fastapi_mail import FastMail, MessageSchema, ConnectionConfig, MessageType
+
 
 # Each tier has independent dev/test/prod envs. APP_ENV selects which
 # backend/.env.<env> file to layer on top of the process environment. Values
@@ -56,6 +59,15 @@ EMOTION_ENDPOINT_NAME = "emotional-identifier"
 
 _workspace_client: WorkspaceClient | None = None
 
+mail_config = ConnectionConfig(
+    MAIL_USERNAME=os.environ.get("MAIL_USERNAME", ""),
+    MAIL_PASSWORD=SecretStr(os.environ.get("MAIL_PASSWORD", "")),
+    MAIL_FROM=os.environ.get("MAIL_FROM", ""),
+    MAIL_PORT=int(os.environ.get("MAIL_PORT", "587")),
+    MAIL_SERVER=os.environ.get("MAIL_SERVER", "smtp.office365.com"),
+    MAIL_STARTTLS=True,
+    MAIL_SSL_TLS=False,
+)
 
 def get_workspace_client() -> WorkspaceClient:
     global _workspace_client
@@ -179,6 +191,26 @@ async def post_emotion_classification(request: Request, file: UploadFile = File(
         logger.exception("Error in emotion classification")
         raise HTTPException(status_code=500, detail="Internal error processing image")
 
+class ContactPayload(BaseModel):
+    name: str
+    email: str
+    message: str
+
+@app.post("/api/contact")
+async def contact(payload: ContactPayload):
+    try:
+        message = MessageSchema(
+            subject=f"Portfolio contact from {payload.name}",
+            recipients=[NameEmail(name=payload.name, email=os.environ["MAIL_TO"])],
+            reply_to=[NameEmail(name=payload.name, email=payload.email)],
+            body=f"From: {payload.name} <{payload.email}>\n\n{payload.message}",
+            subtype=MessageType.plain,
+        )
+        await FastMail(mail_config).send_message(message)
+    except Exception:
+        logger.exception("Error sending contact email")
+        raise HTTPException(status_code=500, detail="Failed to send message")
+    return {"status": "success"}
 
 static_dir = os.path.realpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "static"))
 os.makedirs(static_dir, exist_ok=True)
