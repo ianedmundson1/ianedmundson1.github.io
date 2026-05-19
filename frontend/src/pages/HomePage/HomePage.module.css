@@ -149,6 +149,7 @@
   border-radius: 50%;
   border: 1px dashed rgba(var(--color-primary-rgb), 0.4);
   animation: spin-slow 40s linear infinite;
+  will-change: transform;
 }
 
 .heroPhoto img {
@@ -234,7 +235,7 @@
   font-family: var(--font-body);
   font-weight: 500;
   font-size: 0.95rem;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;

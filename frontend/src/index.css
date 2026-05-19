@@ -132,7 +132,6 @@ h1, h2, h3 {
   font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1.15;
-  text-rendering: optimizeLegibility;
   font-feature-settings: 'cv11', 'ss01', 'ss02';
 }
 
