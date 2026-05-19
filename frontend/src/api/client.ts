@@ -1,5 +1,3 @@
-const BASE_URL = import.meta.env.VITE_API_URL ?? '';
-
 export class ApiError extends Error {
   status: number;
   constructor(status: number, message: string) {
@@ -9,8 +7,11 @@ export class ApiError extends Error {
   }
 }
 
-export const apiFetch = async <T>(path: string, init?: RequestInit): Promise<T> => {
-  const res = await fetch(`${BASE_URL}${path}`, init);
+export const apiFetch = async <T>(
+  path: string,
+  init?: RequestInit,
+): Promise<T | undefined> => {
+  const res = await fetch(path, init);
   if (!res.ok) {
     // Only read the body when the server signals JSON; otherwise the SPA
     // catch-all returns index.html for unknown paths and we'd surface the
@@ -24,11 +25,11 @@ export const apiFetch = async <T>(path: string, init?: RequestInit): Promise<T> 
     throw new ApiError(res.status, `HTTP ${res.status}: ${detail}`);
   }
   if (res.status === 204 || res.headers.get('content-length') === '0') {
-    return undefined as T;
+    return undefined;
   }
   const ctype = res.headers.get('content-type') ?? '';
   if (!ctype.includes('application/json')) {
-    return undefined as T;
+    return undefined;
   }
-  return res.json() as Promise<T>;
+  return (await res.json()) as T;
 };

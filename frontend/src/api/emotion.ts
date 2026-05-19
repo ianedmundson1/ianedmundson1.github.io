@@ -8,14 +8,21 @@ export interface EmotionApiResponse {
 }
 
 const dataURItoBlob = (dataURI: string) => {
-  const byteString = atob(dataURI.split(',')[1]);
-  const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+  const [header, payload] = dataURI.split(',');
+  if (!header || !payload) {
+    throw new Error('Invalid data URI');
+  }
+  const mimeMatch = header.match(/^data:([^;]+)/);
+  if (!mimeMatch?.[1]) {
+    throw new Error('Invalid data URI: missing MIME type');
+  }
+  const byteString = atob(payload);
   const ab = new ArrayBuffer(byteString.length);
   const ia = new Uint8Array(ab);
   for (let i = 0; i < byteString.length; i++) {
     ia[i] = byteString.charCodeAt(i);
   }
-  return new Blob([ab], { type: mimeString });
+  return new Blob([ab], { type: mimeMatch[1] });
 };
 
 const analyzeEmotion = async (
@@ -33,6 +40,7 @@ const analyzeEmotion = async (
     body: formData,
     signal,
   });
+  if (!json) throw new Error('Empty response from /api/emotion_classification');
   logger.debug('Backend Response:', json);
   return json;
 };
