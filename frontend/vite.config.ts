@@ -9,12 +9,13 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 // https://vite.dev/config/
 const base = '/';
 
-// Strict CSP, injected only into the production build so dev HMR (inline
-// scripts, websockets) keeps working. Inline scripts have been moved to
-// public/bootstrap.js and public/spa-redirect.js, so script-src can be 'self'.
+// CSP injected only into the production build so dev HMR (inline scripts,
+// websockets) keeps working. Inline scripts have been moved to
+// public/bootstrap.js and public/spa-redirect.js. unsafe-eval is required
+// because Plotly's WebGL renderer (regl) uses new Function() at runtime.
 const PROD_CSP = [
   "default-src 'self'",
-  "script-src 'self'",
+  "script-src 'self' 'unsafe-eval'",
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob:",
   "font-src 'self'",
