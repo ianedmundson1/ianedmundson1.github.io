@@ -88,6 +88,7 @@ const ConnectLinks: React.FC<ConnectLinksProps> = ({
           </a>
         ))}
         <button
+            type="button"
             className={styles.connectLink}
             onClick={() => setContactOpen(true)}
             aria-label="Open contact form"

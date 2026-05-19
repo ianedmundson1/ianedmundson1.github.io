@@ -54,7 +54,7 @@ const EmotionDetector = ({ capturedImage, onReset }: EmotionDetectorProps) => {
               </span>
             </div>
           </div>
-          <button className={`${styles.analyzeButton} ${styles.secondary}`} onClick={onReset}>
+          <button type="button" className={`${styles.analyzeButton} ${styles.secondary}`} onClick={onReset}>
             Try Another Image
           </button>
         </div>
@@ -65,7 +65,7 @@ const EmotionDetector = ({ capturedImage, onReset }: EmotionDetectorProps) => {
           <h3>Analysis Failed</h3>
           <p>{errorMessage}</p>
           <div className={styles.errorActions}>
-            <button className={`${styles.analyzeButton} ${styles.secondary}`} onClick={onReset}>
+            <button type="button" className={`${styles.analyzeButton} ${styles.secondary}`} onClick={onReset}>
               Try Again
             </button>
           </div>

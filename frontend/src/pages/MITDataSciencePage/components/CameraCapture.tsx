@@ -29,6 +29,7 @@ const CameraCapture = ({ onCapture, onCancel }: CameraCaptureProps) => {
       />
       <div className={styles.cameraControls}>
         <button
+          type="button"
           className={`${styles.captureButton} ${styles.primary}`}
           onClick={capture}
           aria-label="Capture photo from camera"
@@ -36,6 +37,7 @@ const CameraCapture = ({ onCapture, onCancel }: CameraCaptureProps) => {
           <Camera size={18} aria-hidden="true" /> Capture Photo
         </button>
         <button
+          type="button"
           className={`${styles.captureButton} ${styles.secondary}`}
           onClick={onCancel}
           aria-label="Cancel and return to options"

@@ -109,6 +109,7 @@ const MITDataSciencePage = () => {
             {mode === 'idle' && (
               <div className={styles.inputOptions}>
                 <button
+                  type="button"
                   className={`${styles.captureButton} ${styles.primary}`}
                   onClick={() => setMode('camera')}
                   aria-label="Open camera to capture a photo"
@@ -116,6 +117,7 @@ const MITDataSciencePage = () => {
                   <Camera size={18} aria-hidden="true" /> Use Camera
                 </button>
                 <button
+                  type="button"
                   className={`${styles.captureButton} ${styles.secondary}`}
                   onClick={() => setMode('upload')}
                   aria-label="Upload an image file"

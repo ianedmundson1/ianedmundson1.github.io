@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback, type ChangeEvent, type DragEvent } from 'react';
+import { useEffect, useRef, useState, useCallback, type ChangeEvent, type DragEvent } from 'react';
 import { Upload } from 'lucide-react';
 import styles from './ImageUpload.module.css';
 
@@ -45,20 +45,34 @@ const ImageUpload = ({ onUpload, onCancel }: ImageUploadProps) => {
   const [dragOver, setDragOver] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [fileError, setFileError] = useState<string | null>(null);
+  const cancelledRef = useRef(false);
+
+  useEffect(
+    () => () => {
+      cancelledRef.current = true;
+    },
+    [],
+  );
 
   const handleFileSelect = useCallback(async (file: File) => {
     if (!file || !ACCEPTED_TYPES.includes(file.type)) {
-      setFileError('Please select a valid image file (JPG, PNG, or WebP).');
+      if (!cancelledRef.current) {
+        setFileError('Please select a valid image file (JPG, PNG, or WebP).');
+      }
       return;
     }
     const magicMatches = await sniffImageMagic(file);
+    if (cancelledRef.current) return;
     if (!magicMatches) {
       setFileError("That file's contents don't match its extension. Please choose a real JPG, PNG, or WebP image.");
       return;
     }
     setFileError(null);
     const reader = new FileReader();
-    reader.onload = (e) => setPreviewUrl(e.target?.result as string);
+    reader.onload = (e) => {
+      if (cancelledRef.current) return;
+      setPreviewUrl(e.target?.result as string);
+    };
     reader.readAsDataURL(file);
   }, []);
 
@@ -84,8 +98,8 @@ const ImageUpload = ({ onUpload, onCancel }: ImageUploadProps) => {
     (e: DragEvent) => {
       e.preventDefault();
       setDragOver(false);
-      const files = e.dataTransfer.files;
-      if (files.length > 0) handleFileSelect(files[0]);
+      const file = e.dataTransfer.files[0];
+      if (file) handleFileSelect(file);
     },
     [handleFileSelect],
   );
@@ -141,12 +155,14 @@ const ImageUpload = ({ onUpload, onCancel }: ImageUploadProps) => {
           />
           <div className={styles.previewActions}>
             <button
+              type="button"
               onClick={() => onUpload(previewUrl)}
               className={`${styles.uploadButton} ${styles.primary}`}
             >
               Analyze This Image
             </button>
             <button
+              type="button"
               onClick={() => setPreviewUrl(null)}
               className={`${styles.uploadButton} ${styles.secondary}`}
             >
@@ -158,6 +174,7 @@ const ImageUpload = ({ onUpload, onCancel }: ImageUploadProps) => {
 
       <div className={styles.actionButtons}>
         <button
+          type="button"
           onClick={onCancel}
           className={`${styles.uploadButton} ${styles.cancel}`}
           aria-label="Cancel upload and return to options"

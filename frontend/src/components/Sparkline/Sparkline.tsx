@@ -44,7 +44,7 @@ const Sparkline: React.FC<SparklineProps> = ({
       width={width}
       height={height}
       viewBox={`0 0 ${width} ${height}`}
-      role={ariaLabel ? 'img' : 'presentation'}
+      role={ariaLabel ? 'img' : undefined}
       aria-label={ariaLabel}
       aria-hidden={ariaLabel ? undefined : true}
     >
