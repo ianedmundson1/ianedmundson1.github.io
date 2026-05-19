@@ -1,4 +1,5 @@
 import os
+from unittest.mock import AsyncMock, patch
 
 import pytest
 from fastapi.testclient import TestClient
@@ -102,6 +103,56 @@ def test_normalize_prediction_missing_fields():
 def test_normalize_prediction_non_numeric_score():
     raw = {"predictions": [{"label": "happy", "score": "not-a-number"}]}
     assert normalize_prediction(raw) == {"label": "happy", "confidencePercent": 0}
+
+
+# --- /api/contact -------------------------------------------------------------
+
+CONTACT_PAYLOAD = {"name": "Test User", "email": "test@example.com", "message": "Hello"}
+
+
+@pytest.fixture
+def mock_send_message():
+    with patch("backend.main.FastMail.send_message", new_callable=AsyncMock) as mock:
+        yield mock
+
+
+@pytest.fixture
+def mail_env(monkeypatch):
+    monkeypatch.setenv("MAIL_USERNAME", "user@example.com")
+    monkeypatch.setenv("MAIL_PASSWORD", "secret")
+    monkeypatch.setenv("MAIL_FROM", "user@example.com")
+
+
+@pytest.mark.usefixtures("mail_env")
+def test_contact_success(monkeypatch, mock_send_message):
+    monkeypatch.setenv("MAIL_TO", "recipient@example.com")
+    response = client.post("/api/contact", json=CONTACT_PAYLOAD)
+    assert response.status_code == 200
+    assert response.json() == {"status": "success"}
+    mock_send_message.assert_called_once()
+
+
+@pytest.mark.usefixtures("mail_env")
+def test_contact_missing_mail_to(monkeypatch, mock_send_message):
+    monkeypatch.delenv("MAIL_TO", raising=False)
+    response = client.post("/api/contact", json=CONTACT_PAYLOAD)
+    assert response.status_code == 500
+    assert response.json()["detail"] == "Failed to send message"
+    mock_send_message.assert_not_called()
+
+
+def test_contact_missing_fields():
+    response = client.post("/api/contact", json={"name": "Test User"})
+    assert response.status_code == 422
+
+
+@pytest.mark.usefixtures("mail_env")
+def test_contact_rate_limited(monkeypatch, mock_send_message):
+    monkeypatch.setenv("MAIL_TO", "recipient@example.com")
+    for _ in range(5):
+        client.post("/api/contact", json=CONTACT_PAYLOAD)
+    response = client.post("/api/contact", json=CONTACT_PAYLOAD)
+    assert response.status_code == 429
 
 
 # --- /api/resume --------------------------------------------------------------
