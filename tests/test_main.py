@@ -116,6 +116,14 @@ def mock_send_message():
         yield mock
 
 
+@pytest.fixture
+def mail_env(monkeypatch):
+    monkeypatch.setenv("MAIL_USERNAME", "user@example.com")
+    monkeypatch.setenv("MAIL_PASSWORD", "secret")
+    monkeypatch.setenv("MAIL_FROM", "user@example.com")
+
+
+@pytest.mark.usefixtures("mail_env")
 def test_contact_success(monkeypatch, mock_send_message):
     monkeypatch.setenv("MAIL_TO", "recipient@example.com")
     response = client.post("/api/contact", json=CONTACT_PAYLOAD)
@@ -124,6 +132,7 @@ def test_contact_success(monkeypatch, mock_send_message):
     mock_send_message.assert_called_once()
 
 
+@pytest.mark.usefixtures("mail_env")
 def test_contact_missing_mail_to(monkeypatch, mock_send_message):
     monkeypatch.delenv("MAIL_TO", raising=False)
     response = client.post("/api/contact", json=CONTACT_PAYLOAD)
