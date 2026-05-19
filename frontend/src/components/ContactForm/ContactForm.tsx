@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState} from 'react';
-import { sendContactMessage, type ContactPayLoad} from '../../api/contact';
+import { sendContactMessage, type ContactPayload} from '../../api/contact';
 import styles from './ContactForm.module.css'
 
 interface ContactFormProps{
@@ -7,11 +7,11 @@ interface ContactFormProps{
     onClose: () => void;
 }
 
-const EMPTY: ContactPayLoad = { name: '', email: '', message:''}
+const EMPTY: ContactPayload = { name: '', email: '', message:''}
 
 const ContactForm: React.FC<ContactFormProps> = ({ isOpen, onClose}) => {
     const dialogRef = useRef<HTMLDialogElement>(null);
-    const [fields, setFields] = useState<ContactPayLoad>(EMPTY)
+    const [fields, setFields] = useState<ContactPayload>(EMPTY)
     const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
 
     useEffect(() => {
@@ -24,8 +24,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ isOpen, onClose}) => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
         setFields(prev => ({ ...prev, [e.target.name]: e.target.value }));
 
-    const handleSubmit = async (e: React.SubmitEvent) => {
-        e.preventDefault();
+    const handleSubmit = async () => {
         setStatus('submitting');
         try{
             await sendContactMessage(fields);
@@ -43,13 +42,13 @@ const ContactForm: React.FC<ContactFormProps> = ({ isOpen, onClose}) => {
     }
 
     return(
-        <dialog ref={dialogRef} className={styles.dialog} onClose={handleClose}>
+        <dialog ref={dialogRef} id="contact-dialog" aria-labelledby="contact-dialog-title" className={styles.dialog} onClose={handleClose}>
             <button className={styles.closeButton} onClick={handleClose} aria-label='Close'>x </button>
-            <h2 className={styles.title}>Get in touch</h2>
+            <h2 id="contact-dialog-title" className={styles.title}>Get in touch</h2>
             {status === 'success' ? (
                 <p className={styles.success}>Message sent. I'll get back to you soon</p>
             ) : (
-                <form onSubmit={handleSubmit} className={styles.form}>
+                <form onSubmit={(e) => { e.preventDefault(); void handleSubmit(); }} className={styles.form}>
                     <label className={styles.label}>
                         Name 
                         <input name='name' value={fields.name} onChange={handleChange} required className={styles.input} />

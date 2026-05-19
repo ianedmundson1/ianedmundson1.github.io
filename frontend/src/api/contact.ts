@@ -1,12 +1,12 @@
 import { apiFetch } from "./client";
 
-export interface ContactPayLoad {
+export interface ContactPayload {
     name: string;
     email: string;
     message: string;
 }
 
-export const sendContactMessage = (payload: ContactPayLoad): Promise<void> =>
+export const sendContactMessage = (payload: ContactPayload): Promise<void> =>
     apiFetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type':'application/json'},

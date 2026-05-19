@@ -10,7 +10,7 @@ from fastapi import FastAPI, HTTPException, Request, UploadFile, File
 from fastapi.responses import FileResponse
 from databricks.sdk import WorkspaceClient
 from databricks.sdk.service.serving import DataframeSplitInput
-from pydantic import NameEmail, SecretStr, BaseModel
+from pydantic import EmailStr, NameEmail, SecretStr, BaseModel
 from slowapi import Limiter
 from slowapi.errors import RateLimitExceeded
 from slowapi.util import get_remote_address
@@ -59,15 +59,7 @@ EMOTION_ENDPOINT_NAME = "emotional-identifier"
 
 _workspace_client: WorkspaceClient | None = None
 
-mail_config = ConnectionConfig(
-    MAIL_USERNAME=os.environ.get("MAIL_USERNAME", ""),
-    MAIL_PASSWORD=SecretStr(os.environ.get("MAIL_PASSWORD", "")),
-    MAIL_FROM=os.environ.get("MAIL_FROM", ""),
-    MAIL_PORT=int(os.environ.get("MAIL_PORT", "587")),
-    MAIL_SERVER=os.environ.get("MAIL_SERVER", "smtp.office365.com"),
-    MAIL_STARTTLS=True,
-    MAIL_SSL_TLS=False,
-)
+
 
 def get_workspace_client() -> WorkspaceClient:
     global _workspace_client
@@ -193,11 +185,22 @@ async def post_emotion_classification(request: Request, file: UploadFile = File(
 
 class ContactPayload(BaseModel):
     name: str
-    email: str
+    email: EmailStr
     message: str
 
 @app.post("/api/contact")
-async def contact(payload: ContactPayload):
+async def contact(payload: ContactPayload) -> JSONResponse:
+    
+    mail_config = ConnectionConfig(
+        MAIL_USERNAME=os.environ["MAIL_USERNAME"],
+        MAIL_PASSWORD=SecretStr(os.environ["MAIL_PASSWORD"]),
+        MAIL_FROM=os.environ["MAIL_FROM"],
+        MAIL_PORT=int(os.environ.get("MAIL_PORT", "587")),
+        MAIL_SERVER=os.environ.get("MAIL_SERVER", "smtp.office365.com"),
+        MAIL_STARTTLS=True,
+        MAIL_SSL_TLS=False,
+    )
+    
     try:
         message = MessageSchema(
             subject=f"Portfolio contact from {payload.name}",
@@ -210,7 +213,7 @@ async def contact(payload: ContactPayload):
     except Exception:
         logger.exception("Error sending contact email")
         raise HTTPException(status_code=500, detail="Failed to send message")
-    return {"status": "success"}
+    return JSONResponse(content={"status": "success"})
 
 static_dir = os.path.realpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "static"))
 os.makedirs(static_dir, exist_ok=True)

@@ -124,10 +124,12 @@ def test_contact_success(monkeypatch, mock_send_message):
     mock_send_message.assert_called_once()
 
 
-def test_contact_missing_mail_to(monkeypatch):
+def test_contact_missing_mail_to(monkeypatch, mock_send_message):
     monkeypatch.delenv("MAIL_TO", raising=False)
     response = client.post("/api/contact", json=CONTACT_PAYLOAD)
     assert response.status_code == 500
+    assert response.json()["detail"] == "Failed to send message"
+    mock_send_message.assert_not_called()
 
 
 def test_contact_missing_fields():
