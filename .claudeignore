@@ -1,0 +1,58 @@
+# === Dependencies ===
+node_modules/
+.venv/
+**/__pycache__/
+*.pyc
+
+# === Build output ===
+# The big one: npm run build writes here, see CLAUDE.md
+backend/static/
+# GitHub Pages build target
+frontend/dist/
+# Vite caches
+frontend/.vite/
+frontend/dev-dist/
+
+# === Lock files (large, rarely useful as context) ===
+package-lock.json
+uv.lock
+
+# === Test artifacts ===
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+coverage/
+htmlcov/
+.coverage
+playwright-report/
+test-results/
+frontend/playwright-report/
+frontend/test-results/
+
+# === Secrets — keep the .example files readable ===
+.env
+.env.local
+backend/.env.development
+backend/.env.test
+backend/.env.production
+backend/.env.*.local
+frontend/.env.*.local
+*.pem
+*.key
+*.crt
+
+# === Generated Plotly assets ===
+# JSON in frontend/public/plots/ IS source-of-truth-for-frontend, keep readable.
+# Raw HTML exports from notebooks are huge and the script consumes them — Claude
+# doesn't need to read them directly.
+frontend/public/*.html
+# Poster images (binary, no value as context)
+frontend/public/plots/*.webp
+frontend/public/plots/*.png
+
+# === Misc ===
+.DS_Store
+*.log
+.git/
+dist/
+build/
