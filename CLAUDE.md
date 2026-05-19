@@ -2,6 +2,10 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+Subdirectories with their own conventions have their own `CLAUDE.md`:
+
+- `backend/CLAUDE.md` — Databricks model gotcha, SPA static-file fallback, backend test layout
+
 ## Commands
 
 Python is managed by `uv`, not `pip`. The repo uses an npm workspace, so root-level scripts dispatch to `frontend/`.
@@ -11,8 +15,10 @@ Python is managed by `uv`, not `pip`. The repo uses an npm workspace, so root-le
 uv sync                          # backend (Python 3.11+)
 npm install                      # frontend + dev tooling
 
-# Dev (run both)
+# Dev (run in two terminals)
+# Terminal 1 — backend
 .venv/bin/uvicorn backend.main:app --reload --port 8000
+# Terminal 2 — frontend
 npm run dev                      # Vite on :5173, proxies /api → :8000
 
 # Build (writes to backend/static/, see "Build output" below)
@@ -33,46 +39,34 @@ docker compose -f docker-compose.dev.yml up --build
 
 The pre-commit hook runs `lint-staged` (eslint --fix on staged TS/TSX) and `typecheck`. Don't bypass with `--no-verify`.
 
+## Verification before declaring done
+
+- **Frontend changes:** `npm run typecheck && npm run lint`. If logic changed, the relevant vitest file too.
+- **Backend changes:** `.venv/bin/pytest tests/` for the affected module, not only the edited file's tests.
+- **Plotly changes:** verify the lazy boundary in `frontend/src/components/PlotlyEmbed/PlotlyEmbed.tsx` is intact, no Plotly imports leak outside that file, and the PWA cache rules in `vite.config.ts` still isolate the plotly bundle.
+- **Build-affecting changes** (anything touching `/api/*` consumers, env flags, the SPA fallback, or `vite.config.ts`): `npm run build` and confirm `backend/static/` updated cleanly.
+
+A successful run of the quality gates is not the same as the change being correct. State what you verified, not just that it passed.
+
 ## Architecture
 
-### Two deployment targets from one repo
+### Deployment target
 
-This is the load-bearing fact. The same React app ships to two places, and they have different capabilities:
+The Docker fullstack image is the production target: FastAPI serves the React bundle as static files plus the `/api/*` routes. The Dockerfile, `docker-compose.dev.yml`, and `app.yaml` all build this image.
 
-1. **GitHub Pages** (`.github/workflows/ci.yml` `deploy` job, on push to `main`): frontend only, built to `frontend/dist/`. **No backend, no `/api/*`.** The Emotion Classifier and any future backend-dependent features will not work here.
-2. **Docker / local full stack**: FastAPI serves the same React bundle as static files plus the `/api/*` routes. This is what the Dockerfile, `docker-compose.dev.yml`, and `app.yaml` build.
-
-When adding a feature, decide up front which target it must work on. Pages-only features must be self-contained in the frontend (no backend calls).
+A GitHub Pages deploy (`.github/workflows/ci.yml` `deploy` job, frontend only, built to `frontend/dist/`) still exists as a legacy artifact while the cutover is in progress. Treat it as a stopgap, not a constraint on new work: design features for the fullstack target, don't add Pages-only fallbacks, and don't gate features behind `VITE_ENABLE_*` flags purely to keep Pages green. Flags are still appropriate as kill switches for unfinished or paused features (see Environments below).
 
 ### Build output crosses the frontend/backend boundary
 
-`frontend/vite.config.ts` sets `build.outDir` to `../backend/static/`. That means `npm run build` (run from repo root or `frontend/`) overwrites `backend/static/`. The Docker GitHub Pages build overrides this with `--outDir dist` on the CLI.
+`frontend/vite.config.ts` sets `build.outDir` to `../backend/static/`. That means `npm run build` (run from repo root or `frontend/`) overwrites `backend/static/`, which is what the Docker image serves. The legacy Pages CI job overrides this with `--outDir dist` on the CLI.
 
-`backend/main.py` does not use `StaticFiles.mount` (it's commented out intentionally). Instead, the `serve_react` catch-all at the bottom does: try to serve the requested file from `backend/static/`, else fall back to `index.html`. This is the SPA routing fallback, required so deep links like `/projects/rag-demo` work in the full-stack deploy. Don't replace it with a `StaticFiles` mount, that breaks SPA fallback.
+The SPA static-file fallback lives in `backend/main.py` and has its own gotcha. See `backend/CLAUDE.md`.
 
 ### Frontend routing and code splitting
 
-`App.tsx` uses `React.lazy` for every page and `Router` `basename={import.meta.env.BASE_URL}`. The basename matters because the GitHub Pages deploy historically may live at a sub-path. Vite's `base` is currently `/` (see `vite.config.ts`), so changing the deploy path requires updating both.
+`App.tsx` uses `React.lazy` for every page and `Router` `basename={import.meta.env.BASE_URL}`. Vite's `base` is currently `/` (see `vite.config.ts`), and the router picks up the matching `BASE_URL` automatically. If the app is ever served from a sub-path, update `base` and both sides stay in sync.
 
-Plotly is heavy (~1 MB). It's split out via the `plotly-gl3d-dist-min` import in `PlotlyEmbed`, and the service worker (`vite-plugin-pwa`) caches the bundle separately (`plotly-bundle` cache). Don't import Plotly anywhere outside `PlotlyEmbed`.
-
-### Plotly figure pipeline
-
-Three-stage pipeline that is easy to break by editing the wrong layer:
-
-1. **Notebook export** → raw `frontend/public/<name>.html` with embedded `Plotly.newPlot(...)` (theme-loaded with the notebook's defaults).
-2. **`scripts/theme_plotly_html.py`** parses the HTML, extracts the `data` and `layout` args, strips theme-specific styling (fonts, axis colors, paper/plot bg, template, optionally title) and writes `frontend/public/plots/<name>.json`. Run this after re-exporting from a notebook.
-3. **`scripts/export_plot_posters.py`** renders WebP poster images per theme (`light`, `dark`) used as placeholders before the Plotly bundle/JSON loads, and as the only render on touch devices.
-
-The theme tokens in `export_plot_posters.py` (`THEMES`) **mirror** `THEME_TOKENS` in `frontend/src/components/PlotlyEmbed/PlotlyEmbed.tsx`. If you change colors in the React component, update the script and re-run it, otherwise posters will visually disagree with the live chart. `TARGETS` lists the figures both scripts know about, keep them in sync.
-
-Kaleido (used for PNG rendering in the poster script) needs Chrome: `plotly_get_chrome` once before first run.
-
-### Databricks emotion model, preprocessing gotcha
-
-`backend/main.py` `post_emotion_classification` resizes uploads to 48x48 RGB and passes **raw 0-255 float pixel values** to the model. Do not add `/ 255.0` normalization, the Databricks `emotional-identifier` endpoint does its own scaling internally. There's a comment at the call site reinforcing this; it has been wrong before.
-
-`normalize_prediction` is defensive on purpose: the upstream response shape has shifted between `predictions` / `outputs`, and label/score key names vary (`label`/`emotion`/`prediction`, `score`/`confidence`/`probability`). Keep the fallbacks when extending.
+Plotly is heavy (~1 MB) and lives behind code splitting + dedicated cache. Don't import Plotly anywhere outside `PlotlyEmbed` — see `frontend/src/components/PlotlyEmbed/CLAUDE.md`.
 
 ### Sentry, two DSNs, two lifecycles
 
@@ -87,7 +81,7 @@ Frontend and backend each have independent `development`, `test`, and `productio
 
 - `vite` (dev server) → `MODE=development`, loads `frontend/.env.development`.
 - `vitest` / `vite --mode test` → `MODE=test`, loads `frontend/.env.test`.
-- `vite build` → `MODE=production`, loads `frontend/.env.production`. Used by both the GitHub Pages CI deploy and the Docker build stage.
+- `vite build` → `MODE=production`, loads `frontend/.env.production`. Used by the Docker build stage (and the legacy Pages CI job, until it's retired).
 - The committed `.env.{mode}` files hold safe defaults (no secrets). Use `frontend/.env.{mode}.local` (gitignored) for local secrets and overrides.
 
 **Backend** uses `APP_ENV` (default `development`). `backend/main.py` calls `load_dotenv(backend/.env.{APP_ENV})` at startup with `override=False`, so values already in the process environment (Docker `ENV`, CI workflow `env:`, shell exports) always win over the file.
@@ -96,11 +90,24 @@ Frontend and backend each have independent `development`, `test`, and `productio
 - The CI test job sets `APP_ENV=test`.
 - The Dockerfile sets `APP_ENV=production` at runtime.
 
-**Feature flags are orthogonal to env.** `VITE_ENABLE_EMOTION_DEMO` gates the emotion-detection UI on the MIT page. Defaults to `false` in every committed `.env.{mode}` (safe for Pages, which has no backend). The Dockerfile sets `VITE_ENABLE_EMOTION_DEMO=true` in the build stage so the fullstack image keeps the demo live. When adding a backend-dependent feature, follow the same pattern: gate it on a `VITE_ENABLE_*` flag, default off in the committed env files, override `true` where the backend is present.
+**Feature flags are orthogonal to env.** `VITE_ENABLE_EMOTION_DEMO` gates the emotion-detection UI on the MIT page as a kill switch. Defaults to `false` in every committed `.env.{mode}`; the Dockerfile sets it to `true` in the build stage when the demo is live. Use this pattern for paused or unfinished features, not as a Pages-vs-fullstack switch.
 
 ## Conventions
 
-- **Writing style in prose / commit messages / PR descriptions:** no em dashes, no emoji. Use commas, colons, periods.
+- **Writing style** in prose, commit messages, and PR descriptions: no em dashes, no emoji. Use commas, colons, periods. (Goal: enforce via pre-commit; until then, respect manually.)
 - **Path basenames** in code references: pages live in `frontend/src/pages/<Name>Page/`, components in `frontend/src/components/<Name>/`, with co-located CSS modules (`*.module.css`, camelCase locals per `vite.config.ts`).
 - **API client** is in `frontend/src/api/`. Always call relative `/api/*` paths so the Vite proxy and the production catch-all both work.
 - **Static data** for pages (project lists, books, etc.) is in `frontend/src/data/`, kept out of components so it can be tree-shaken / refactored independently.
+- **`frontend/src/pages/BooksPage/`** is intentionally not yet registered in `App.tsx` or `data/routes.ts`. It's reserved for a future book-reviews section; leave the directory and its vitest file in place even though they look orphaned.
+
+### Tests
+
+- **Backend:** pytest, one `test_<module>.py` per backend module under repo-root `tests/`. Mirror the structure of `backend/`.
+- **Frontend unit:** vitest, co-located with source as `<Name>.test.tsx` / `<Name>.test.ts`.
+- **Frontend E2E:** playwright in `frontend/e2e/`, one `.spec.ts` per user-facing flow. Tests boot the Vite dev server via the `webServer` config — don't start it manually.
+
+### Adding a backend-dependent feature
+
+1. Add the FastAPI route under `/api/*` in `backend/main.py` (or a router module).
+2. Wire the UI to the relative `/api/*` path via `frontend/src/api/`. The Vite proxy handles dev, the SPA fallback handles prod.
+3. If the feature isn't ready or you want a kill switch, add a `VITE_ENABLE_<NAME>` flag (default `false` in `.env.{mode}`, set `true` in the Dockerfile build stage when shipping it on). Otherwise no flag is needed: the fullstack image always has the backend present.
