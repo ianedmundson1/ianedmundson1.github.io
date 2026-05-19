@@ -84,11 +84,10 @@ const Navigation: React.FC<NavigationProps> = ({ className }) => {
 
         <div className={styles.navActions}>
           <a
-            href={`${import.meta.env.BASE_URL}resume_ian_edmundson.pdf`}
+            href="/api/resume"
             className={styles.resumeLink}
-            target="_blank"
             rel="noopener noreferrer"
-            aria-label="Download resume (PDF, opens in new tab)"
+            aria-label="Download resume (PDF)"
           >
             Resume
           </a>

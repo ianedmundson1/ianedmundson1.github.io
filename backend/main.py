@@ -220,6 +220,14 @@ async def contact(request: Request, payload: ContactPayload) -> JSONResponse:
 static_dir = os.path.realpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "static"))
 os.makedirs(static_dir, exist_ok=True)
 
+assets_dir = os.path.realpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets"))
+
+@app.get("/api/resume")
+async def get_resume():
+    file_path = os.path.join(assets_dir, "resume_ian_edmundson.pdf")
+    if os.path.isfile(file_path):
+        return FileResponse(file_path, media_type="application/pdf", filename="resume_ian_edmundson.pdf")
+    raise HTTPException(status_code=404, detail="Resume not found.")
 
 @app.get("/{full_path:path}")
 async def serve_react(full_path: str):

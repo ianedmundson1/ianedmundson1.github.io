@@ -64,9 +64,8 @@ const HomePage: React.FC = () => {
                   About
                 </Link>
                 <a
-                  href={`${import.meta.env.BASE_URL}resume_ian_edmundson.pdf`}
+                  href="/api/resume"
                   className={`${styles.btn} ${styles.btnSecondary}`}
-                  target="_blank"
                   rel="noopener noreferrer"
                 >
                   Resume

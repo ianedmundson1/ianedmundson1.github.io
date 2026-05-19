@@ -153,3 +153,21 @@ def test_contact_rate_limited(monkeypatch, mock_send_message):
         client.post("/api/contact", json=CONTACT_PAYLOAD)
     response = client.post("/api/contact", json=CONTACT_PAYLOAD)
     assert response.status_code == 429
+
+
+# --- /api/resume --------------------------------------------------------------
+
+def test_resume_success(monkeypatch, tmp_path):
+    pdf = tmp_path / "resume_ian_edmundson.pdf"
+    pdf.write_bytes(b"%PDF-1.4 fake")
+    monkeypatch.setattr("backend.main.assets_dir", str(tmp_path))
+    response = client.get("/api/resume")
+    assert response.status_code == 200
+    assert response.headers["content-type"] == "application/pdf"
+
+
+def test_resume_not_found(monkeypatch, tmp_path):
+    monkeypatch.setattr("backend.main.assets_dir", str(tmp_path))
+    response = client.get("/api/resume")
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Resume not found."
