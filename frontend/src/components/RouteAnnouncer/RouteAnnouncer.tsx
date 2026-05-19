@@ -17,21 +17,26 @@ const RouteAnnouncer: React.FC = () => {
     window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
 
     const main = document.querySelector('main') as HTMLElement | null;
+    let blurCleanup: (() => void) | null = null;
     if (main) {
       const prevTabIndex = main.getAttribute('tabindex');
       main.setAttribute('tabindex', '-1');
       main.focus({ preventScroll: false });
       if (prevTabIndex === null) {
         // Remove after blur so the focus ring doesn't linger on click
-        const cleanup = () => {
+        const onBlur = () => {
           main.removeAttribute('tabindex');
-          main.removeEventListener('blur', cleanup);
+          main.removeEventListener('blur', onBlur);
         };
-        main.addEventListener('blur', cleanup);
+        main.addEventListener('blur', onBlur);
+        blurCleanup = () => main.removeEventListener('blur', onBlur);
       }
     }
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      blurCleanup?.();
+    };
   }, [location.pathname]);
 
   return (
@@ -46,7 +51,7 @@ const RouteAnnouncer: React.FC = () => {
         padding: 0,
         margin: -1,
         overflow: 'hidden',
-        clip: 'rect(0,0,0,0)',
+        clipPath: 'inset(50%)',
         whiteSpace: 'nowrap',
         border: 0,
       }}

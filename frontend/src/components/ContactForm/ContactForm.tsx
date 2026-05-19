@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState} from 'react';
 import { sendContactMessage, type ContactPayload} from '../../api/contact';
+import { logger } from '../../utils/logger';
 import styles from './ContactForm.module.css'
 
 interface ContactFormProps{
@@ -30,7 +31,11 @@ const ContactForm: React.FC<ContactFormProps> = ({ isOpen, onClose}) => {
             await sendContactMessage(fields);
             setStatus('success');
             setFields(EMPTY);
-        } catch {
+        } catch (err) {
+            logger.error('Contact form submission failed', err);
+            import('@sentry/react')
+                .then(({ captureException }) => captureException(err))
+                .catch(() => {});
             setStatus('error')
         }
     };
@@ -43,7 +48,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ isOpen, onClose}) => {
 
     return(
         <dialog ref={dialogRef} id="contact-dialog" aria-labelledby="contact-dialog-title" className={styles.dialog} onClose={handleClose}>
-            <button className={styles.closeButton} onClick={handleClose} aria-label='Close'>x </button>
+            <button type="button" className={styles.closeButton} onClick={handleClose} aria-label='Close'>x </button>
             <h2 id="contact-dialog-title" className={styles.title}>Get in touch</h2>
             {status === 'success' ? (
                 <p className={styles.success}>Message sent. I'll get back to you soon</p>

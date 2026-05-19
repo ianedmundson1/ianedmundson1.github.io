@@ -6,7 +6,6 @@ import { PLOTLY_THEME_TOKENS } from '../../theme/plotlyTokens';
 import styles from './PlotlyEmbed.module.css';
 
 const Plot = lazy(async () => {
-  const Sentry = await import('@sentry/react').catch(() => null);
   const load = async () => {
     const [{ default: createPlotlyComponent }, plotlyMod] = await Promise.all([
       import('react-plotly.js/factory'),
@@ -14,6 +13,16 @@ const Plot = lazy(async () => {
     ]);
     return createPlotlyComponent(plotlyMod.default);
   };
+  // Only attach a Sentry span if the SDK is already on the page. The deferred
+  // init in sentry.ts may not have run yet; pulling @sentry/react here purely
+  // to record a span would inflate the critical path.
+  const sentryReady =
+    typeof window !== 'undefined' &&
+    (window as unknown as { __SENTRY__?: unknown }).__SENTRY__ !== undefined;
+  if (!sentryReady) {
+    return { default: await load() };
+  }
+  const Sentry = await import('@sentry/react').catch(() => null);
   const Component = Sentry
     ? await Sentry.startSpan(
         { name: 'plotly.lazy-import', op: 'resource.script', forceTransaction: true },
@@ -100,7 +109,6 @@ const PlotlyEmbed = ({
   const [activated, setActivated] = useState(() => !isCoarsePointer());
 
   useEffect(() => {
-    if (inView) return;
     const el = wrapperRef.current;
     if (!el) return;
     if (typeof IntersectionObserver === 'undefined') {
@@ -118,7 +126,7 @@ const PlotlyEmbed = ({
     );
     obs.observe(el);
     return () => obs.disconnect();
-  }, [inView]);
+  }, []);
 
   const shouldFetch = !providedFigure && inView && activated;
   const query = usePlotlyFigure(shouldFetch ? src ?? null : null);
