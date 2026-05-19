@@ -10,7 +10,7 @@ const Plot = lazy(async () => {
   const load = async () => {
     const [{ default: createPlotlyComponent }, plotlyMod] = await Promise.all([
       import('react-plotly.js/factory'),
-      import('plotly.js-gl3d-dist-min'),
+      import('plotly.js-dist-min'),
     ]);
     return createPlotlyComponent(plotlyMod.default);
   };
@@ -82,6 +82,7 @@ const isCoarsePointer = () =>
   typeof window !== 'undefined' &&
   typeof window.matchMedia === 'function' &&
   window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+
 
 const PlotlyEmbed = ({
   src,
