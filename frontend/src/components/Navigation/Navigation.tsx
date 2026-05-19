@@ -40,6 +40,17 @@ const Navigation: React.FC<NavigationProps> = ({ className }) => {
     }
   }, [menuOpen]);
 
+  // Lock body scroll while the mobile menu is open so the page behind it
+  // doesn't scroll under the user's finger.
+  useEffect(() => {
+    if (!menuOpen) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [menuOpen]);
+
   useFocusTrap(menuOpen, navListRef, hamburgerRef);
 
   const isActive = (path: string) => {
@@ -67,6 +78,16 @@ const Navigation: React.FC<NavigationProps> = ({ className }) => {
           <span className={styles.hamburgerBar} />
           <span className={styles.hamburgerBar} />
         </button>
+
+        {menuOpen && (
+          <button
+            type="button"
+            className={styles.scrim}
+            onClick={() => setMenuOpen(false)}
+            aria-label="Close menu"
+            tabIndex={-1}
+          />
+        )}
 
         <ul ref={navListRef} id="primary-nav" className={`${styles.navLinks} ${menuOpen ? styles.navLinksOpen : ''}`}>
           {NAV_ITEMS.map((item) => (

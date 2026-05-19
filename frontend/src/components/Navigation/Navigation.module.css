@@ -4,7 +4,23 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  transform: translateZ(0);
+}
+
+.scrim {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .scrim {
+    display: block;
+    position: fixed;
+    inset: 4rem 0 0 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 98;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+  }
 }
 
 .navContainer {
