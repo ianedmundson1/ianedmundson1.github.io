@@ -55,7 +55,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ isOpen, onClose}) => {
                     </label>
                     <label className={styles.label}>
                         Email 
-                        <input name='email' value={fields.email} onChange={handleChange} required className={styles.input}/>
+                        <input type='email' name='email' value={fields.email} onChange={handleChange} required className={styles.input}/>
                     </label>
                     <label className={styles.label}>
                         Message 

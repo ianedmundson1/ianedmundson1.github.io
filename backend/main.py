@@ -189,19 +189,21 @@ class ContactPayload(BaseModel):
     message: str
 
 @app.post("/api/contact")
-async def contact(payload: ContactPayload) -> JSONResponse:
+@limiter.limit("5/minute")
+async def contact(request: Request, payload: ContactPayload) -> JSONResponse:
     
-    mail_config = ConnectionConfig(
-        MAIL_USERNAME=os.environ["MAIL_USERNAME"],
-        MAIL_PASSWORD=SecretStr(os.environ["MAIL_PASSWORD"]),
-        MAIL_FROM=os.environ["MAIL_FROM"],
-        MAIL_PORT=int(os.environ.get("MAIL_PORT", "587")),
-        MAIL_SERVER=os.environ.get("MAIL_SERVER", "smtp.office365.com"),
-        MAIL_STARTTLS=True,
-        MAIL_SSL_TLS=False,
-    )
-    
-    try:
+    try: 
+
+        mail_config = ConnectionConfig(
+            MAIL_USERNAME=os.environ["MAIL_USERNAME"],
+            MAIL_PASSWORD=SecretStr(os.environ["MAIL_PASSWORD"]),
+            MAIL_FROM=os.environ["MAIL_FROM"],
+            MAIL_PORT=int(os.environ.get("MAIL_PORT", "587")),
+            MAIL_SERVER=os.environ.get("MAIL_SERVER", "smtp.office365.com"),
+            MAIL_STARTTLS=True,
+            MAIL_SSL_TLS=False,
+        )
+        
         message = MessageSchema(
             subject=f"Portfolio contact from {payload.name}",
             recipients=[NameEmail(name=payload.name, email=os.environ["MAIL_TO"])],

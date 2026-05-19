@@ -144,3 +144,12 @@ def test_contact_missing_mail_to(monkeypatch, mock_send_message):
 def test_contact_missing_fields():
     response = client.post("/api/contact", json={"name": "Test User"})
     assert response.status_code == 422
+
+
+@pytest.mark.usefixtures("mail_env")
+def test_contact_rate_limited(monkeypatch, mock_send_message):
+    monkeypatch.setenv("MAIL_TO", "recipient@example.com")
+    for _ in range(5):
+        client.post("/api/contact", json=CONTACT_PAYLOAD)
+    response = client.post("/api/contact", json=CONTACT_PAYLOAD)
+    assert response.status_code == 429

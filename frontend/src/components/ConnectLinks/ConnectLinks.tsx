@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './ConnectLinks.module.css';
-import { useState } from 'react';
 import ContactForm from '../ContactForm/ContactForm';
 /* -------------------------------------------------- */
 /*  Data                                               */
