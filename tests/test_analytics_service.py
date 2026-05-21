@@ -30,9 +30,9 @@ def _table_env(monkeypatch):
 def test_fire_911_metadata_returns_row_count(_table_env):
     ds = FakeDataSource([{"row_count": 12345}])
     result = service.fire_911_metadata(ds)
-    assert result["table"] == "cat.schema.fire_911"
-    assert result["rowCount"] == 12345
-    assert "fetchedAt" in result
+    assert result.table == "cat.schema.fire_911"
+    assert result.rowCount == 12345
+    assert result.fetchedAt
 
 
 def test_fire_911_metadata_caches_result(_table_env):
@@ -52,7 +52,7 @@ def test_fire_911_metadata_requires_table_env(monkeypatch):
 def test_fire_911_metadata_handles_empty_result(_table_env):
     ds = FakeDataSource([])
     result = service.fire_911_metadata(ds)
-    assert result["rowCount"] == 0
+    assert result.rowCount == 0
 
 
 def test_fire_911_metadata_interpolates_table_into_sql(_table_env):

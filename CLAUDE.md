@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Subdirectories with their own conventions have their own `CLAUDE.md`:
 
-- `backend/CLAUDE.md` — Databricks model gotcha, SPA static-file fallback, backend test layout
+- `backend/CLAUDE.md` — Databricks model gotcha, SPA static-file fallback, response model and schemas convention, backend test layout
 
 ## Commands
 
@@ -108,6 +108,6 @@ Frontend and backend each have independent `development`, `test`, and `productio
 
 ### Adding a backend-dependent feature
 
-1. Add the FastAPI route under `/api/*` in `backend/main.py` (or a router module).
+1. Add the FastAPI route under `/api/*` in a feature module (`backend/<feature>/router.py`). Define request/response Pydantic models in `backend/<feature>/schemas.py` and have the service layer return typed models so FastAPI infers the response shape from the return annotation. See `backend/CLAUDE.md` for the full convention.
 2. Wire the UI to the relative `/api/*` path via `frontend/src/api/`. The Vite proxy handles dev, the SPA fallback handles prod.
 3. If the feature isn't ready or you want a kill switch, add a `VITE_ENABLE_<NAME>` flag (default `false` in `.env.{mode}`, set `true` in the Dockerfile build stage when shipping it on). Otherwise no flag is needed: the fullstack image always has the backend present.
