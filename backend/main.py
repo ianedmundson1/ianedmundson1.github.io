@@ -19,6 +19,8 @@ from fastapi.responses import JSONResponse
 import sentry_sdk
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig, MessageType
 
+from backend.analytics.router import router as analytics_router
+
 
 # Each tier has independent dev/test/prod envs. APP_ENV selects which
 # backend/.env.<env> file to layer on top of the process environment. Values
@@ -47,6 +49,8 @@ app = FastAPI(title="Simple FastAPI + React App")
 limiter = Limiter(key_func=get_remote_address, default_limits=["60/minute"])
 app.state.limiter = limiter
 app.add_middleware(SlowAPIMiddleware)
+
+app.include_router(analytics_router)
 
 
 @app.exception_handler(RateLimitExceeded)
