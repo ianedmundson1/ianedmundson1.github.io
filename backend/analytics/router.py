@@ -15,22 +15,16 @@ from backend.datasource import DataSource, get_datasource
 
 from . import service
 
-from pydantic import BaseModel
+from .schemas import SeattleFire911MetadataResponse
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/analytics", tags=["analytics"])
 
-
 def _datasource_dep() -> DataSource:
     return get_datasource()
-
-class SeattleFire911MetadataResponse(BaseModel):
-    table: str
-    rowCount: int
-    fetchedAt: str
     
-@router.get("/seattle-fire-911/metadata", response_model=SeattleFire911MetadataResponse)
+@router.get("/seattle-fire-911/metadata")
 def seattle_fire_911_metadata(ds: DataSource = Depends(_datasource_dep)) -> SeattleFire911MetadataResponse:
     try:
         return service.fire_911_metadata(ds)

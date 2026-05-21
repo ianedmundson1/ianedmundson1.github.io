@@ -14,6 +14,14 @@ Loaded when working under `backend/`. Root context is in the top-level `CLAUDE.m
 
 **Do not replace this with `StaticFiles.mount` — it breaks SPA fallback.** If you need to add static behavior, layer it on top of the catch-all, don't swap it out.
 
+## API response models and schemas
+
+Each feature module owns its Pydantic models in `<feature>/schemas.py` (see `backend/analytics/schemas.py`). The service layer constructs and returns the typed model; the router annotates the return type and lets FastAPI infer `response_model` from it. Don't set both `response_model=` on the decorator and a typed return annotation: pick the annotation, since the function signature is closer to the data.
+
+When a service caches its results, the cache type follows the model: `TTLCache[str, MyResponse]`, not `TTLCache[str, dict]`.
+
+Tests assert via attribute access (`result.field`), not dict subscript. Pydantic models are not subscriptable.
+
 ## Tests
 
 pytest, repo-root `tests/`, one `test_<module>.py` per backend module. Before declaring a backend change done, run `.venv/bin/pytest tests/` for the affected module — not just the test file you edited. Module-level runs catch fixture and import-order regressions that file-scoped runs miss.
