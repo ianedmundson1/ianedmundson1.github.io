@@ -34,3 +34,5 @@ htmlcov/
 backend/.env.development
 backend/.env.test
 backend/.env.production
+
+typings
