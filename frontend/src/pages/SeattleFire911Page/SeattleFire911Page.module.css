@@ -1,0 +1,88 @@
+.seattle-fire911-page {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: var(--color-bg-subtle);
+}
+
+.section-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.source-section,
+.placeholder-section {
+  padding: 3rem 0;
+}
+
+.section-title {
+  margin: 0 0 1.5rem 0;
+  font-size: 1.5rem;
+}
+
+.source-list {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 1.5rem;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+}
+
+.source-row {
+  display: grid;
+  grid-template-columns: 8rem 1fr;
+  gap: 1rem;
+  align-items: baseline;
+}
+
+.source-row dt {
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.source-row dd {
+  margin: 0;
+  word-break: break-all;
+}
+
+.source-row code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.95em;
+}
+
+.status-message {
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.placeholder-text {
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  margin: 0 0 1.5rem 0;
+}
+
+.back-link {
+  margin: 0;
+}
+
+.back-link a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.back-link a:hover,
+.back-link a:focus-visible {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .section-container {
+    padding: 0 1.25rem;
+  }
+  .source-row {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+}

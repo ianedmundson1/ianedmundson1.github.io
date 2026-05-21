@@ -16,6 +16,8 @@ const RagDemoPage = lazy(() => import('./pages/RagDemoPage'));
 const EnergyOptimizationPage = lazy(() => import('./pages/EnergyOptimizationPage'));
 const CloudMigrationPage = lazy(() => import('./pages/CloudMigrationPage'));
 const AboutPage = lazy(() => import('./pages/AboutPage'));
+const AnalyticsHubPage = lazy(() => import('./pages/AnalyticsHubPage'));
+const SeattleFire911Page = lazy(() => import('./pages/SeattleFire911Page'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 function App() {
@@ -36,6 +38,8 @@ function App() {
                   <Route path={ROUTES.energyOptimization} element={<EnergyOptimizationPage />} />
                   <Route path={ROUTES.cloudMigration} element={<CloudMigrationPage />} />
                   <Route path={ROUTES.about} element={<AboutPage />} />
+                  <Route path={ROUTES.analyticsHub} element={<AnalyticsHubPage />} />
+                  <Route path={ROUTES.seattleFire911} element={<SeattleFire911Page />} />
                   <Route path="*" element={<NotFoundPage />} />
                 </Route>
               </Routes>
