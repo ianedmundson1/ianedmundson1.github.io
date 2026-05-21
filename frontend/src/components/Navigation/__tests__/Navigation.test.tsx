@@ -23,6 +23,7 @@ describe('Navigation', () => {
     renderNavigation();
     expect(screen.getByRole('link', { name: 'Home' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Projects' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Analytics' })).toHaveAttribute('href', '/analytics');
     expect(screen.getByRole('link', { name: 'About' })).toBeInTheDocument();
   });
 

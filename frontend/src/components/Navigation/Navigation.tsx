@@ -12,6 +12,7 @@ interface NavigationProps {
 const NAV_ITEMS = [
   { to: ROUTES.home, label: 'Home' },
   { to: ROUTES.projects, label: 'Projects' },
+  { to: ROUTES.analyticsHub, label: 'Analytics' },
   { to: ROUTES.about, label: 'About' },
 ] as const;
 
