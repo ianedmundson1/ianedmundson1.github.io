@@ -36,3 +36,25 @@ def seattle_fire_911_metadata(ds: DataSource = Depends(_datasource_dep)) -> Seat
     except Exception:
         logger.exception("Failed to query Seattle Fire 911 metadata")
         raise HTTPException(status_code=502, detail="Upstream analytics query failed")
+    
+@router.get("/seattle-fire-911/recent-calls")
+def seattle_fire_911_recent_calls(ds: DataSource = Depends(_datasource_dep)):
+    try:
+        return service.fire_911_recent_calls(ds)
+    except RuntimeError as exc:
+        logger.warning("Analytics misconfigured: %s", exc)
+        raise HTTPException(status_code=503, detail=str(exc))
+    except Exception:
+        logger.exception("Failed to query Seattle Fire 911 recent calls")
+        raise HTTPException(status_code=502, detail="Upstream analytics query failed")
+    
+@router.get("/seattle-fire-911/last-24h-by-category")
+def seattle_fire_911_last_24h_by_category(ds: DataSource = Depends(_datasource_dep)):
+    try:
+        return service.fire_911_last_24h_by_category(ds)
+    except RuntimeError as exc:
+        logger.warning("Analytics misconfigured: %s", exc)
+        raise HTTPException(status_code=503, detail=str(exc))
+    except Exception:
+        logger.exception("Failed to query Seattle Fire 911 last 24h by category")
+        raise HTTPException(status_code=502, detail="Upstream analytics query failed")
