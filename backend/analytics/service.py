@@ -21,7 +21,7 @@ from . import queries
 from .schemas import SeattleFire911MetadataResponse
 
 _CACHE_TTL_SECONDS = 15 * 60
-_metadata_cache: TTLCache[str, SeattleFire911MetadataResponse] = TTLCache(maxsize=8, ttl=_CACHE_TTL_SECONDS)
+_metadata_cache = TTLCache[str, SeattleFire911MetadataResponse](maxsize=8, ttl=_CACHE_TTL_SECONDS)
 
 
 def _fire_911_table() -> str:
