@@ -190,10 +190,9 @@ class ContactPayload(BaseModel):
 
 @app.post("/api/contact")
 @limiter.limit("5/minute")
-async def contact(request: Request, payload: ContactPayload) -> JSONResponse:
+async def contact(request: Request, payload: ContactPayload) -> dict[str, str]:
     
     try: 
-
         mail_config = ConnectionConfig(
             MAIL_USERNAME=os.environ["MAIL_USERNAME"],
             MAIL_PASSWORD=SecretStr(os.environ["MAIL_PASSWORD"]),
@@ -215,7 +214,7 @@ async def contact(request: Request, payload: ContactPayload) -> JSONResponse:
     except Exception:
         logger.exception("Error sending contact email")
         raise HTTPException(status_code=500, detail="Failed to send message")
-    return JSONResponse(content={"status": "success"})
+    return {"status": "success"}
 
 static_dir = os.path.realpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "static"))
 os.makedirs(static_dir, exist_ok=True)
