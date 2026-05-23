@@ -15,7 +15,7 @@ from backend.datasource import DataSource, get_datasource
 
 from . import service
 
-from .schemas import SeattleFire911MetadataResponse
+from .schemas import SeattleFire911MetadataResponse, Fire911RecentCallsResponse, Fire911Last24hByCategoryResponse
 
 logger = logging.getLogger(__name__)
 
@@ -38,7 +38,7 @@ def seattle_fire_911_metadata(ds: DataSource = Depends(_datasource_dep)) -> Seat
         raise HTTPException(status_code=502, detail="Upstream analytics query failed")
     
 @router.get("/seattle-fire-911/recent-calls")
-def seattle_fire_911_recent_calls(ds: DataSource = Depends(_datasource_dep)):
+def seattle_fire_911_recent_calls(ds: DataSource = Depends(_datasource_dep)) -> Fire911RecentCallsResponse:
     try:
         return service.fire_911_recent_calls(ds)
     except RuntimeError as exc:
@@ -49,7 +49,7 @@ def seattle_fire_911_recent_calls(ds: DataSource = Depends(_datasource_dep)):
         raise HTTPException(status_code=502, detail="Upstream analytics query failed")
     
 @router.get("/seattle-fire-911/last-24h-by-category")
-def seattle_fire_911_last_24h_by_category(ds: DataSource = Depends(_datasource_dep)):
+def seattle_fire_911_last_24h_by_category(ds: DataSource = Depends(_datasource_dep)) -> Fire911Last24hByCategoryResponse:
     try:
         return service.fire_911_last_24h_by_category(ds)
     except RuntimeError as exc:

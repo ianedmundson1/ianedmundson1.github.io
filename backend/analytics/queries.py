@@ -35,6 +35,7 @@ def fire_911_recent_calls(table: str, limit: int = 10) -> str:
         LIMIT {limit}
     """
 
+#TODO: make the interval configurable through the API and query parameters instead of hardcoding 24 hours
 def fire_911_last_24h_by_category(table: str) -> str:
     return f"""
         WITH latest AS (
