@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { vi, beforeEach, afterEach } from 'vitest';
@@ -69,7 +69,10 @@ describe('SeattleFire911Page', () => {
     );
     renderPage();
     await waitFor(() => {
-      expect(screen.getByRole('alert')).toHaveTextContent(/could not load source metadata/i);
+      const sourceSection = screen.getByRole('region', { name: /source/i });
+      expect(within(sourceSection).getByRole('alert')).toHaveTextContent(
+        /could not load source metadata/i,
+      );
     });
   });
 
