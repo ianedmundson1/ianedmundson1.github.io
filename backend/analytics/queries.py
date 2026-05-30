@@ -31,7 +31,7 @@ def fire_911_recent_calls(table: str, limit: int = 10) -> str:
             latitude,
             longitude
         FROM {table}
-        ORDER BY datetime DESC
+        ORDER BY CAST(datetime AS TIMESTAMP) DESC
         LIMIT {limit}
     """
 

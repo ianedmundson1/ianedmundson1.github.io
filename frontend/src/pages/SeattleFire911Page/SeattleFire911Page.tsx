@@ -88,8 +88,8 @@ const SeattleFire911Page: React.FC = () => {
 
             {recent.data && (
               <ul className={styles.callsList}>
-                {recent.data.calls.map((call) => (
-                  <li key={call.incidentNumber}>
+                {recent.data.calls.map((call,i) => (
+                  <li key={`${call.incidentNumber}-${call.datetime}-${i}`}>
                     <article className={styles.callCard}>
                       <p className={styles.callType}>{call.type}</p>
                       <p className={styles.callAddress}>{call.address}</p>

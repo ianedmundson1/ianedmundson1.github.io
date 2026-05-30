@@ -28,7 +28,7 @@ jobs:
     
     deploy:
         needs: quality
-        if: github.event_name != 'pull_request' && 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         runs-on: [self-hosted,Linux, ARM64]
         environment: production
         steps:
@@ -59,4 +59,8 @@ jobs:
               run: |
                 docker compose --env-file secrets.env -f docker-compose.prod.yml up -d --build
                 docker image prune -f 
-            
+                
+            - name: Remove runtime secrets file
+              if: always()
+              run: rm -f secrets.env
+              
