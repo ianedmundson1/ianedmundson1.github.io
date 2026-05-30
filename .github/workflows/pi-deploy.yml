@@ -9,8 +9,8 @@ jobs:
     quality:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
+            - uses: actions/checkout@v5
+            - uses: actions/setup-node@v5
               with:
                 node-version: '22'
                 cache: 'npm'
@@ -19,7 +19,7 @@ jobs:
             - run: npm run typecheck
             - run: npm run test
             - run: npm run build
-            - uses: astral-sh/setup-uv@v4
+            - uses: astral-sh/setup-uv@v7
             - run: uv sync 
             - name: Backend tests
               env:
@@ -32,7 +32,7 @@ jobs:
         runs-on: [self-hosted,Linux, ARM64]
         environment: production
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v5
 
             - name: Write runtime env from Github secrets
               run: |
