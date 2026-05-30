@@ -24,7 +24,7 @@ jobs:
             - name: Backend tests
               env:
                 APP_ENV: test
-              run: .venv/bin/pytest test/ -v
+              run: .venv/bin/pytest tests/ -v
     
     deploy:
         needs: quality
