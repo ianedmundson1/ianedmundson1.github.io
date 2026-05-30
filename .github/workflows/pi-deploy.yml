@@ -1,0 +1,62 @@
+on: 
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+    workflow_dispatch:
+    
+jobs:
+    quality:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                node-version: '22'
+                cache: 'npm'
+            - run: npm cli
+            - run: npm run lint
+            - run: npm run typecheck
+            - run: npm run test
+            - run: npm run build
+            - uses: astral-sh/setup-uv@v4
+            - run: uv sync 
+            - name: Backend tests
+              env:
+                APP_ENV: test
+              run: .venv/bin/pytest test/ -v
+    
+    deploy:
+        needs: quality
+        if: github.event_name != 'pull_request' && 'refs/heads/main'
+        runs-on: [self-hosted,Linux, ARM64]
+        environment: production
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Write runtime env from Github secrets
+              run: |
+                umask 077
+                cat > secrets.env <<'EOF'
+                DATABRICKS_HOST=${{ secrets.DATABRICKS_HOST }}
+                DATABRICKS_TOKEN=${{ secrets.DATABRICKS_TOKEN }}
+                DATA_SOURCE=${{ secrets.DATA_SOURCE }}
+                DATABRICKS_HTTP_PATH=${{ secrets.DATABRICKS_HTTP_PATH }}
+                SEATTLE_FIRE_911_TABLE=${{ secrets.SEATTLE_FIRE_911_TABLE }}
+                SENTRY_DSN=${{ secrets.SENTRY_DSN }}
+                SENTRY_TRACES_SAMPLE_RATE=${{ secrets.SENTRY_TRACES_SAMPLE_RATE }}
+                SENTRY_PROFILES_SAMPLE_RATE=${{ secrets.SENTRY_PROFILES_SAMPLE_RATE }}
+                VITE_SENTRY_DSN=${{ secrets.VITE_SENTRY_DSN }}
+                MAIL_USERNAME=${{ secrets.MAIL_USERNAME }}
+                MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}
+                MAIL_FROM=${{ secrets.MAIL_FROM }}
+                MAIL_TO=${{ secrets.MAIL_TO }}
+                MAIL_SERVER=${{ secrets.MAIL_SERVER }}
+                MAIL_PORT=${{ secrets.MAIL_PORT }}
+                EOF
+            
+            - name: Build image and restart service 
+              run: |
+                docker compose --env-file secrets.env -f docker-compose.prod.yml up -d --build
+                docker image prune -f 
+            
