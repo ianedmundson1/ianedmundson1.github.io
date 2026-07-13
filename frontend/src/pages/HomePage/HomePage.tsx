@@ -1,16 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Seo from '../../components/Seo';
-import Sparkline from '../../components/Sparkline';
-import { useFadeOnScroll } from '../../hooks/useFadeOnScroll';
-import headshot400 from '../../assets/headshot-400.jpg';
-import headshot400Webp from '../../assets/headshot-400.webp';
-import headshot800Webp from '../../assets/headshot-800.webp';
-import { EXPERTISE_CARDS, IMPACT_ITEMS, HERO_DESCRIPTION } from '../../data/home';
-import { getFeaturedProjects } from '../../data/projects';
-import { ROUTES } from '../../data/routes';
-import { EXPERTISE_ICONS } from '../../components/ExpertiseIcons';
-import ProjectCard from '../../components/ProjectCard/ProjectCard';
+import Seo from '@/components/Seo';
+import Sparkline from '@/components/Sparkline';
+import { useFadeOnScroll } from '@/hooks/useFadeOnScroll';
+import headshot400 from '@/assets/headshot-400.jpg';
+import headshot400Webp from '@/assets/headshot-400.webp';
+import headshot800Webp from '@/assets/headshot-800.webp';
+import { EXPERTISE_CARDS, IMPACT_ITEMS, HERO_DESCRIPTION } from '@/data/home';
+import { getFeaturedProjects } from '@/data/projects';
+import { ROUTES } from '@/data/routes';
+import { EXPERTISE_ICONS } from '@/components/ExpertiseIcons';
+import ProjectCard from '@/components/ProjectCard/ProjectCard';
 import styles from './HomePage.module.css';
 
 const PERSON_JSON_LD = {

@@ -1,5 +1,5 @@
-import ProjectDetailLayout from '../../components/ProjectDetailLayout';
-import { getProject } from '../../data/projects';
+import ProjectDetailLayout from '@/components/ProjectDetailLayout';
+import { getProject } from '@/data/projects';
 
 const META = getProject('energy-optimization');
 

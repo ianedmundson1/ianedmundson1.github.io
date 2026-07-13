@@ -1,8 +1,8 @@
 import React from 'react';
-import Seo from '../../components/Seo';
-import Hero from '../../components/Hero/Hero';
-import { useFadeOnScroll } from '../../hooks/useFadeOnScroll';
-import { BOOK_REVIEWS } from '../../data/books';
+import Seo from '@/components/Seo';
+import Hero from '@/components/Hero/Hero';
+import { useFadeOnScroll } from '@/hooks/useFadeOnScroll';
+import { BOOK_REVIEWS } from '@/data/books';
 import styles from './BooksPage.module.css';
 
 /* -------------------------------------------------- */

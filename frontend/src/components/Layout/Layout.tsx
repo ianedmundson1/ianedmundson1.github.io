@@ -1,8 +1,8 @@
 import { Suspense } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
-import Navigation from '../Navigation/Navigation';
-import ConnectLinks from '../ConnectLinks/ConnectLinks';
-import ErrorBoundary from '../ErrorBoundary';
+import Navigation from '@/components/Navigation/Navigation';
+import ConnectLinks from '@/components/ConnectLinks/ConnectLinks';
+import ErrorBoundary from '@/components/ErrorBoundary';
 import styles from './Layout.module.css';
 
 const RouteFallback = () => (

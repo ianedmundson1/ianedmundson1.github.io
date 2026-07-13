@@ -1,8 +1,8 @@
 import { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react';
 import type { Layout, Config } from 'plotly.js';
-import { useTheme } from '../../context/ThemeContext';
-import { usePlotlyFigure, type Figure } from '../../api/plots';
-import { PLOTLY_THEME_TOKENS } from '../../theme/plotlyTokens';
+import { useTheme } from '@/context/ThemeContext';
+import { usePlotlyFigure, type Figure } from '@/api/plots';
+import { PLOTLY_THEME_TOKENS } from '@/theme/plotlyTokens';
 import styles from './PlotlyEmbed.module.css';
 
 const Plot = lazy(async () => {

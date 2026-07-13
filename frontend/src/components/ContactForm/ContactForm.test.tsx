@@ -7,7 +7,7 @@ vi.mock('../../api/contact', () => ({
   sendContactMessage: vi.fn(),
 }));
 
-import { sendContactMessage } from '../../api/contact';
+import { sendContactMessage } from '@/api/contact';
 
 beforeAll(() => {
   // jsdom doesn't implement HTMLDialogElement modal methods.

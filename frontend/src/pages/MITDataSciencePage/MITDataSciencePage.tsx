@@ -1,12 +1,12 @@
 import { useState, useCallback } from 'react';
 import { Camera, Upload } from 'lucide-react';
-import ProjectDetailLayout from '../../components/ProjectDetailLayout';
-import SectionDownNotice from '../../components/SectionDownNotice';
+import ProjectDetailLayout from '@/components/ProjectDetailLayout';
+import SectionDownNotice from '@/components/SectionDownNotice';
 import CameraCapture from './components/CameraCapture';
 import EmotionDetector from './components/EmotionDetector';
 import ImageUpload from './components/ImageUpload';
 import styles from './MITDataSciencePage.module.css';
-import { useEmotionAnalysis } from '../../api/emotion';
+import { useEmotionAnalysis } from '@/api/emotion';
 
 type InputMode = 'idle' | 'camera' | 'upload' | 'result';
 

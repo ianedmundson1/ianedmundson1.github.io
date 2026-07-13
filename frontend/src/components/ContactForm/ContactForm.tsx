@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState} from 'react';
-import { sendContactMessage, type ContactPayload} from '../../api/contact';
-import { logger } from '../../utils/logger';
+import { sendContactMessage, type ContactPayload} from '@/api/contact';
+import { logger } from '@/utils/logger';
 import styles from './ContactForm.module.css'
 
 interface ContactFormProps{

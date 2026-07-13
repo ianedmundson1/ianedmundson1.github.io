@@ -1,4 +1,4 @@
-import type { ExpertiseIconId } from '../components/ExpertiseIcons';
+import type { ExpertiseIconId } from '@/components/ExpertiseIcons';
 
 export interface ExpertiseCard {
   iconId: ExpertiseIconId;

@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import Seo from '../Seo';
-import { useFadeOnScroll } from '../../hooks/useFadeOnScroll';
+import { useFadeOnScroll } from '@/hooks/useFadeOnScroll';
 
 type Highlight = { value: string; label: string };
 type PipelineStep = { step: number; title: string; description: string };

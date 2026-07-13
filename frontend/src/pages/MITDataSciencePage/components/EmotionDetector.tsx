@@ -1,4 +1,4 @@
-import type { EmotionApiResponse } from '../../../api/emotion';
+import type { EmotionApiResponse } from '@/api/emotion';
 import styles from './EmotionDetector.module.css';
 
 interface EmotionDetectorProps {

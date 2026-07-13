@@ -1,8 +1,8 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useTheme } from '../../context/ThemeContext';
-import { useFocusTrap } from '../../hooks/useFocusTrap';
-import { ROUTES } from '../../data/routes';
+import { useTheme } from '@/context/ThemeContext';
+import { useFocusTrap } from '@/hooks/useFocusTrap';
+import { ROUTES } from '@/data/routes';
 import styles from './Navigation.module.css';
 
 interface NavigationProps {

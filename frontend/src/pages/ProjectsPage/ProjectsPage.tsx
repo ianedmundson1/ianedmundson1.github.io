@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Seo from '../../components/Seo';
-import Hero from '../../components/Hero/Hero';
-import ProjectCard from '../../components/ProjectCard/ProjectCard';
-import { useFadeOnScroll } from '../../hooks/useFadeOnScroll';
-import { CATEGORIES, getProjectsByKind } from '../../data/projects';
+import Seo from '@/components/Seo';
+import Hero from '@/components/Hero/Hero';
+import ProjectCard from '@/components/ProjectCard/ProjectCard';
+import { useFadeOnScroll } from '@/hooks/useFadeOnScroll';
+import { CATEGORIES, getProjectsByKind } from '@/data/projects';
 import styles from './ProjectsPage.module.css';
 
 const ProjectsPage: React.FC = () => {

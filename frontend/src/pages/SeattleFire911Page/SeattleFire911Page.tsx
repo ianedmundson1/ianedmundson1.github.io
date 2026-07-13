@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Seo from '../../components/Seo';
-import Hero from '../../components/Hero/Hero';
-import { useFire911Metadata, useFire911RecentCalls, useFire911Last24hByCategory } from '../../api/analytics';
-import { ROUTES } from '../../data/routes';
+import Seo from '@/components/Seo';
+import Hero from '@/components/Hero/Hero';
+import { useFire911Metadata, useFire911RecentCalls, useFire911Last24hByCategory } from '@/api/analytics';
+import { ROUTES } from '@/data/routes';
 import styles from './SeattleFire911Page.module.css';
-import type { Figure } from '../../api/plots';
-import PlotlyEmbed from '../../components/PlotlyEmbed';
+import type { Figure } from '@/api/plots';
+import PlotlyEmbed from '@/components/PlotlyEmbed';
 
 const formatRowCount = (n: number) => n.toLocaleString('en-US');
 

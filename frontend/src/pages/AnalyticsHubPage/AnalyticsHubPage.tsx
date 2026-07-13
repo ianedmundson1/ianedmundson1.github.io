@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Seo from '../../components/Seo';
-import Hero from '../../components/Hero/Hero';
-import { ROUTES } from '../../data/routes';
+import Seo from '@/components/Seo';
+import Hero from '@/components/Hero/Hero';
+import { ROUTES } from '@/data/routes';
 import styles from './AnalyticsHubPage.module.css';
 
 interface Dataset {

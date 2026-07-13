@@ -1,5 +1,5 @@
-import PlotlyEmbed from '../../components/PlotlyEmbed';
-import ProjectDetailLayout from '../../components/ProjectDetailLayout';
+import PlotlyEmbed from '@/components/PlotlyEmbed';
+import ProjectDetailLayout from '@/components/ProjectDetailLayout';
 import styles from './RagDemoPage.module.css';
 
 const META = {

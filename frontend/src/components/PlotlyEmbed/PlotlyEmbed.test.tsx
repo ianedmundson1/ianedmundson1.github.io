@@ -2,7 +2,7 @@ import { render, screen, act } from '@testing-library/react';
 import { vi } from 'vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import PlotlyEmbed from './PlotlyEmbed';
-import { ThemeProvider } from '../../context/ThemeContext';
+import { ThemeProvider } from '@/context/ThemeContext';
 
 vi.mock('react-plotly.js/factory', () => ({
   default: () => (props: { 'aria-label'?: string }) => (
@@ -18,7 +18,7 @@ vi.mock('../../api/plots', () => ({
   usePlotlyFigure: vi.fn(),
 }));
 
-import { usePlotlyFigure } from '../../api/plots';
+import { usePlotlyFigure } from '@/api/plots';
 
 let intersectCallbacks: IntersectionObserverCallback[] = [];
 

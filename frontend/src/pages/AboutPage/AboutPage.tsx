@@ -1,6 +1,6 @@
-import Seo from '../../components/Seo';
-import Hero from '../../components/Hero/Hero';
-import { useFadeOnScroll } from '../../hooks/useFadeOnScroll';
+import Seo from '@/components/Seo';
+import Hero from '@/components/Hero/Hero';
+import { useFadeOnScroll } from '@/hooks/useFadeOnScroll';
 import {
   HERO_SUBTITLE,
   INTRO_PARAGRAPHS,
@@ -9,10 +9,10 @@ import {
   EDUCATION,
   AWARDS,
   CERTIFICATIONS,
-} from '../../data/about';
-import headshot400 from '../../assets/headshot-400.jpg';
-import headshot400Webp from '../../assets/headshot-400.webp';
-import headshot800Webp from '../../assets/headshot-800.webp';
+} from '@/data/about';
+import headshot400 from '@/assets/headshot-400.jpg';
+import headshot400Webp from '@/assets/headshot-400.webp';
+import headshot800Webp from '@/assets/headshot-800.webp';
 import styles from './AboutPage.module.css';
 
 const AboutPage = () => {

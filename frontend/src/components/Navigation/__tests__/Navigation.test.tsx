@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import Navigation from '../Navigation';
-import { ThemeProvider } from '../../../context/ThemeContext';
+import { ThemeProvider } from '@/context/ThemeContext';
 
 const renderNavigation = (props?: { className?: string }) =>
   render(

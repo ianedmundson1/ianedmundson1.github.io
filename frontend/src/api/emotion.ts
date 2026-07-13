@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { apiFetchRequired } from './client';
-import { logger } from '../utils/logger';
+import { logger } from '@/utils/logger';
 
 export interface EmotionApiResponse {
   label: string;
