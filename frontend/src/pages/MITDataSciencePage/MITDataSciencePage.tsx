@@ -6,6 +6,7 @@ import CameraCapture from './components/CameraCapture';
 import EmotionDetector from './components/EmotionDetector';
 import ImageUpload from './components/ImageUpload';
 import styles from './MITDataSciencePage.module.css';
+import { useEmotionAnalysis } from '../../api/emotion';
 
 type InputMode = 'idle' | 'camera' | 'upload' | 'result';
 
@@ -68,20 +69,24 @@ const FUTURE_WORK = [
 const MITDataSciencePage = () => {
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [mode, setMode] = useState<InputMode>('idle');
-
+  const { mutate: analyzeEmotion, data, isPending, error, reset } = useEmotionAnalysis();
+  
   const handleCapture = useCallback((imageSrc: string) => {
     setCapturedImage(imageSrc);
     setMode('result');
-  }, []);
+    analyzeEmotion(imageSrc)
+  }, [analyzeEmotion]);
 
   const handleUpload = useCallback((imageSrc: string) => {
     setCapturedImage(imageSrc);
     setMode('result');
-  }, []);
+    analyzeEmotion(imageSrc)
+  }, [analyzeEmotion]);
 
   const handleReset = useCallback(() => {
     setCapturedImage(null);
     setMode('idle');
+    reset();
   }, []);
 
   const demoExplicitlyEnabled = import.meta.env.VITE_ENABLE_EMOTION_DEMO === 'true';
@@ -136,7 +141,13 @@ const MITDataSciencePage = () => {
             )}
 
             {mode === 'result' && capturedImage && (
-              <EmotionDetector capturedImage={capturedImage} onReset={handleReset} />
+              <EmotionDetector 
+                capturedImage={capturedImage} 
+                data={data}
+                isPending={isPending}
+                error={error}
+                onReset={handleReset} 
+                />
             )}
           </div>
         </div>

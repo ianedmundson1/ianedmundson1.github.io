@@ -1,5 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
-import { apiFetch } from './client';
+import { useMutation } from '@tanstack/react-query';
+import { apiFetchRequired } from './client';
 import { logger } from '../utils/logger';
 
 export interface EmotionApiResponse {
@@ -35,26 +35,19 @@ const analyzeEmotion = async (
   formData.append('file', file);
 
   logger.debug('Sending image to backend /api/emotion_classification');
-  const json = await apiFetch<EmotionApiResponse>('/api/emotion_classification', {
+  const json = await apiFetchRequired<EmotionApiResponse>('/api/emotion_classification', {
     method: 'POST',
     body: formData,
     signal,
   });
-  if (!json) throw new Error('Empty response from /api/emotion_classification');
   logger.debug('Backend Response:', json);
   return json;
 };
 
-export const useEmotionAnalysis = (imageDataUrl: string | null) => {
-  return useQuery({
-    queryKey: ['emotionAnalysis', imageDataUrl],
-    queryFn: ({ signal }) => {
-      if (!imageDataUrl) throw new Error('No image data provided');
-      return analyzeEmotion(imageDataUrl, signal);
-    },
-    enabled: !!imageDataUrl,
+export const useEmotionAnalysis = () => {
+  return useMutation({
+    mutationFn: (imageDataUrl: string) => analyzeEmotion(imageDataUrl),
     retry: 2,
-    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
-    staleTime: Infinity,
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000)
   });
 };

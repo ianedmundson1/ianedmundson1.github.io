@@ -1,14 +1,15 @@
-import { useEmotionAnalysis } from '../../../api/emotion';
+import type { EmotionApiResponse } from '../../../api/emotion';
 import styles from './EmotionDetector.module.css';
 
 interface EmotionDetectorProps {
   capturedImage: string;
+  data: EmotionApiResponse | undefined;
+  isPending: boolean;
+  error: Error | null;
   onReset: () => void;
 }
 
-const EmotionDetector = ({ capturedImage, onReset }: EmotionDetectorProps) => {
-  const { data, isLoading, error } = useEmotionAnalysis(capturedImage);
-
+const EmotionDetector = ({ capturedImage, data, isPending, error, onReset }: EmotionDetectorProps) => {
   const prediction = data?.label ?? '';
   const confidence = data?.confidencePercent ?? 0;
   const errorMessage = error?.message ?? null;
@@ -23,14 +24,14 @@ const EmotionDetector = ({ capturedImage, onReset }: EmotionDetectorProps) => {
         />
       </div>
 
-      {isLoading && (
+      {isPending && (
         <div className={styles.analyzing} aria-live="polite">
           <div className={styles.spinner} role="status" aria-label="Analyzing" />
           <p>Analyzing facial expression…</p>
         </div>
       )}
 
-      {!isLoading && !errorMessage && prediction && (
+      {!isPending && !errorMessage && prediction && (
         <div className={styles.emotionResult} aria-live="polite">
           <h3>Detected Emotion</h3>
           <div className={styles.emotionDisplay}>

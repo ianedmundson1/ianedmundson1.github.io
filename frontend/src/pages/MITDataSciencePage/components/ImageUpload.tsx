@@ -47,12 +47,12 @@ const ImageUpload = ({ onUpload, onCancel }: ImageUploadProps) => {
   const [fileError, setFileError] = useState<string | null>(null);
   const cancelledRef = useRef(false);
 
-  useEffect(
-    () => () => {
+  useEffect(() => {
+    cancelledRef.current = false;
+    return () => {
       cancelledRef.current = true;
-    },
-    [],
-  );
+    };
+  }, []);
 
   const handleFileSelect = useCallback(async (file: File) => {
     if (!file || !ACCEPTED_TYPES.includes(file.type)) {
