@@ -14,8 +14,8 @@
 }
 
 .badges {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.5rem;
   margin-bottom: 1rem;
 }
@@ -31,12 +31,18 @@
   font-weight: 500;
   letter-spacing: 0.05em;
   text-transform: uppercase;
+  text-align: center;
+  display:flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .badge.badgeInteractive {
   background: var(--color-primary);
   color: var(--color-bg);
   border-color: var(--color-primary);
+  grid-column: 1/-1;
+  
 }
 
 .title {

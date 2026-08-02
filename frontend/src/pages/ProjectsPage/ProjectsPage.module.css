@@ -90,21 +90,24 @@
 }
 
 .view-all-link {
-  color: var(--color-primary);
-  text-decoration: none;
-  font-family: var(--font-mono);
-  font-weight: 500;
-  font-size: 0.8rem;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  display: inline-flex;
+  display: flex;
+  width:100%;
   align-items: center;
-  gap: 0.4rem;
-  transition: gap 0.2s ease;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: var(--color-bg);
+  background-color: var(--color-text-primary);
+  border: 1px solid var(--color-text-primary);
+  transition: background-color 0.2s ease;
 }
 
 .view-all-link:hover {
-  gap: 0.7rem;
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
 }
 
 /* ==========================================

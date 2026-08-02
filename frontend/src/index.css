@@ -203,7 +203,7 @@ h4, h5, h6 {
 .section-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 1.25rem;
 }
 
 /* ==========================================
@@ -248,5 +248,11 @@ h4, h5, h6 {
     transform: none;
     transition: none;
     transition-delay: 0s;
+  }
+}
+
+@media (min-width: 768px) {
+  .section-container {
+    padding: 0 2rem;
   }
 }
