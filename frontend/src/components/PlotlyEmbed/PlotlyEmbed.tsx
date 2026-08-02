@@ -5,32 +5,32 @@ import { usePlotlyFigure, type Figure } from '@/api/plots';
 import { PLOTLY_THEME_TOKENS } from '@/theme/plotlyTokens';
 import styles from './PlotlyEmbed.module.css';
 
-const Plot = lazy(async () => {
-  const load = async () => {
-    const [{ default: createPlotlyComponent }, plotlyMod] = await Promise.all([
-      import('react-plotly.js/factory'),
-      import('plotly.js-dist-min'),
-    ]);
-    return createPlotlyComponent(plotlyMod.default);
-  };
-  // Only attach a Sentry span if the SDK is already on the page. The deferred
-  // init in sentry.ts may not have run yet; pulling @sentry/react here purely
-  // to record a span would inflate the critical path.
+const loadPlot = async () => {
+  const [{ default: createPlotlyComponent }, plotlyMod] = await Promise.all([
+    import('react-plotly.js/factory'),
+    import('plotly.js-dist-min'),
+  ]);
+  return createPlotlyComponent(plotlyMod.default);
+};
+// Only attach a Sentry span if the SDK is already on the page. The deferred
+// init in sentry.ts may not have run yet; pulling @sentry/react here purely
+// to record a span would inflate the critical path.
+const loadPlotWithSentry = async () => {
   const sentryReady =
     typeof window !== 'undefined' &&
     (window as unknown as { __SENTRY__?: unknown }).__SENTRY__ !== undefined;
-  if (!sentryReady) {
-    return { default: await load() };
-  }
+  if (!sentryReady) return loadPlot(); 
   const Sentry = await import('@sentry/react').catch(() => null);
-  const Component = Sentry
-    ? await Sentry.startSpan(
-        { name: 'plotly.lazy-import', op: 'resource.script', forceTransaction: true },
-        load,
-      )
-    : await load();
-  return { default: Component };
-});
+  if (!Sentry) return loadPlot();
+  return Sentry.startSpan(
+    { name: 'plotly.lazy-import', op: 'resource.script', forceTransaction: true },
+    loadPlot,
+  );
+};
+
+const Plot = lazy(async () => ({ default: await loadPlotWithSentry() }));
+
+const FILL: React.CSSProperties = { width: '100%', height: '100%' };
 
 type Poster = string | { light: string; dark: string };
 
@@ -130,9 +130,14 @@ const PlotlyEmbed = ({
 
   const shouldFetch = !providedFigure && inView && activated;
   const query = usePlotlyFigure(shouldFetch ? src ?? null : null);
-  const figure = providedFigure ?? query.data ?? null;
+  const source = providedFigure ?? query.data ?? null;
   const errorMessage = providedFigure ? null : query.error?.message ?? null;
 
+  // react-plotly.js mutates the data and layout objects it is handed in response
+  // to user interaction (documented upstream). Hand it a private copy so
+  // rotating a scene does not write back into the react-query cache entry.
+  const figure = useMemo(() => (source ? structuredClone(source) : null), [source]);
+  
   const layout = useMemo(
     () => (figure ? themedLayout(figure.layout, theme) : null),
     [figure, theme],
@@ -157,61 +162,43 @@ const PlotlyEmbed = ({
     <div className={styles.skeleton} />
   );
 
-  if (errorMessage) {
-    return (
-      <div ref={wrapperRef} className={styles.wrap} style={cssVars} role="alert">
-        <div className={styles.message}>Could not load plot: {errorMessage}</div>
-      </div>
-    );
-  }
-
-  if (!activated) {
-    return (
-      <div
-        ref={wrapperRef}
-        className={styles.wrap}
-        style={cssVars}
-        aria-label={ariaLabel}
-      >
-        {placeholder}
-        <button
-          type="button"
-          className={styles.scrim}
-          onClick={() => setActivated(true)}
-          aria-label={`Activate interactive controls for ${ariaLabel}`}
-        >
-          <span className={styles.scrimLabel}>Tap to interact</span>
-        </button>
-      </div>
-    );
-  }
-
-  if (!inView || !figure || !layout) {
-    return (
-      <div
-        ref={wrapperRef}
-        className={styles.wrap}
-        style={cssVars}
-        aria-busy="true"
-        aria-label={`Loading ${ariaLabel}`}
-      >
-        {placeholder}
-      </div>
-    );
-  }
+  const plot =
+    activated && inView && figure && layout ? (
+      <Suspense fallback={placeholder}>
+        <Plot data={figure.data} layout={layout} config={baseConfig} style={FILL} />
+      </Suspense>
+    ) : null;
 
   return (
-    <div ref={wrapperRef} className={styles.wrap} style={cssVars}>
-      <Suspense fallback={placeholder}>
-        <Plot
-          data={figure.data}
-          layout={layout}
-          config={baseConfig}
-          style={{ width: '100%', height: '100%' }}
-          useResizeHandler
-          aria-label={ariaLabel}
-        />
-      </Suspense>
+    <div
+      ref={wrapperRef}
+      className={styles.wrap}
+      style={cssVars}
+      role="group"
+      aria-label={ariaLabel}
+      aria-busy={activated && !errorMessage && !plot ? true : undefined}
+    >
+      {errorMessage ? (
+        <div className={styles.message} role="alert">
+          Could not load plot: {errorMessage}
+        </div>
+      ) : (
+        plot ?? (
+          <>
+            {placeholder}
+            {!activated && (
+              <button
+                type="button"
+                className={styles.scrim}
+                onClick={() => setActivated(true)}
+                aria-label={`Activate interactive controls for ${ariaLabel}`}
+              >
+                <span className={styles.scrimLabel}>Tap to interact</span>
+              </button>
+            )}
+          </>
+        )
+      )}
     </div>
   );
 };

@@ -16,19 +16,19 @@ const renderPage = () => {
 };
 
 describe('SeattleFire911Page', () => {
-  const originalFetch = global.fetch;
+  const originalFetch = globalThis.fetch;
 
   beforeEach(() => {
-    global.fetch = vi.fn();
+    globalThis.fetch = vi.fn();
   });
 
   afterEach(() => {
-    global.fetch = originalFetch;
+    globalThis.fetch = originalFetch;
     vi.restoreAllMocks();
   });
 
   it('renders the hero and source heading immediately', () => {
-    (global.fetch as ReturnType<typeof vi.fn>).mockReturnValue(new Promise(() => {}));
+    (globalThis.fetch as ReturnType<typeof vi.fn>).mockReturnValue(new Promise(() => {}));
     renderPage();
     expect(
       screen.getByRole('heading', { level: 1, name: 'Seattle Fire 911 Calls' }),
@@ -37,13 +37,13 @@ describe('SeattleFire911Page', () => {
   });
 
   it('shows the loading state while the metadata request is in flight', () => {
-    (global.fetch as ReturnType<typeof vi.fn>).mockReturnValue(new Promise(() => {}));
+    (globalThis.fetch as ReturnType<typeof vi.fn>).mockReturnValue(new Promise(() => {}));
     renderPage();
     expect(screen.getByText(/loading source metadata/i)).toBeInTheDocument();
   });
 
   it('renders the metadata once it loads', async () => {
-    (global.fetch as ReturnType<typeof vi.fn>).mockResolvedValue(
+    (globalThis.fetch as ReturnType<typeof vi.fn>).mockResolvedValue(
       new Response(
         JSON.stringify({
           table: 'cat.schema.fire_911',
@@ -61,7 +61,7 @@ describe('SeattleFire911Page', () => {
   });
 
   it('shows an error message when the fetch fails', async () => {
-    (global.fetch as ReturnType<typeof vi.fn>).mockResolvedValue(
+    (globalThis.fetch as ReturnType<typeof vi.fn>).mockResolvedValue(
       new Response(JSON.stringify({ detail: 'down' }), {
         status: 503,
         headers: { 'content-type': 'application/json' },
@@ -77,7 +77,7 @@ describe('SeattleFire911Page', () => {
   });
 
   it('links back to the analytics hub', () => {
-    (global.fetch as ReturnType<typeof vi.fn>).mockReturnValue(new Promise(() => {}));
+    (globalThis.fetch as ReturnType<typeof vi.fn>).mockReturnValue(new Promise(() => {}));
     renderPage();
     const link = screen.getByRole('link', { name: /back to analytics/i });
     expect(link).toHaveAttribute('href', '/analytics');

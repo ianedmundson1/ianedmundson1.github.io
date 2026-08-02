@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import { Link } from 'react-router-dom';
 import Seo from '@/components/Seo';
 import Hero from '@/components/Hero/Hero';
@@ -19,7 +19,23 @@ const SeattleFire911Page: React.FC = () => {
   const { data, isLoading, error } = useFire911Metadata();
   const recent = useFire911RecentCalls();
   const byCategory = useFire911Last24hByCategory();
-
+  const buckets = byCategory.data?.buckets;
+  const categoryFigure = useMemo<Figure | null>(() => {
+    if (!buckets || buckets.length === 0) return null;
+    return {
+      data: [{
+        type: 'bar',
+        orientation: 'h',
+        x: buckets.map((b) => b.count),
+        y: buckets.map((b) => b.type),
+      }],
+      layout: {
+        xaxis: { title: { text: 'Calls' } },
+        yaxis: { title: { text: '' }, automargin: true, autorange: 'reversed' },
+        margin: { l: 20, r: 20, t: 20, b: 50 },
+      },
+  };
+  }, [buckets]);
   return (
     <div className={styles.seattleFire911Page}>
       <Seo
@@ -110,9 +126,12 @@ const SeattleFire911Page: React.FC = () => {
             <h2 id="by-category-heading" className={styles.sectionTitle}>Calls by category, last 24 hours</h2>
             <p className={styles.sectionSubtitle}>
               {byCategory.data
-                ? <>Window ending <time dateTime={byCategory.data.windowEnd}>{formatDateTime(byCategory.data.windowEnd)}</time></>  
-                : 'Loading window...'}
+                ? <>Window ending <time dateTime={byCategory.data.windowEnd}>{formatDateTime(byCategory.data.windowEnd)}</time></>
+                : byCategory.error
+                  ? 'Window unavailable'
+                  : 'Loading window...'}
             </p>
+
             {byCategory.isLoading && (
               <p className={styles.statusMessage} aria-busy="true">
                 Loading calls by category...
@@ -126,39 +145,22 @@ const SeattleFire911Page: React.FC = () => {
               </p>
             )}
 
-            {byCategory.data && byCategory.data.buckets.length === 0 &&(
+            {byCategory.data && buckets?.length === 0 && (
               <p className={styles.statusMessage}>No calls in the last 24 hours</p>
             )}
 
-            {byCategory.data && byCategory.data.buckets.length > 0 && (() => {
+            {categoryFigure && buckets && (
+              <PlotlyEmbed
+                figure={categoryFigure}
+                ariaLabel="Calls by category in the last 24 hours, horizontal bar chart"
+                height={Math.max(300, buckets.length * 32)}
+                mobileHeight={Math.max(280, buckets.length * 28)}
+              />
+            )}
 
-              const buckets = byCategory.data.buckets;
-              const figure: Figure = {
-                data: [{
-                  type: 'bar',
-                  orientation: 'h',
-                  x: buckets.map((b) => b.count),
-                  y: buckets.map((b) => b.type),
-                }],
-                layout: {
-                  xaxis: { title: {text: 'Calls'} },
-                  yaxis: { title: {text: '' }, automargin: true, autorange: 'reversed'},
-                  margin: {l: 20, r:20, t: 20, b:50 },
-                },
-              };
-              return(
-                <PlotlyEmbed
-                  figure={figure}
-                  ariaLabel="Calls by category in the last 24 hours, horizontal bar chart"
-                  height={Math.max(300, buckets.length * 32)}
-                  mobileHeight={Math.max(280, buckets.length * 28)}
-                  />
-              );
-            }
-            )()}
-          <p className={styles.backLink}>
-            <Link to={ROUTES.analyticsHub}>Back to analytics</Link>
-          </p>
+            <p className={styles.backLink}>
+              <Link to={ROUTES.analyticsHub}>Back to analytics</Link>
+            </p>
           </div>
         </section>
       </main>
