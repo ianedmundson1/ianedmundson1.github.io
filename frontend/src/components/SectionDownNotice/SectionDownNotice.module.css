@@ -1,5 +1,5 @@
 .notice {
-  padding: 4rem 1rem;
+  padding: 3rem 1rem;
   display: flex;
   justify-content: center;
 }
@@ -11,7 +11,7 @@
   border: 1px solid var(--color-border);
   border-left: 3px solid var(--color-primary);
   border-radius: var(--border-radius-lg);
-  padding: 2rem 2.25rem;
+  padding: 1.5rem 1.5rem;
   text-align: left;
 }
 
@@ -28,7 +28,7 @@
 
 .title {
   font-family: var(--font-display);
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   font-weight: 600;
   letter-spacing: -0.015em;
   line-height: 1.25;
@@ -43,16 +43,16 @@
   margin: 0;
 }
 
-@media (max-width: 480px) {
+@media (min-width: 480px) {
   .notice {
-    padding: 3rem 1rem;
+    padding: 4rem 1rem;
   }
 
   .inner {
-    padding: 1.5rem 1.5rem;
+    padding: 2rem 2.25rem;
   }
 
   .title {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
   }
 }

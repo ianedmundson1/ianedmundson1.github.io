@@ -1,14 +1,14 @@
 .wrap {
   position: relative;
   width: 100%;
-  height: var(--plot-h, 600px);
+  height: var(--plot-h-mobile, 360px);
   background: transparent;
   overflow: hidden;
 }
 
-@media (max-width: 640px) {
+@media (min-width: 640px) {
   .wrap {
-    height: var(--plot-h-mobile, 360px);
+    height: var(--plot-h, 600px);
   }
 }
 
