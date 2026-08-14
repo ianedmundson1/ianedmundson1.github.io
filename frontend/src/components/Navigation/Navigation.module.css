@@ -6,27 +6,24 @@
   z-index: 100;
 }
 
+/* Scrim behind the open off-canvas menu. Only rendered while the menu is
+   open, and the menu can only be opened by the hamburger, which is hidden
+   from 768px up. */
 .scrim {
-  display: none;
-}
-
-@media (max-width: 768px) {
-  .scrim {
-    display: block;
-    position: fixed;
-    inset: 4rem 0 0 0;
-    background: rgba(0, 0, 0, 0.4);
-    z-index: 98;
-    border: 0;
-    padding: 0;
-    cursor: pointer;
-  }
+  display: block;
+  position: fixed;
+  inset: 4rem 0 0 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 98;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
 }
 
 .navContainer {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 0.75rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -35,32 +32,56 @@
 
 .navBrand a {
   font-family: var(--font-display);
-  font-size: 1.35rem;
+  font-size: 1.25rem;
   font-weight: 600;
   letter-spacing: -0.02em;
   color: var(--color-text-primary);
   text-decoration: none;
 }
 
+/* Off-canvas panel, slid off-screen until .navLinksOpen is applied.
+   Becomes a plain horizontal list from 768px up. */
 .navLinks {
+  position: fixed;
+  top: 4rem;
+  left: 0;
+  right: 0;
+  bottom: 0;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
   list-style: none;
   margin: 0;
-  padding: 0;
-  gap: 2rem;
+  padding: 2rem 0 0;
+  gap: 0;
+  background-color: var(--color-bg);
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  z-index: 99;
+}
+
+.navLinksOpen {
+  transform: translateX(0);
+}
+
+.navLinks li {
+  width: 100%;
+  text-align: center;
 }
 
 .navLinks a {
+  display: block;
   color: var(--color-text-secondary);
   text-decoration: none;
   font-family: var(--font-mono);
   font-weight: 500;
-  font-size: 0.78rem;
+  font-size: 1.1rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   transition: color var(--transition);
   position: relative;
-  padding-bottom: 4px;
+  padding: 1rem;
 }
 
 /* Animated slide-in underline for all nav links */
@@ -95,6 +116,9 @@
 .navLinks a.active::after {
   transform: scaleX(1);
   transition: none;
+  bottom: 8px;
+  left: 30%;
+  right: 30%;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -156,9 +180,9 @@
   outline-offset: 2px;
 }
 
-/* Hamburger button — hidden on desktop */
+/* Hamburger button — hidden from 768px up */
 .hamburger {
-  display: none;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 5px;
@@ -189,56 +213,50 @@
   transform: translateY(-7px) rotate(-45deg);
 }
 
-/* ---- Mobile ---- */
-@media (max-width: 768px) {
+/* ---- Desktop ---- */
+@media (min-width: 768px) {
+  .scrim {
+    display: none;
+  }
+
   .navContainer {
-    padding: 0 0.75rem;
+    padding: 0 1rem;
   }
 
   .navBrand a {
-    font-size: 1.25rem;
+    font-size: 1.35rem;
   }
 
   .hamburger {
-    display: flex;
+    display: none;
   }
 
   .navLinks {
-    /* Off-screen by default */
-    position: fixed;
-    top: 4rem;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    padding-top: 2rem;
-    gap: 0;
-    background-color: var(--color-bg);
-    transform: translateX(100%);
-    transition: transform 0.3s ease;
-    z-index: 99;
-  }
-
-  .navLinksOpen {
-    transform: translateX(0);
+    position: static;
+    flex-direction: row;
+    align-items: stretch;
+    padding: 0;
+    gap: 2rem;
+    background-color: transparent;
+    transform: none;
+    transition: none;
+    z-index: auto;
   }
 
   .navLinks li {
-    width: 100%;
-    text-align: center;
+    width: auto;
+    text-align: initial;
   }
 
   .navLinks a {
-    display: block;
-    padding: 1rem;
-    font-size: 1.1rem;
+    display: inline;
+    font-size: 0.78rem;
+    padding: 0 0 4px;
   }
 
   .navLinks a.active::after {
-    bottom: 8px;
-    left: 30%;
-    right: 30%;
+    bottom: -2px;
+    left: 0;
+    right: 0;
   }
 }

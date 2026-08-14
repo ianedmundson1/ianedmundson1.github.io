@@ -31,11 +31,10 @@
    ========================================== */
 .category-section {
   background: transparent;
-  padding: 0;
+  padding: 1.5rem;
   border: none;
   box-shadow: none;
   border-top: 1px solid var(--color-rule);
-  padding-top: 3rem;
 }
 
 .category-section:first-child {
@@ -54,7 +53,7 @@
   display: flex;
   align-items: baseline;
   font-family: var(--font-display);
-  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-size: 1.6rem;
   color: var(--color-text-primary);
   margin: 0 0 0.75rem;
   font-weight: 600;
@@ -76,7 +75,7 @@
    ========================================== */
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: 1fr;
   gap: 2rem;
   margin-bottom: 2rem;
 }
@@ -113,30 +112,23 @@
 /* ==========================================
    RESPONSIVE DESIGN
    ========================================== */
-@media (max-width: 768px) {
+@media (min-width: 480px) {
   .category-section {
     padding: 2rem;
   }
+}
+
+@media (min-width: 768px) {
+  .category-section {
+    padding: 0;
+    padding-top: 3rem;
+  }
 
   .category-title {
-    font-size: 1.6rem;
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
   }
 
   .projects-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .projects-overview .section-container {
-    padding: 0 1.25rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .category-section {
-    padding: 1.5rem;
-  }
-
-  .project-card {
-    padding: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   }
 }

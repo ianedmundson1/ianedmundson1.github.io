@@ -1,6 +1,6 @@
 .hero {
   position: relative;
-  padding: 5rem 1rem 4rem;
+  padding: 3rem 1rem 2rem;
   background: var(--gradient-paper);
   color: var(--color-text-primary);
   overflow: hidden;
@@ -32,9 +32,10 @@
 
 .containerWithMedia {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr);
   gap: 3rem;
   align-items: center;
+  text-align: center;
 }
 
 .text {
@@ -43,7 +44,7 @@
 
 .title {
   font-family: var(--font-display);
-  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-size: 2.5rem;
   font-weight: 600;
   margin: 0 0 0.5rem;
   letter-spacing: -0.035em;
@@ -53,7 +54,7 @@
 
 .subtitle {
   font-family: var(--font-display);
-  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  font-size: 1.1rem;
   font-style: italic;
   font-weight: 400;
   color: var(--color-primary);
@@ -65,33 +66,34 @@
 
 .media {
   position: relative;
+  margin: 0 auto;
 }
 
-@media (max-width: 768px) {
+@media (min-width: 480px) {
   .hero {
     padding: 4rem 1rem 3rem;
   }
+}
+
+@media (min-width: 768px) {
+  .hero {
+    padding: 5rem 1rem 4rem;
+  }
 
   .containerWithMedia {
-    grid-template-columns: minmax(0, 1fr);
-    text-align: center;
+    grid-template-columns: minmax(0, 1fr) auto;
+    text-align: left;
   }
 
   .media {
-    margin: 0 auto;
+    margin: 0;
   }
 
   .title {
-    font-size: 2.5rem;
+    font-size: clamp(2.5rem, 5vw, 4rem);
   }
 
   .subtitle {
-    font-size: 1.1rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .hero {
-    padding: 3rem 1rem 2rem;
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
   }
 }
