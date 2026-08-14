@@ -16,7 +16,6 @@
 
 .captured-image {
   width: 100%;
-  max-width: 480px;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin-bottom: 1rem;
@@ -149,9 +148,9 @@
 }
 
 /* ---------- Responsive ---------- */
-@media (max-width: 768px) {
+@media (min-width: 768px) {
   .captured-image {
-    max-width: 100%;
+    max-width: 480px;
   }
 }
 

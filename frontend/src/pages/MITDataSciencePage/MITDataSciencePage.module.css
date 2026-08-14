@@ -48,13 +48,15 @@
 /* ---------- Input options ---------- */
 .input-options {
   display: flex;
-  gap: 2rem;
+  flex-direction: column;
+  gap: 1rem;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
 }
 
 .capture-button {
+  width: 200px;
   padding: 1rem 2rem;
   font-size: 1.1rem;
   border: none;
@@ -133,14 +135,14 @@
 }
 
 /* ---------- Responsive ---------- */
-@media (max-width: 768px) {
+@media (min-width: 768px) {
   .input-options {
-    flex-direction: column;
-    gap: 1rem;
+    flex-direction: row;
+    gap: 2rem;
   }
 
   .capture-button {
-    width: 200px;
+    width: auto;
   }
 }
 
