@@ -28,11 +28,6 @@
   margin: 0.5rem;
 }
 
-.capture-button:focus-visible {
-  outline: 3px solid var(--color-primary);
-  outline-offset: 2px;
-}
-
 .capture-button.primary {
   background: var(--color-primary);
   color: #fff;

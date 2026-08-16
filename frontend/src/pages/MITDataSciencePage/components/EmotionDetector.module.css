@@ -110,11 +110,6 @@
   transition: var(--transition);
 }
 
-.analyze-button:focus-visible {
-  outline: 3px solid var(--color-primary);
-  outline-offset: 2px;
-}
-
 .analyze-button.primary {
   background: var(--mit-color-success);
   color: #fff;

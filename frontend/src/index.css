@@ -126,6 +126,18 @@ a {
   text-decoration: none;
 }
 
+/* ==========================================
+   FOCUS RING
+   One definition for the whole app. Components should not redeclare it;
+   override only where an element needs a different offset or needs to
+   suppress the ring in favour of its own indicator (see ContactForm's
+   text inputs, which use a border colour instead).
+   ========================================== */
+:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
 /* Display headings get the serif */
 h1, h2, h3 {
   font-family: var(--font-display);

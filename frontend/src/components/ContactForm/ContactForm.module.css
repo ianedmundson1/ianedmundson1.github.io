@@ -36,11 +36,6 @@
   color: var(--color-text-primary);
 }
 
-.closeButton:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
-}
-
 .title {
   font-family: var(--font-display);
   font-size: 1.5rem;
@@ -114,11 +109,6 @@
 .submitButton:disabled {
   opacity: 0.55;
   cursor: not-allowed;
-}
-
-.submitButton:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
 }
 
 .success {

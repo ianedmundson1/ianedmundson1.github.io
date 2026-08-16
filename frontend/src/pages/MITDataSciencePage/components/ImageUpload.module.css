@@ -98,11 +98,6 @@
   transition: var(--transition);
 }
 
-.upload-button:focus-visible {
-  outline: 3px solid var(--color-primary);
-  outline-offset: 2px;
-}
-
 .upload-button.primary {
   background: var(--mit-color-success);
   color: #fff;

@@ -46,11 +46,6 @@
   transition: all 0.2s ease;
 }
 
-.connect-link:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
-}
-
 .connect-icon {
   display: inline-flex;
   align-items: center;
