@@ -36,6 +36,7 @@
   border-radius: var(--border-radius);
   font-weight: 500;
   transition: var(--transition);
+  width: fit-content;
 }
 
 .project-link:hover {
@@ -101,16 +102,32 @@
   max-width: 720px;
 }
 
+/* Results table. Below 640px each row stacks into a labelled card; from
+   640px up the min-width block below restores real table display. */
 .results-table-wrapper {
-  overflow-x: auto;
+  overflow-x: visible;
   margin-bottom: 1.5rem;
 }
 
 .results-table {
+  display: block;
   width: 100%;
   border-collapse: collapse;
   font-size: 0.95rem;
   color: var(--color-text-primary);
+}
+
+/* Column headers are redundant once rows stack, but stay in the
+   accessibility tree rather than being display: none. */
+.results-table thead {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
 }
 
 .results-table thead th {
@@ -120,17 +137,38 @@
   border-bottom: 2px solid var(--color-border, rgba(0, 0, 0, 0.15));
 }
 
+.results-table tbody,
+.results-table tr,
+.results-table th,
+.results-table td {
+  display: block;
+  width: 100%;
+}
+
+.results-table tr {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--color-border, rgba(0, 0, 0, 0.08));
+}
+
+.results-table tr:last-child {
+  border-bottom: none;
+}
+
 .results-table tbody th {
   text-align: left;
   font-weight: 500;
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid var(--color-border, rgba(0, 0, 0, 0.08));
-  white-space: nowrap;
+  padding: 0 0 0.25rem;
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: none;
+  white-space: normal;
 }
 
 .results-table tbody td {
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid var(--color-border, rgba(0, 0, 0, 0.08));
+  padding: 0.25rem 0;
+  border-bottom: none;
   color: var(--color-text-secondary);
   line-height: 1.5;
 }
@@ -140,6 +178,8 @@
   font-weight: 600;
   color: var(--color-primary) !important;
   white-space: nowrap;
+  font-size: 1.6rem;
+  padding: 0.1rem 0 0.4rem !important;
 }
 
 .results-takeaway {
@@ -149,58 +189,61 @@
   line-height: 1.7;
 }
 
-@media (max-width: 640px) {
+@media (min-width: 640px) {
   .results-table-wrapper {
-    overflow-x: visible;
+    overflow-x: auto;
+  }
+
+  .results-table {
+    display: table;
   }
 
   .results-table thead {
-    border: 0;
-    clip: rect(0 0 0 0);
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    padding: 0;
-    position: absolute;
-    width: 1px;
+    display: table-header-group;
+    clip: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    position: static;
+    width: auto;
   }
 
-  .results-table,
-  .results-table tbody,
-  .results-table tr,
-  .results-table th,
-  .results-table td {
-    display: block;
-    width: 100%;
+  .results-table tbody {
+    display: table-row-group;
+    width: auto;
   }
 
   .results-table tr {
-    padding: 1rem 0;
-    border-bottom: 1px solid var(--color-border, rgba(0, 0, 0, 0.08));
+    display: table-row;
+    width: auto;
+    padding: 0;
+    border-bottom: none;
   }
 
-  .results-table tr:last-child {
-    border-bottom: none;
+  .results-table th,
+  .results-table td {
+    display: table-cell;
+    width: auto;
   }
 
   .results-table tbody th {
-    padding: 0 0 0.25rem;
-    font-size: 0.8rem;
-    color: var(--color-text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    border-bottom: none;
-    white-space: normal;
+    padding: 0.75rem 1rem;
+    font-size: inherit;
+    color: inherit;
+    text-transform: none;
+    letter-spacing: normal;
+    border-bottom: 1px solid var(--color-border, rgba(0, 0, 0, 0.08));
+    white-space: nowrap;
   }
 
   .results-table tbody td {
-    padding: 0.25rem 0;
-    border-bottom: none;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--color-border, rgba(0, 0, 0, 0.08));
   }
 
   .score-cell {
-    font-size: 1.6rem;
-    padding: 0.1rem 0 0.4rem !important;
+    font-size: inherit;
+    padding: 0.75rem 1rem !important;
   }
 }
 
