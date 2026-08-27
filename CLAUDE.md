@@ -52,13 +52,27 @@ A successful run of the quality gates is not the same as the change being correc
 
 ### Deployment target
 
-The Docker fullstack image is the production target: FastAPI serves the React bundle as static files plus the `/api/*` routes. The Dockerfile, `docker-compose.dev.yml`, and `app.yaml` all build this image.
+Production is the Docker fullstack image running on Fly.io: FastAPI serves the React bundle as static files plus the `/api/*` routes. App `ianedmundson` at `ianedmundson.fly.dev`, configured in `fly.toml`. The Dockerfile, `docker-compose.dev.yml`, and `app.yaml` all build the same image.
 
-A GitHub Pages deploy (`.github/workflows/ci.yml` `deploy` job, frontend only, built to `frontend/dist/`) still exists as a legacy artifact while the cutover is in progress. Treat it as a stopgap, not a constraint on new work: design features for the fullstack target, don't add Pages-only fallbacks, and don't gate features behind `VITE_ENABLE_*` flags purely to keep Pages green. Flags are still appropriate as kill switches for unfinished or paused features (see Environments below).
+The GitHub Pages deploy is gone. `.github/workflows/ci.yml` no longer has a `deploy` job; the `build` job still runs `npx vite build --outDir dist` and uploads a `frontend-dist` artifact, which is a build check only and deploys nowhere. Design features for the fullstack target, don't add Pages-only fallbacks, and don't gate features behind `VITE_ENABLE_*` flags to keep a Pages build green. Flags are still appropriate as kill switches for unfinished or paused features (see Environments below).
+
+### Deploying to Fly
+
+Two paths, same image:
+
+- **CI:** push to `main`. The `deploy-fly` job runs after `build` and `test`, and needs the `FLY_API_TOKEN` and `VITE_SENTRY_DSN` repo secrets.
+- **Local:** `fly deploy --remote-only --build-arg VITE_SENTRY_DSN=<dsn>`. Builds from the working tree, not from git, so uncommitted edits ship. `.dockerignore`, not `.gitignore`, decides what enters the build context.
+
+Two things that have already caused an outage here:
+
+- **All backend config comes from `fly secrets`.** The image sets `APP_ENV=production`, so `backend/main.py` looks for `backend/.env.production`, and `.dockerignore` deliberately keeps that file out of the image. A value that isn't a Fly secret is simply absent in prod.
+- **`VITE_SENTRY_DSN` is a build `ARG`, not a secret.** It is baked into the JS bundle at build time, so it must be passed with `--build-arg`. Setting it via `fly secrets` does nothing.
+
+`/api/health` returns static JSON and never touches Databricks, so the `fly.toml` health check passes even when the warehouse config is broken. Verify a real route (`/api/analytics/seattle-fire-911/metadata`) after deploying, not just health.
 
 ### Build output crosses the frontend/backend boundary
 
-`frontend/vite.config.ts` sets `build.outDir` to `../backend/static/`. That means `npm run build` (run from repo root or `frontend/`) overwrites `backend/static/`, which is what the Docker image serves. The legacy Pages CI job overrides this with `--outDir dist` on the CLI.
+`frontend/vite.config.ts` sets `build.outDir` to `../backend/static/`. That means `npm run build` (run from repo root or `frontend/`) overwrites `backend/static/`, which is what the Docker image serves. The CI `build` job overrides this with `--outDir dist` on the CLI so its artifact upload doesn't collide with the served directory.
 
 The SPA static-file fallback lives in `backend/main.py` and has its own gotcha. See `backend/CLAUDE.md`.
 
@@ -81,7 +95,7 @@ Frontend and backend each have independent `development`, `test`, and `productio
 
 - `vite` (dev server) → `MODE=development`, loads `frontend/.env.development`.
 - `vitest` / `vite --mode test` → `MODE=test`, loads `frontend/.env.test`.
-- `vite build` → `MODE=production`, loads `frontend/.env.production`. Used by the Docker build stage (and the legacy Pages CI job, until it's retired).
+- `vite build` → `MODE=production`, loads `frontend/.env.production`. Used by the Docker build stage and by the CI `build` job.
 - The committed `.env.{mode}` files hold safe defaults (no secrets). Use `frontend/.env.{mode}.local` (gitignored) for local secrets and overrides.
 
 **Backend** uses `APP_ENV` (default `development`). `backend/main.py` calls `load_dotenv(backend/.env.{APP_ENV})` at startup with `override=False`, so values already in the process environment (Docker `ENV`, CI workflow `env:`, shell exports) always win over the file.
@@ -90,7 +104,7 @@ Frontend and backend each have independent `development`, `test`, and `productio
 - The CI test job sets `APP_ENV=test`.
 - The Dockerfile sets `APP_ENV=production` at runtime.
 
-**Feature flags are orthogonal to env.** `VITE_ENABLE_EMOTION_DEMO` gates the emotion-detection UI on the MIT page as a kill switch. Defaults to `false` in every committed `.env.{mode}`; the Dockerfile sets it to `true` in the build stage when the demo is live. Use this pattern for paused or unfinished features, not as a Pages-vs-fullstack switch.
+**Feature flags are orthogonal to env.** `VITE_ENABLE_EMOTION_DEMO` gates the emotion-detection UI on the MIT page as a kill switch. Defaults to `false` in every committed `.env.{mode}`; the Dockerfile sets it to `true` in the build stage when the demo is live. Use this pattern for paused or unfinished features, not as a deploy-target switch.
 
 ## Conventions
 
