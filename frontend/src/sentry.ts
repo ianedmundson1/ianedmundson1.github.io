@@ -12,12 +12,9 @@ export const initSentryDeferred = () => {
       Sentry.init({
         dsn,
         integrations: [
-          Sentry.browserTracingIntegration(),
-          Sentry.replayIntegration(),
+          Sentry.browserTracingIntegration()
         ],
         tracesSampleRate: 0.1,
-        replaysSessionSampleRate: 0.0,
-        replaysOnErrorSampleRate: 1.0,
       });
     });
 
