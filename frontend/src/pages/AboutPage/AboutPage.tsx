@@ -141,7 +141,6 @@ const AboutPage = () => {
             <div className={styles.awardsGrid}>
               {AWARDS.map((award) => (
                 <article key={award.title} className={styles.awardCard}>
-                  <div className={styles.awardIcon} aria-hidden="true">{'🏆'}</div>
                   <h3>
                     {award.title}{' '}
                     <span className={styles.awardYear}>{award.year}</span>
