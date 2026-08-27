@@ -44,9 +44,21 @@ logger = logging.getLogger(__name__)
 
 app = FastAPI(title="Simple FastAPI + React App")
 
+TRUSTED_CLIENT_IP_HEADER = os.environ.get("TRUSTED_CLIENT_IP_HEADER", "")
+
+# Which header carries the real client IP depends entirely on what sits in
+# front of this process. Getting it wrong breaks in both directions: trust a
+# header that no proxy overwrites and a client can forge a fresh bucket per
+# request; trust nothing and every visitor collapses into one shared bucket.
+def client_ip(request: Request) -> str:
+    if TRUSTED_CLIENT_IP_HEADER:
+        forwarded = request.headers.get(TRUSTED_CLIENT_IP_HEADER)
+        if forwarded:
+            return forwarded
+    return get_remote_address(request)
 # Rate limiter protects the paid Databricks endpoint from abuse. The default
 # limit applies globally; per-route decorators tighten further (see emotion).
-limiter = Limiter(key_func=get_remote_address, default_limits=["60/minute"])
+limiter = Limiter(key_func=client_ip, default_limits=["60/minute"])
 app.state.limiter = limiter
 app.add_middleware(SlowAPIMiddleware)
 
@@ -125,6 +137,7 @@ async def hello():
 
 
 @app.get("/api/health")
+@limiter.exempt
 async def health_check():
     return {"status": "healthy"}
 
