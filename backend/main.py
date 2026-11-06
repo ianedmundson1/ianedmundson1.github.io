@@ -5,7 +5,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 from dotenv import load_dotenv
-from PIL import Image
+from PIL import Image, ImageOps
 from fastapi import FastAPI, HTTPException, Request, UploadFile, File 
 from fastapi.responses import FileResponse
 from databricks.sdk import WorkspaceClient
@@ -18,6 +18,7 @@ from slowapi.middleware import SlowAPIMiddleware
 from fastapi.responses import JSONResponse
 import sentry_sdk
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig, MessageType
+import cv2
 
 from backend.analytics.router import router as analytics_router
 
@@ -130,6 +131,20 @@ def normalize_prediction(raw: dict) -> dict:
     return {"label": label, "confidencePercent": confidence_percent}
 
 
+_face_cascade = cv2.CascadeClassifier(
+    cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
+)
+
+def crop_face(gray: np.ndarray) -> np.ndarray | None:
+    faces = _face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(60, 60))
+    if len(faces) == 0:
+        return None
+    x, y, w, h = max(faces, key=lambda f: f[2] * f[3])  # largest face
+    pad = int(0.15 * w)  # a little margin, FER crops include some forehead/chin
+    x0, y0 = max(x - pad, 0), max(y - pad, 0)
+    x1, y1 = min(x + w + pad, gray.shape[1]), min(y + h + pad, gray.shape[0])
+    return gray[y0:y1, x0:x1]
+
 @app.get("/api/hello")
 async def hello():
     logger.info("Accessed /api/hello")
@@ -178,16 +193,22 @@ async def post_emotion_classification(request: Request, file: UploadFile = File(
             raise HTTPException(status_code=413, detail="File exceeds 10 MB limit")
 
         image = Image.open(io.BytesIO(contents))
+        image = ImageOps.exif_transpose(image)        # phone uploads are often rotated
+        gray = np.array(image.convert("L"))
+        
+        face = crop_face(gray)
+        if face is None:
+            raise HTTPException(status_code=422, detail="No face detected, try facing the camera with good lighting")
 
+        face = cv2.equalizeHist(face)                  # optional: evens out lighting
         # Resize to 48x48 (FER2013 input size).
-        target_size = (48, 48)
-        image = image.resize(target_size)
-        image = image.convert('RGB')
-
+        face = cv2.resize(face, (48, 48), interpolation=cv2.INTER_AREA)
+        
         # The Databricks emotion model expects raw 0-255 float pixel values
         # and performs any needed scaling internally, so do NOT normalize here.
-        img_array = np.array(image).astype(np.float32)
+        img_array = np.stack([face] * 3, axis=-1).astype(np.float32)  # (48, 48, 3), still raw 0-255
         input_data = np.expand_dims(img_array, axis=0)
+
 
         logger.info(f"Calling Databricks model with shape: {input_data.shape}")
         result = score_model(input_data)
