@@ -5,10 +5,9 @@ warehouse only touches this module. ANSI where possible; date/time
 functions are the main thing that varies between dialects, so prefer
 EXTRACT(... FROM CAST(col AS TIMESTAMP)) over vendor-specific helpers.
 
-The Seattle Fire 911 calls table is in the bronze layer with all columns
-typed as strings; cast `datetime` to TIMESTAMP before extracting parts.
-Datetime values are ISO 8601 with millisecond precision (e.g.
-"2026-03-09T08:42:00.000") which CAST handles natively.
+The Seattle Fire 911 calls table is in the bronze layer with typed columns:
+`datetime` is TIMESTAMP and `latitude`/`longitude` are DOUBLE. `type` and
+`address` are nullable.
 
 Identifiers (table names) cannot be parameterized through the driver, so
 they are interpolated from trusted env vars at query-build time. Values
@@ -31,7 +30,8 @@ def fire_911_recent_calls(table: str, limit: int = 10) -> str:
             latitude,
             longitude
         FROM {table}
-        ORDER BY CAST(datetime AS TIMESTAMP) DESC
+        WHERE datetime IS NOT NULL
+        ORDER BY datetime DESC
         LIMIT {limit}
     """
 
@@ -39,16 +39,15 @@ def fire_911_recent_calls(table: str, limit: int = 10) -> str:
 def fire_911_last_24h_by_category(table: str) -> str:
     return f"""
         WITH latest AS (
-            SELECT MAX(CAST(datetime AS TIMESTAMP)) AS window_end
+            SELECT MAX(datetime) AS window_end
             FROM {table}
-            WHERE datetime IS NOT NULL
         )
         SELECT
-            t.type AS type,
+            COALESCE(t.type, 'Unknown') AS type,
             COUNT(*) AS count,
             CAST((SELECT window_end FROM latest) AS STRING) AS window_end
         FROM {table} t
-        WHERE CAST(t.datetime AS TIMESTAMP) >= ((SELECT window_end FROM latest) - INTERVAL '24' HOUR)
-        GROUP BY t.type
+        WHERE t.datetime >= ((SELECT window_end FROM latest) - INTERVAL '24' HOUR)
+        GROUP BY COALESCE(t.type, 'Unknown')
         ORDER BY count DESC
     """

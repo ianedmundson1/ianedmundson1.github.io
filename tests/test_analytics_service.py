@@ -4,6 +4,7 @@ import pytest
 
 from backend.analytics import service
 
+import datetime as dt
 
 class FakeDataSource:
     def __init__(self, rows: list[dict[str, Any]]):
@@ -66,11 +67,11 @@ def test_fire_911_metadata_interpolates_table_into_sql(_table_env):
 
 RECENT_CALL_ROW = {
     "incident_number": "F26000001",
-    "datetime": "2026-05-20T14:30:00.000",
+    "datetime": dt.datetime(2026, 5, 20, 14, 30),
     "type": "Aid Response",
     "address": "100 Pike St",
-    "latitude": "47.6097",
-    "longitude": "-122.3331",
+    "latitude": 47.6097,
+    "longitude": -122.3331,
 }
 
 
@@ -82,7 +83,7 @@ def test_recent_calls_returns_typed_results(_table_env):
     assert len(result.calls) == 2
     assert result.calls[0].incidentNumber == "F26000001"
     assert result.calls[0].type == "Aid Response"
-    assert result.calls[0].latitude == "47.6097"
+    assert result.calls[0].latitude == 47.6097
     assert result.calls[1].latitude is None
     assert result.fetchedAt
 

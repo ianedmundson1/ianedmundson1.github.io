@@ -110,7 +110,9 @@ const SeattleFire911Page: React.FC = () => {
                       <p className={styles.callType}>{call.type}</p>
                       <p className={styles.callAddress}>{call.address}</p>
                       <p className={styles.callMeta}>
-                        <time dateTime={call.datetime}>{formatDateTime(call.datetime)}</time>
+                        {call.datetime
+                          ? <time dateTime={call.datetime}>{formatDateTime(call.datetime)}</time>
+                          : <span>Time unknown</span>}
                         <span className={styles.callIncident}>#{call.incidentNumber}</span>
                       </p>
                     </article>

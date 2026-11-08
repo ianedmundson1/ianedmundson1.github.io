@@ -5,7 +5,7 @@ Models live here so they can be reused without circular imports.
 """
 
 from __future__ import annotations
-
+import datetime as dt
 from pydantic import BaseModel
 
 class SeattleFire911MetadataResponse(BaseModel):
@@ -15,11 +15,11 @@ class SeattleFire911MetadataResponse(BaseModel):
 
 class Fire911RecentCall(BaseModel):
     incidentNumber: str
-    datetime: str
+    datetime: dt.datetime | str
     type: str
     address: str
-    latitude: str | None
-    longitude: str | None
+    latitude: float | None
+    longitude: float | None
     
 class Fire911RecentCallsResponse(BaseModel):
     table: str

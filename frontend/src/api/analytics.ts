@@ -9,11 +9,11 @@ export interface Fire911Metadata {
 
 export interface Fire911RecentCall {
   incidentNumber: string;
-  datetime: string;
-  type: string;
-  address: string;
-  latitude: string | null;
-  longitude: string | null;
+  datetime: string | null;
+  type: string | null;
+  address: string | null;
+  latitude: number | null;
+  longitude: number | null;
 }
 
 export interface Fire911RecentCallsResponse {
