@@ -2,11 +2,9 @@
 
 Loaded when working under `backend/`. Root context is in the top-level `CLAUDE.md`.
 
-## Databricks emotion model, preprocessing gotcha
+## Emotion classification
 
-`backend/main.py` `post_emotion_classification` resizes uploads to 48x48 RGB and passes **raw 0–255 float pixel values** to the model. Do not add `/ 255.0` normalization — the Databricks `emotional-identifier` endpoint does its own scaling internally. There's a comment at the call site reinforcing this; it has been wrong before.
-
-`normalize_prediction` is defensive on purpose: the upstream response shape has shifted between `predictions` / `outputs`, and label/score key names vary (`label` / `emotion` / `prediction`, `score` / `confidence` / `probability`). Keep the fallbacks when extending.
+Lives in `backend/emotion/`; its input-format and decoding gotchas are in `backend/emotion/CLAUDE.md`.
 
 ## Static file serving and SPA fallback
 
