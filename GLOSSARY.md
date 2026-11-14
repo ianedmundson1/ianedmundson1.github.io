@@ -21,3 +21,13 @@ _Avoid_: scorer, endpoint, classifier
 **Confidence**:
 How sure the classifier is of the emotion label, expressed as a whole percent.
 _Avoid_: score, probability
+
+### Seattle Fire 911 analytics
+
+**Fire 911 call**:
+One dispatch record from the Seattle Fire Department real-time 911 dataset: an incident number, a time, a call type, an address and a location.
+_Avoid_: incident (the incident number identifies a call, it is not the call), event, row
+
+**Call type**:
+The kind of response a Fire 911 call was dispatched as, for example "Aid Response". Stored in the `type` column; missing values are reported as "Unknown".
+_Avoid_: category (the `last-24h-by-category` URL predates this term and is kept for the frontend)
