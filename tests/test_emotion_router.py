@@ -87,3 +87,25 @@ def test_bytes_that_are_not_an_image_return_400():
     assert response.status_code == 400
     assert "image" in response.json()["detail"].lower()
 
+
+def test_image_cut_off_partway_through_upload_returns_400():
+    # A truncated PNG passes Image.open (the header is intact) and only
+    # fails when the pixel data is decoded.
+    whole = png_bytes()
+    client = _client(FakeEmotionModel(), FakeFaceDetector(ONE_FACE))
+
+    response = _upload(client, whole[: len(whole) // 2])
+
+    assert response.status_code == 400
+
+
+def test_no_face_detected_returns_422():
+    model = FakeEmotionModel()
+    client = _client(model, FakeFaceDetector([]))
+
+    response = _upload(client, png_bytes())
+
+    assert response.status_code == 422
+    assert "face" in response.json()["detail"].lower()
+    assert model.received_batch is None  # the emotion model was never called
+

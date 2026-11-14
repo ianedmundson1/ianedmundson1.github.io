@@ -13,7 +13,8 @@ def normalize_prediction(raw: dict) -> dict:
     if not isinstance(record, dict):
         record = {}
 
-    label = record.get("label") or record.get("emotion") or record.get("prediction") or "Unknown"
+    # str(): some model versions return a class index, not a name.
+    label = str(record.get("label") or record.get("emotion") or record.get("prediction") or "Unknown")
 
     score = record.get("score")
     if score is None:
@@ -46,8 +47,10 @@ class DatabricksEmotionModel:
     def predict(self,batch:np.ndarray) -> EmotionClassificationResponse: 
         try:
             client = self._get_client()
-        except KeyError as exc:
-            raise EmotionModelUnavailable(f"Missing Databricks setting: {exc}") from exc
+        # KeyError: env var absent. ValueError: set but blank (WorkspaceClient
+        # rejects empty host/token), e.g. an empty Fly secret.
+        except (KeyError, ValueError) as exc:
+            raise EmotionModelUnavailable(f"Databricks client not configured: {exc}") from exc
         
         try: 
             result = client.serving_endpoints.query(

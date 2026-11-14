@@ -27,12 +27,14 @@ def classify_emotion(contents: bytes, model: EmotionModel, detector: FaceDetecto
     return model.predict(_prepare_batch(face))
 
 def _decode_grayscale(contents: bytes) -> np.ndarray:
+    # Image.open only reads the header; a file cut off mid-upload fails later,
+    # during decoding, with OSError. Both mean the visitor sent a bad file.
     try:
         image = Image.open(io.BytesIO(contents))
-    except UnidentifiedImageError as exc:
-        raise UnreadableImage() from exc    
-    image = ImageOps.exif_transpose(image)  # phone uploads are often rotated
-    return np.array(image.convert("L"))
+        image = ImageOps.exif_transpose(image)  # phone uploads are often rotated
+        return np.array(image.convert("L"))
+    except (UnidentifiedImageError, OSError) as exc:
+        raise UnreadableImage() from exc
 
 def _crop_face(gray: np.ndarray, boxes: list[Box]) -> np.ndarray | None:
     
