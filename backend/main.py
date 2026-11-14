@@ -1,18 +1,16 @@
+from dotenv import load_dotenv
 import os
 import logging
 import io
 from pathlib import Path
 import numpy as np
-from dotenv import load_dotenv
 from PIL import Image, ImageOps, UnidentifiedImageError
 from fastapi import Depends, FastAPI, HTTPException, Request, UploadFile, File 
 from fastapi.responses import FileResponse
 from databricks.sdk import WorkspaceClient
 from pydantic import EmailStr, NameEmail, SecretStr, BaseModel
 from typing import Protocol
-from slowapi import Limiter
 from slowapi.errors import RateLimitExceeded
-from slowapi.util import get_remote_address
 from slowapi.middleware import SlowAPIMiddleware
 from fastapi.responses import JSONResponse
 import sentry_sdk
@@ -29,6 +27,13 @@ APP_ENV = os.environ.get("APP_ENV", "development")
 _env_file = Path(__file__).parent / f".env.{APP_ENV}"
 if _env_file.is_file():
     load_dotenv(_env_file, override=False)
+    
+# Imported after load_dotenv: ratelimit reads TRUSTED_CLIENT_IP_HEADER at import time.
+from backend.ratelimit import limiter
+from backend.emotion.databricks import DatabricksEmotionModel, normalize_prediction
+from backend.emotion.face_detector import Box, FaceDetector, OpenCvFaceDetector
+from backend.emotion.model import EmotionModel, EmotionModelCallFailed, EmotionModelUnavailable
+from backend.emotion.schemas import EmotionClassificationResponse
 
 sentry_sdk.init(
     dsn=os.environ.get("SENTRY_DSN", ""),
@@ -44,21 +49,7 @@ logger = logging.getLogger(__name__)
 
 app = FastAPI(title="Simple FastAPI + React App")
 
-TRUSTED_CLIENT_IP_HEADER = os.environ.get("TRUSTED_CLIENT_IP_HEADER", "")
 
-# Which header carries the real client IP depends entirely on what sits in
-# front of this process. Getting it wrong breaks in both directions: trust a
-# header that no proxy overwrites and a client can forge a fresh bucket per
-# request; trust nothing and every visitor collapses into one shared bucket.
-def client_ip(request: Request) -> str:
-    if TRUSTED_CLIENT_IP_HEADER:
-        forwarded = request.headers.get(TRUSTED_CLIENT_IP_HEADER)
-        if forwarded:
-            return forwarded
-    return get_remote_address(request)
-# Rate limiter protects the paid Databricks endpoint from abuse. The default
-# limit applies globally; per-route decorators tighten further (see emotion).
-limiter = Limiter(key_func=client_ip, default_limits=["60/minute"])
 app.state.limiter = limiter
 app.add_middleware(SlowAPIMiddleware)
 
@@ -71,89 +62,6 @@ async def _rate_limit_handler(_request: Request, exc: RateLimitExceeded):
 
 ALLOWED_IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp", "image/jpg"}
 MAX_UPLOAD_BYTES = 10 * 1024 * 1024  # 10 MB
-_CASCADE_PATH = cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
-
-
-class EmotionClassificationResponse(BaseModel):
-    label: str
-    confidencePercent: int
-    
-class EmotionModel(Protocol):
-    def predict(self, batch:np.ndarray) -> EmotionClassificationResponse: ...
-        
-
-class EmotionModelUnavailable(Exception):...
-    
-class EmotionModelCallFailed(Exception): ...
-    
-class DatabricksEmotionModel:
-    ENDPOINT_NAME = "emotional-identifier"
-    
-    def __init__(self, client_factory: Callable[[],WorkspaceClient]) -> None:
-        self._client_factory = client_factory
-        self._client: WorkspaceClient | None = None
-    
-    def _get_client(self) -> WorkspaceClient:
-        if self._client is None:
-            self._client = self._client_factory()
-        return self._client
-    
-    def predict(self,batch:np.ndarray) -> EmotionClassificationResponse: 
-        try:
-            client = self._get_client()
-        except KeyError as exc:
-            raise EmotionModelUnavailable(f"Missing Databricks setting: {exc}") from exc
-        
-        try: 
-            result = client.serving_endpoints.query(
-                name=self.ENDPOINT_NAME, inputs=batch.tolist()
-            )
-        except Exception as exc:
-            raise EmotionModelCallFailed("Emotion model call failed") from exc
-        
-        return EmotionClassificationResponse(**normalize_prediction(result.as_dict()))
-
-Box = tuple[int, int, int, int]
-
-class FaceDetector(Protocol):
-    def detect(self, gray: np.ndarray) -> list[Box]: ...
-    
-class OpenCvFaceDetector:
-    
-    def __init__(self, cascade_path: str = _CASCADE_PATH) -> None:
-        self._cascade = cv2.CascadeClassifier(cascade_path)
-        if self._cascade.empty():
-            raise RuntimeError(f"Face cascade failed to load from {cascade_path}")
-                
-    def detect(self,gray:np.ndarray) -> list[Box]:
-        faces = self._cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(60, 60))
-        return [tuple(int(v) for v in f) for f in faces]
-
-
-def normalize_prediction(raw: dict) -> dict:
-    payload = raw.get("predictions", raw.get("outputs", raw))
-    record = payload[0] if isinstance(payload, list) and payload else payload
-    if not isinstance(record, dict):
-        record = {}
-
-    label = record.get("label") or record.get("emotion") or record.get("prediction") or "Unknown"
-
-    score = record.get("score")
-    if score is None:
-        score = record.get("confidence")
-    if score is None:
-        score = record.get("probability")
-    if score is None:
-        score = 0
-
-    try:
-        score = float(score)
-    except (TypeError, ValueError):
-        score = 0.0
-
-    confidence_percent = round(score * 100) if score <= 1 else round(score)
-    return {"label": label, "confidencePercent": confidence_percent}
-
 
 def crop_face(gray: np.ndarray, boxes: list[Box]) -> np.ndarray | None:
     
