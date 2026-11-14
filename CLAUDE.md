@@ -4,7 +4,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Subdirectories with their own conventions have their own `CLAUDE.md`:
 
-- `backend/CLAUDE.md` — Databricks model gotcha, SPA static-file fallback, response model and schemas convention, backend test layout
+- `backend/CLAUDE.md` — SPA static-file fallback, response model and schemas convention, backend test layout
+- `backend/emotion/CLAUDE.md` — emotion model input format (never divide by 255), defensive response decoding, status codes
 
 ## Commands
 
@@ -125,3 +126,17 @@ Frontend and backend each have independent `development`, `test`, and `productio
 1. Add the FastAPI route under `/api/*` in a feature module (`backend/<feature>/router.py`). Define request/response Pydantic models in `backend/<feature>/schemas.py` and have the service layer return typed models so FastAPI infers the response shape from the return annotation. See `backend/CLAUDE.md` for the full convention.
 2. Wire the UI to the relative `/api/*` path via `frontend/src/api/`. The Vite proxy handles dev, the SPA fallback handles prod.
 3. If the feature isn't ready or you want a kill switch, add a `VITE_ENABLE_<NAME>` flag (default `false` in `.env.{mode}`, set `true` in the Dockerfile build stage when shipping it on). Otherwise no flag is needed: the fullstack image always has the backend present.
+
+## Agent skills
+
+### Issue tracker
+
+Issues are tracked in GitHub Issues for `ianedmundson1/ianedmundson1.github.io` via the `gh` CLI. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Default label names, except that `ready-for-agent` is not used: this is a practice repo where the owner implements everything, so agent-ready work maps to `ready-for-human`. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: `GLOSSARY.md` and `docs/adr/` at the repo root. See `docs/agents/domain.md`.
