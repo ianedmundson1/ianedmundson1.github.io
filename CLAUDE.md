@@ -18,7 +18,7 @@ npm install                      # frontend + dev tooling
 
 # Dev (run in two terminals)
 # Terminal 1 — backend
-.venv/bin/uvicorn backend.main:app --reload --port 8000
+uv run uvicorn backend.main:app --reload --port 8000
 # Terminal 2 — frontend
 npm run dev                      # Vite on :5173, proxies /api → :8000
 
@@ -31,8 +31,8 @@ npm run typecheck                # tsc --noEmit
 npm test                         # vitest (frontend unit)
 npm run test:watch
 npm run test:e2e                 # playwright (boots Vite via webServer config)
-.venv/bin/pytest tests/ -v       # backend
-.venv/bin/pytest tests/test_main.py::test_name -v   # single test
+uv run pytest tests/ -v
+uv run pytest tests/test_main.py::test_name -v
 
 # Container
 docker compose -f docker-compose.dev.yml up --build
@@ -43,7 +43,7 @@ The pre-commit hook runs `lint-staged` (eslint --fix on staged TS/TSX) and `type
 ## Verification before declaring done
 
 - **Frontend changes:** `npm run typecheck && npm run lint`. If logic changed, the relevant vitest file too.
-- **Backend changes:** `.venv/bin/pytest tests/` for the affected module, not only the edited file's tests.
+- **Backend changes:** `uv run pytest tests/` for the affected module, not only the edited file's tests.
 - **Plotly changes:** verify the lazy boundary in `frontend/src/components/PlotlyEmbed/PlotlyEmbed.tsx` is intact, no Plotly imports leak outside that file, and the PWA cache rules in `vite.config.ts` still isolate the plotly bundle.
 - **Build-affecting changes** (anything touching `/api/*` consumers, env flags, the SPA fallback, or `vite.config.ts`): `npm run build` and confirm `backend/static/` updated cleanly.
 
@@ -131,7 +131,8 @@ Frontend and backend each have independent `development`, `test`, and `productio
 
 ### Issue tracker
 
-Issues are tracked in GitHub Issues for `ianedmundson1/ianedmundson1.github.io` via the `gh` CLI. See `docs/agents/issue-tracker.md`.
+Issues live in GitHub Issues for `ianedmundson1/ianedmundson1.github.io`. Read `docs/agents/issue-tracker.md` before any `gh` call: plain `gh issue view` fails on this repo (Projects classic deprecation), use the `--json` forms there.
+
 
 ### Triage labels
 
