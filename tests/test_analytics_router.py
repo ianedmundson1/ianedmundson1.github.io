@@ -15,6 +15,30 @@ class FakeDataSource:
     def execute(self, sql: str, params: Mapping[str, Any] | None = None) -> list[dict[str, Any]]:
         return self.rows
 
+@pytest.mark.parametrize(
+    "path",
+    [
+        "/api/analytics/seattle-fire-911/metadata",
+        "/api/analytics/seattle-fire-911/recent-calls",
+        "/api/analytics/seattle-fire-911/last-24h-by-category",
+    ],
+)
+def test_endpoints_return_503_when_warehouse_unconfigured(monkeypatch, path):
+    monkeypatch.delenv("DATABRICKS_HOST", raising=False)
+    monkeypatch.delenv("DATABRICKS_TOKEN", raising=False)
+    monkeypatch.delenv("DATABRICKS_HTTP_PATH", raising=False)
+    client = TestClient(app)
+
+    response = client.get(path)
+
+    assert response.status_code == 503
+    assert "DATABRICKS_HOST" in response.json()["detail"]
+
+
+def _client_with(rows: list[dict[str, Any]]) -> TestClient:
+    app.dependency_overrides[_datasource_dep] = lambda: FakeDataSource(rows)
+    return TestClient(app)
+
 
 @pytest.fixture(autouse=True)
 def _table_env(monkeypatch):
@@ -23,11 +47,6 @@ def _table_env(monkeypatch):
     yield
     service.clear_caches()
     app.dependency_overrides.clear()
-
-
-def _client_with(rows: list[dict[str, Any]]) -> TestClient:
-    app.dependency_overrides[_datasource_dep] = lambda: FakeDataSource(rows)
-    return TestClient(app)
 
 
 def test_metadata_endpoint_returns_row_count():

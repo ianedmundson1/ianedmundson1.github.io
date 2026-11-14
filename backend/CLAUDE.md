@@ -22,7 +22,7 @@ Tests assert via attribute access (`result.field`), not dict subscript. Pydantic
 
 ## Tests
 
-pytest, repo-root `tests/`, one `test_<module>.py` per backend module. Before declaring a backend change done, run `.venv/bin/pytest tests/` for the affected module — not just the test file you edited. Module-level runs catch fixture and import-order regressions that file-scoped runs miss.
+pytest, repo-root `tests/`, one `test_<module>.py` per backend module. Before declaring a backend change done, run `uv run pytest tests/` for the affected module, not just the test file you edited. Module-level runs catch fixture and import-order regressions that file-scoped runs miss.
 
 ## Environment loading
 
