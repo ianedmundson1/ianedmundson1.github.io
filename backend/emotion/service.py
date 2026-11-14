@@ -30,7 +30,7 @@ def _decode_grayscale(contents: bytes) -> np.ndarray:
     try:
         image = Image.open(io.BytesIO(contents))
     except UnidentifiedImageError as exc:
-        raise UnreadableImage() from exc                            # CHANGED: was HTTPException(400)
+        raise UnreadableImage() from exc    
     image = ImageOps.exif_transpose(image)  # phone uploads are often rotated
     return np.array(image.convert("L"))
 

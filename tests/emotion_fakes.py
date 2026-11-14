@@ -2,7 +2,7 @@ import io
 
 import numpy as np
 from PIL import Image, ImageDraw
-from backend.main import EmotionClassificationResponse
+from backend.emotion.schemas import EmotionClassificationResponse
 
 class FakeEmotionModel:
     

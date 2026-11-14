@@ -1,7 +1,10 @@
 import pytest
 from fastapi.testclient import TestClient
 import numpy as np
-from backend.main import app, limiter, _emotion_model_dep, _face_detector_dep, EmotionModelCallFailed, EmotionModelUnavailable
+from backend.emotion.model import EmotionModelCallFailed, EmotionModelUnavailable
+from backend.emotion.router import _emotion_model_dep, _face_detector_dep
+from backend.main import app
+from backend.ratelimit import limiter
 from tests.emotion_fakes import FakeEmotionModel, FakeFaceDetector, png_bytes, two_tone_png
 
 URL = "/api/emotion_classification"

@@ -3,8 +3,9 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 from fastapi.testclient import TestClient
-from backend.main import app, limiter, normalize_prediction
-
+from backend.main import app
+from backend.ratelimit import limiter
+from backend.emotion.databricks import normalize_prediction
 client = TestClient(app)
 
 

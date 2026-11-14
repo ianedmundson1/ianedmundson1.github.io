@@ -2,7 +2,7 @@ from types import SimpleNamespace
 
 import numpy as np
 
-from backend.main import DatabricksEmotionModel
+from backend.emotion.databricks import DatabricksEmotionModel
 
 
 class StubServingEndpoints:
