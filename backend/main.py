@@ -4,7 +4,7 @@ import io
 from pathlib import Path
 import numpy as np
 from dotenv import load_dotenv
-from PIL import Image, ImageOps
+from PIL import Image, ImageOps, UnidentifiedImageError
 from fastapi import Depends, FastAPI, HTTPException, Request, UploadFile, File 
 from fastapi.responses import FileResponse
 from databricks.sdk import WorkspaceClient
@@ -234,8 +234,12 @@ async def post_emotion_classification(request: Request,
         if len(contents) > MAX_UPLOAD_BYTES:
             raise HTTPException(status_code=413, detail="File exceeds 10 MB limit")
 
-        image = Image.open(io.BytesIO(contents))
-        image = ImageOps.exif_transpose(image)        # phone uploads are often rotated
+        try:
+            image = Image.open(io.BytesIO(contents))
+        except UnidentifiedImageError:
+            raise HTTPException(status_code=400, detail="File is not a readable image, try a different JPEG, PNG or WebP")
+        
+        image = ImageOps.exif_transpose(image)
         gray = np.array(image.convert("L"))
         
         boxes = detector.detect(gray)
@@ -262,9 +266,16 @@ async def post_emotion_classification(request: Request,
 
     except HTTPException:
         raise
+    except EmotionModelUnavailable as exc:
+        logger.warning("Emotion model not configured: %s", exc)
+        raise HTTPException(status_code=503, detail="Emotion model is not configured right now")
+    except EmotionModelCallFailed:
+        logger.exception("Emotion model call failed")
+        raise HTTPException(status_code=502, detail="Emotion model is temporarily unavailable, try again shortly")
     except Exception:
         logger.exception("Error in emotion classification")
         raise HTTPException(status_code=500, detail="Internal error processing image")
+
 
 class ContactPayload(BaseModel):
     name: str
