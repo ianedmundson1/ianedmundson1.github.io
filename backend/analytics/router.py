@@ -11,7 +11,7 @@ import logging
 
 from fastapi import APIRouter, Depends, HTTPException
 
-from backend.datasource import DataSource, get_datasource
+from backend.datasource import DataSource, DatabricksDataSource
 
 from . import service
 
@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/analytics", tags=["analytics"])
 
 def _datasource_dep() -> DataSource:
-    return get_datasource()
+    return DatabricksDataSource()
     
 @router.get("/seattle-fire-911/metadata")
 def seattle_fire_911_metadata(ds: DataSource = Depends(_datasource_dep)) -> SeattleFire911MetadataResponse:

@@ -24,3 +24,7 @@ class DataSource(Protocol):
     ) -> list[dict[str, Any]]:
         """Run a read query and return rows as dicts keyed by column name."""
         ...
+
+
+class DataSourceNotConfigured(RuntimeError):
+    """The data source's connection settings are missing or blank."""

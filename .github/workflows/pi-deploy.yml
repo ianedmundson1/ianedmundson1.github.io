@@ -38,7 +38,6 @@ jobs:
                 cat > secrets.env <<'EOF'
                 DATABRICKS_HOST=${{ secrets.DATABRICKS_HOST }}
                 DATABRICKS_TOKEN=${{ secrets.DATABRICKS_TOKEN }}
-                DATA_SOURCE=${{ secrets.DATA_SOURCE }}
                 DATABRICKS_HTTP_PATH=${{ secrets.DATABRICKS_HTTP_PATH }}
                 SEATTLE_FIRE_911_TABLE=${{ secrets.SEATTLE_FIRE_911_TABLE }}
                 SENTRY_DSN=${{ secrets.SENTRY_DSN }}

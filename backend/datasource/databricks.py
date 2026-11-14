@@ -14,14 +14,15 @@ from urllib.parse import urlparse
 
 from databricks import sql
 
+from .base import DataSourceNotConfigured
 
 def _hostname(host: str) -> str:
     # The connector wants a bare hostname, not a URL. Accept either.
     if "://" in host:
         return urlparse(host).hostname or host
     return host
-
-
+    
+    
 class DatabricksDataSource:
     """Opens a fresh connection per query.
 
@@ -35,11 +36,12 @@ class DatabricksDataSource:
         sql_text: str,
         params: Mapping[str, Any] | None = None,
     ) -> list[dict[str, Any]]:
-        host = os.environ.get("DATABRICKS_HOST")
-        token = os.environ.get("DATABRICKS_TOKEN")
-        http_path = os.environ.get("DATABRICKS_HTTP_PATH")
+        host = os.environ.get("DATABRICKS_HOST", "").strip()
+        token = os.environ.get("DATABRICKS_TOKEN", "").strip()
+        http_path = os.environ.get("DATABRICKS_HTTP_PATH", "").strip()
+
         if not host or not token or not http_path:
-            raise RuntimeError(
+            raise DataSourceNotConfigured(
                 "Databricks SQL warehouse is not configured. "
                 "Set DATABRICKS_HOST, DATABRICKS_TOKEN, DATABRICKS_HTTP_PATH.",
             )
