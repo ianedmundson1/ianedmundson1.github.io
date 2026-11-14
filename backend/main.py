@@ -34,7 +34,7 @@ from backend.emotion.databricks import DatabricksEmotionModel, normalize_predict
 from backend.emotion.face_detector import Box, FaceDetector, OpenCvFaceDetector
 from backend.emotion.model import EmotionModel, EmotionModelCallFailed, EmotionModelUnavailable
 from backend.emotion.schemas import EmotionClassificationResponse
-
+from backend.emotion.service import classify_emotion, NoFaceDetected, UnreadableImage
 sentry_sdk.init(
     dsn=os.environ.get("SENTRY_DSN", ""),
     traces_sample_rate=float(os.environ.get("SENTRY_TRACES_SAMPLE_RATE", "0")),
@@ -62,18 +62,6 @@ async def _rate_limit_handler(_request: Request, exc: RateLimitExceeded):
 
 ALLOWED_IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp", "image/jpg"}
 MAX_UPLOAD_BYTES = 10 * 1024 * 1024  # 10 MB
-
-def crop_face(gray: np.ndarray, boxes: list[Box]) -> np.ndarray | None:
-    
-    if not boxes:
-        return None
-    
-    x,y,w,h = max(boxes, key=lambda f: f[2] * f[3])
-    
-    pad = int(0.15 * w)  # a little margin, FER crops include some forehead/chin
-    x0, y0 = max(x - pad, 0), max(y - pad, 0)
-    x1, y1 = min(x + w + pad, gray.shape[1]), min(y + h + pad, gray.shape[0])
-    return gray[y0:y1, x0:x1]
 
 
 _emotion_model = DatabricksEmotionModel(
@@ -142,38 +130,14 @@ async def post_emotion_classification(request: Request,
         if len(contents) > MAX_UPLOAD_BYTES:
             raise HTTPException(status_code=413, detail="File exceeds 10 MB limit")
 
-        try:
-            image = Image.open(io.BytesIO(contents))
-        except UnidentifiedImageError:
-            raise HTTPException(status_code=400, detail="File is not a readable image, try a different JPEG, PNG or WebP")
-        
-        image = ImageOps.exif_transpose(image)
-        gray = np.array(image.convert("L"))
-        
-        boxes = detector.detect(gray)
-        
-        face = crop_face(gray, boxes)
-        
-        if face is None:
-            raise HTTPException(status_code=422, detail="No face detected, try facing the camera with good lighting")
-
-        face = cv2.equalizeHist(face)                  # optional: evens out lighting
-        # Resize to 48x48 (FER2013 input size).
-        face = cv2.resize(face, (48, 48), interpolation=cv2.INTER_AREA)
-        
-        # The Databricks emotion model expects raw 0-255 float pixel values
-        # and performs any needed scaling internally, so do NOT normalize here.
-        img_array = np.stack([face] * 3, axis=-1).astype(np.float32)  # (48, 48, 3), still raw 0-255
-        input_data = np.expand_dims(img_array, axis=0)
-
-
-        logger.info("Calling emotion model with shape: %s", input_data.shape)
-
-
-        return model.predict(input_data)
+        return classify_emotion(contents, model, detector)
 
     except HTTPException:
         raise
+    except UnreadableImage:
+        raise HTTPException(status_code=400, detail="File is not a readable image, try a different JPEG, PNG or WebP")
+    except NoFaceDetected:
+        raise HTTPException(status_code=422, detail="No face detected, try facing the camera with good lighting")
     except EmotionModelUnavailable as exc:
         logger.warning("Emotion model not configured: %s", exc)
         raise HTTPException(status_code=503, detail="Emotion model is not configured right now")
