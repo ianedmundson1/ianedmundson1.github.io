@@ -34,6 +34,9 @@ npm run test:e2e                 # playwright (boots Vite via webServer config)
 uv run pytest tests/ -v
 uv run pytest tests/test_main.py::test_name -v
 
+uv run ruff check backend/ tests/
+uv run ruff format --check backend/ tests/
+
 # Container
 docker compose -f docker-compose.dev.yml up --build
 ```
