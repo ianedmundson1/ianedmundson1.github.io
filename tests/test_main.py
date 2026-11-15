@@ -1,11 +1,12 @@
-import os
 from unittest.mock import AsyncMock, patch
 
 import pytest
 from fastapi.testclient import TestClient
+
+from backend.emotion.databricks import normalize_prediction
 from backend.main import app
 from backend.ratelimit import limiter
-from backend.emotion.databricks import normalize_prediction
+
 client = TestClient(app)
 
 
@@ -75,6 +76,7 @@ def test_serve_react_rejects_path_traversal():
 
 
 # --- normalize_prediction --------------------------------------------------
+
 
 def test_normalize_prediction_predictions_list():
     raw = {"predictions": [{"label": "happy", "score": 0.87}]}
@@ -157,6 +159,7 @@ def test_contact_rate_limited(monkeypatch, mock_send_message):
 
 
 # --- /api/resume --------------------------------------------------------------
+
 
 def test_resume_success(monkeypatch, tmp_path):
     pdf = tmp_path / "resume_ian_edmundson.pdf"

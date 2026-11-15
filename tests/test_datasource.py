@@ -12,7 +12,10 @@ def test_databricks_impl_satisfies_protocol():
 
 
 def test_hostname_strips_scheme():
-    assert _hostname("https://workspace.azuredatabricks.net") == "workspace.azuredatabricks.net"
+    assert (
+        _hostname("https://workspace.azuredatabricks.net")
+        == "workspace.azuredatabricks.net"
+    )
     assert _hostname("workspace.azuredatabricks.net") == "workspace.azuredatabricks.net"
 
 
@@ -24,18 +27,23 @@ def test_databricks_execute_raises_not_configured_when_settings_missing(monkeypa
         DatabricksDataSource().execute("SELECT 1")
 
 
-@pytest.mark.parametrize("blank_setting", ["DATABRICKS_HOST", "DATABRICKS_TOKEN", "DATABRICKS_HTTP_PATH"])
-def test_databricks_execute_raises_not_configured_when_a_setting_is_blank(monkeypatch, blank_setting):
+@pytest.mark.parametrize(
+    "blank_setting", ["DATABRICKS_HOST", "DATABRICKS_TOKEN", "DATABRICKS_HTTP_PATH"]
+)
+def test_databricks_execute_raises_not_configured_when_a_setting_is_blank(
+    monkeypatch, blank_setting
+):
     monkeypatch.setenv("DATABRICKS_HOST", "https://workspace.databricks.com")
     monkeypatch.setenv("DATABRICKS_TOKEN", "tok")
     monkeypatch.setenv("DATABRICKS_HTTP_PATH", "/sql/1.0/warehouses/abc")
     monkeypatch.setenv(blank_setting, "   ")
 
-    with patch("backend.datasource.databricks.sql.connect") as connect:
-        with pytest.raises(DataSourceNotConfigured):
-            DatabricksDataSource().execute("SELECT 1")
-
-    connect.assert_not_called()
+    with (
+        patch("backend.datasource.databricks.sql.connect") as connect,
+        pytest.raises(DataSourceNotConfigured),
+    ):
+        DatabricksDataSource().execute("SELECT 1")
+        connect.assert_not_called()
 
 
 def test_databricks_execute_returns_dict_rows(monkeypatch):
@@ -54,7 +62,9 @@ def test_databricks_execute_returns_dict_rows(monkeypatch):
     fake_conn.__enter__.return_value = fake_conn
     fake_conn.__exit__.return_value = False
 
-    with patch("backend.datasource.databricks.sql.connect", return_value=fake_conn) as connect:
+    with patch(
+        "backend.datasource.databricks.sql.connect", return_value=fake_conn
+    ) as connect:
         rows = DatabricksDataSource().execute("SELECT COUNT(*) AS row_count FROM t")
 
     assert rows == [{"row_count": 42}]
@@ -63,4 +73,6 @@ def test_databricks_execute_returns_dict_rows(monkeypatch):
         http_path="/sql/1.0/warehouses/abc",
         access_token="tok",
     )
-    fake_cursor.execute.assert_called_once_with("SELECT COUNT(*) AS row_count FROM t", parameters={})
+    fake_cursor.execute.assert_called_once_with(
+        "SELECT COUNT(*) AS row_count FROM t", parameters={}
+    )

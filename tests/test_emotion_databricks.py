@@ -49,6 +49,7 @@ def test_predict_turns_a_non_string_emotion_label_into_a_string():
 def _factory_raising(exc: Exception):
     def factory():
         raise exc
+
     return factory
 
 
@@ -56,7 +57,9 @@ def _factory_raising(exc: Exception):
     "config_error",
     [
         KeyError("DATABRICKS_HOST"),  # env var absent
-        ValueError("default auth: cannot configure default credentials"),  # set but blank
+        ValueError(
+            "default auth: cannot configure default credentials"
+        ),  # set but blank
     ],
 )
 def test_predict_reports_unavailable_when_the_client_cannot_be_configured(config_error):

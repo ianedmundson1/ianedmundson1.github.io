@@ -1,4 +1,5 @@
-from typing import Any, Mapping
+from collections.abc import Mapping
+from typing import Any
 
 import pytest
 from fastapi.testclient import TestClient
@@ -12,8 +13,11 @@ class FakeDataSource:
     def __init__(self, rows: list[dict[str, Any]]):
         self.rows = rows
 
-    def execute(self, sql: str, params: Mapping[str, Any] | None = None) -> list[dict[str, Any]]:
+    def execute(
+        self, sql: str, params: Mapping[str, Any] | None = None
+    ) -> list[dict[str, Any]]:
         return self.rows
+
 
 @pytest.mark.parametrize(
     "path",
@@ -69,7 +73,9 @@ def test_metadata_returns_503_when_table_unconfigured(monkeypatch):
 
 def test_metadata_returns_502_on_upstream_failure():
     class BrokenDataSource:
-        def execute(self, sql: str, params: Mapping[str, Any] | None = None) -> list[dict[str, Any]]:
+        def execute(
+            self, sql: str, params: Mapping[str, Any] | None = None
+        ) -> list[dict[str, Any]]:
             raise ConnectionError("warehouse offline")
 
     app.dependency_overrides[_datasource_dep] = lambda: BrokenDataSource()
@@ -77,35 +83,42 @@ def test_metadata_returns_502_on_upstream_failure():
     response = client.get("/api/analytics/seattle-fire-911/metadata")
     assert response.status_code == 502
 
+
 @pytest.mark.parametrize("blank", ["", "   "])
 def test_recent_calls_reports_a_blank_call_type_as_unknown(blank):
-    client = _client_with([
-        {
-            "incident_number": "F1",
-            "datetime": "2026-05-20T14:30:00.000",
-            "type": blank,
-            "address": "100 Pike St",
-            "latitude": 47.61,
-            "longitude": -122.33,
-        }
-    ])
+    client = _client_with(
+        [
+            {
+                "incident_number": "F1",
+                "datetime": "2026-05-20T14:30:00.000",
+                "type": blank,
+                "address": "100 Pike St",
+                "latitude": 47.61,
+                "longitude": -122.33,
+            }
+        ]
+    )
     response = client.get("/api/analytics/seattle-fire-911/recent-calls")
     assert response.status_code == 200
     assert response.json()["calls"][0]["type"] == "Unknown"
 
+
 # --- /api/analytics/seattle-fire-911/recent-calls ---------------------------
 
+
 def test_recent_calls_endpoint_returns_calls():
-    client = _client_with([
-        {
-            "incident_number": "F1",
-            "datetime": "2026-05-20T14:30:00.000",
-            "type": "Aid Response",
-            "address": "100 Pike St",
-            "latitude": "47.61",
-            "longitude": "-122.33",
-        }
-    ])
+    client = _client_with(
+        [
+            {
+                "incident_number": "F1",
+                "datetime": "2026-05-20T14:30:00.000",
+                "type": "Aid Response",
+                "address": "100 Pike St",
+                "latitude": "47.61",
+                "longitude": "-122.33",
+            }
+        ]
+    )
     response = client.get("/api/analytics/seattle-fire-911/recent-calls")
     assert response.status_code == 200
     body = response.json()
@@ -127,7 +140,9 @@ def test_recent_calls_returns_503_when_table_unconfigured(monkeypatch):
 
 def test_recent_calls_returns_502_on_upstream_failure():
     class BrokenDataSource:
-        def execute(self, sql: str, params: Mapping[str, Any] | None = None) -> list[dict[str, Any]]:
+        def execute(
+            self, sql: str, params: Mapping[str, Any] | None = None
+        ) -> list[dict[str, Any]]:
             raise ConnectionError("warehouse offline")
 
     app.dependency_overrides[_datasource_dep] = lambda: BrokenDataSource()
@@ -135,43 +150,61 @@ def test_recent_calls_returns_502_on_upstream_failure():
     response = client.get("/api/analytics/seattle-fire-911/recent-calls")
     assert response.status_code == 502
 
+
 def test_recent_calls_reports_a_missing_call_type_as_unknown():
-    client = _client_with([
-        {
-            "incident_number": "F1",
-            "datetime": "2026-05-20T14:30:00.000",
-            "type": None,
-            "address": "100 Pike St",
-            "latitude": 47.61,
-            "longitude": -122.33,
-        }
-    ])
+    client = _client_with(
+        [
+            {
+                "incident_number": "F1",
+                "datetime": "2026-05-20T14:30:00.000",
+                "type": None,
+                "address": "100 Pike St",
+                "latitude": 47.61,
+                "longitude": -122.33,
+            }
+        ]
+    )
     response = client.get("/api/analytics/seattle-fire-911/recent-calls")
     assert response.status_code == 200
     assert response.json()["calls"][0]["type"] == "Unknown"
 
+
 def test_recent_calls_keeps_a_missing_address_as_null():
-    client = _client_with([
-        {
-            "incident_number": "F1",
-            "datetime": "2026-05-20T14:30:00.000",
-            "type": "Aid Response",
-            "address": None,
-            "latitude": 47.61,
-            "longitude": -122.33,
-        }
-    ])
+    client = _client_with(
+        [
+            {
+                "incident_number": "F1",
+                "datetime": "2026-05-20T14:30:00.000",
+                "type": "Aid Response",
+                "address": None,
+                "latitude": 47.61,
+                "longitude": -122.33,
+            }
+        ]
+    )
     response = client.get("/api/analytics/seattle-fire-911/recent-calls")
     assert response.status_code == 200
     assert response.json()["calls"][0]["address"] is None
 
+
 # --- /api/analytics/seattle-fire-911/last-24h-by-category -------------------
 
+
 def test_last_24h_by_category_endpoint_returns_buckets():
-    client = _client_with([
-        {"type": "Medic Response", "count": 50, "window_end": "2026-05-20T14:30:00.000"},
-        {"type": "Aid Response", "count": 20, "window_end": "2026-05-20T14:30:00.000"},
-    ])
+    client = _client_with(
+        [
+            {
+                "type": "Medic Response",
+                "count": 50,
+                "window_end": "2026-05-20T14:30:00.000",
+            },
+            {
+                "type": "Aid Response",
+                "count": 20,
+                "window_end": "2026-05-20T14:30:00.000",
+            },
+        ]
+    )
     response = client.get("/api/analytics/seattle-fire-911/last-24h-by-category")
     assert response.status_code == 200
     body = response.json()
@@ -191,7 +224,9 @@ def test_last_24h_by_category_returns_503_when_table_unconfigured(monkeypatch):
 
 def test_last_24h_by_category_returns_502_on_upstream_failure():
     class BrokenDataSource:
-        def execute(self, sql: str, params: Mapping[str, Any] | None = None) -> list[dict[str, Any]]:
+        def execute(
+            self, sql: str, params: Mapping[str, Any] | None = None
+        ) -> list[dict[str, Any]]:
             raise ConnectionError("warehouse offline")
 
     app.dependency_overrides[_datasource_dep] = lambda: BrokenDataSource()

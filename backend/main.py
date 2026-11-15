@@ -1,17 +1,17 @@
-from dotenv import load_dotenv
-import os
 import logging
+import os
 from pathlib import Path
-from fastapi import FastAPI, HTTPException, Request 
-from fastapi.responses import FileResponse
-from pydantic import EmailStr, NameEmail, SecretStr, BaseModel
+
+import sentry_sdk
+from dotenv import load_dotenv
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import FileResponse, JSONResponse
+from fastapi_mail import ConnectionConfig, FastMail, MessageSchema, MessageType
+from pydantic import BaseModel, EmailStr, NameEmail, SecretStr
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
-from fastapi.responses import JSONResponse
-import sentry_sdk
-from fastapi_mail import FastMail, MessageSchema, ConnectionConfig, MessageType
-from backend.analytics.router import router as analytics_router
 
+from backend.analytics.router import router as analytics_router
 
 # Each tier has independent dev/test/prod envs. APP_ENV selects which
 # backend/.env.<env> file to layer on top of the process environment. Values
@@ -20,11 +20,10 @@ APP_ENV = os.environ.get("APP_ENV", "development")
 _env_file = Path(__file__).parent / f".env.{APP_ENV}"
 if _env_file.is_file():
     load_dotenv(_env_file, override=False)
-    
-# Imported after load_dotenv: ratelimit reads TRUSTED_CLIENT_IP_HEADER at import time.
-from backend.ratelimit import limiter
-from backend.emotion.router import router as emotion_router
 
+# Imported after load_dotenv: ratelimit reads TRUSTED_CLIENT_IP_HEADER at import time.
+from backend.emotion.router import router as emotion_router
+from backend.ratelimit import limiter
 
 sentry_sdk.init(
     dsn=os.environ.get("SENTRY_DSN", ""),
@@ -33,13 +32,11 @@ sentry_sdk.init(
 )
 
 logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s"
+    level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s"
 )
 logger = logging.getLogger(__name__)
 
 app = FastAPI(title="Simple FastAPI + React App")
-
 
 
 app.state.limiter = limiter
@@ -49,9 +46,13 @@ app.include_router(analytics_router)
 
 app.include_router(emotion_router)
 
+
 @app.exception_handler(RateLimitExceeded)
 async def _rate_limit_handler(_request: Request, exc: RateLimitExceeded):
-    return JSONResponse(status_code=429, content={"detail": f"Rate limit exceeded: {exc.detail}"})
+    return JSONResponse(
+        status_code=429, content={"detail": f"Rate limit exceeded: {exc.detail}"}
+    )
+
 
 @app.get("/api/hello")
 async def hello():
@@ -74,9 +75,10 @@ async def readiness_check():
     host = os.environ.get("DATABRICKS_HOST")
     token = os.environ.get("DATABRICKS_TOKEN")
     if not host or not token:
-        raise HTTPException(status_code=503, detail="Databricks credentials not configured")
+        raise HTTPException(
+            status_code=503, detail="Databricks credentials not configured"
+        )
     return {"status": "ready"}
-
 
 
 class ContactPayload(BaseModel):
@@ -84,11 +86,12 @@ class ContactPayload(BaseModel):
     email: EmailStr
     message: str
 
+
 @app.post("/api/contact")
 @limiter.limit("5/minute")
 async def contact(request: Request, payload: ContactPayload) -> dict[str, str]:
-    
-    try: 
+
+    try:
         mail_config = ConnectionConfig(
             MAIL_USERNAME=os.environ["MAIL_USERNAME"],
             MAIL_PASSWORD=SecretStr(os.environ["MAIL_PASSWORD"]),
@@ -98,7 +101,7 @@ async def contact(request: Request, payload: ContactPayload) -> dict[str, str]:
             MAIL_STARTTLS=True,
             MAIL_SSL_TLS=False,
         )
-        
+
         message = MessageSchema(
             subject=f"Portfolio contact from {payload.name}",
             recipients=[NameEmail(name=payload.name, email=os.environ["MAIL_TO"])],
@@ -112,17 +115,26 @@ async def contact(request: Request, payload: ContactPayload) -> dict[str, str]:
         raise HTTPException(status_code=500, detail="Failed to send message")
     return {"status": "success"}
 
-static_dir = os.path.realpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "static"))
+
+static_dir = os.path.realpath(
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
+)
 os.makedirs(static_dir, exist_ok=True)
 
-assets_dir = os.path.realpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets"))
+assets_dir = os.path.realpath(
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets")
+)
+
 
 @app.get("/api/resume")
 async def get_resume():
     file_path = os.path.join(assets_dir, "resume_ian_edmundson.pdf")
     if os.path.isfile(file_path):
-        return FileResponse(file_path, media_type="application/pdf", filename="resume_ian_edmundson.pdf")
+        return FileResponse(
+            file_path, media_type="application/pdf", filename="resume_ian_edmundson.pdf"
+        )
     raise HTTPException(status_code=404, detail="Resume not found.")
+
 
 @app.get("/{full_path:path}")
 async def serve_react(full_path: str):
@@ -130,8 +142,9 @@ async def serve_react(full_path: str):
     # check to prevent traversal out of static_dir via "../" segments.
     if full_path:
         candidate = os.path.realpath(os.path.join(static_dir, full_path))
-        if (candidate == static_dir or candidate.startswith(static_dir + os.sep)) \
-                and os.path.isfile(candidate):
+        if (
+            candidate == static_dir or candidate.startswith(static_dir + os.sep)
+        ) and os.path.isfile(candidate):
             return FileResponse(candidate)
 
     # SPA fallback: serve index.html for unknown paths so /projects, etc. work.
@@ -142,6 +155,5 @@ async def serve_react(full_path: str):
 
     logger.error("Frontend not built. index.html missing.")
     raise HTTPException(
-        status_code=404,
-        detail="Frontend not built. Please run 'npm run build' first."
+        status_code=404, detail="Frontend not built. Please run 'npm run build' first."
     )

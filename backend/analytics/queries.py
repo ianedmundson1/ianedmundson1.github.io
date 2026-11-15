@@ -20,6 +20,7 @@ from __future__ import annotations
 def fire_911_row_count(table: str) -> str:
     return f"SELECT COUNT(*) AS row_count FROM {table}"
 
+
 def fire_911_recent_calls(table: str, limit: int = 10) -> str:
     return f"""
         SELECT
@@ -35,7 +36,8 @@ def fire_911_recent_calls(table: str, limit: int = 10) -> str:
         LIMIT {limit}
     """
 
-#TODO: make the interval configurable through the API and query parameters instead of hardcoding 24 hours
+
+# TODO: make the interval configurable through the API and query parameters instead of hardcoding 24 hours
 def fire_911_last_24h_by_category(table: str) -> str:
     return f"""
         WITH latest AS (

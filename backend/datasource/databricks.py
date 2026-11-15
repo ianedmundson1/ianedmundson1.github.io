@@ -9,20 +9,22 @@ SQL warehouses additionally need an HTTP path.
 from __future__ import annotations
 
 import os
-from typing import Any, Mapping
+from collections.abc import Mapping
+from typing import Any
 from urllib.parse import urlparse
 
 from databricks import sql
 
 from .base import DataSourceNotConfigured
 
+
 def _hostname(host: str) -> str:
     # The connector wants a bare hostname, not a URL. Accept either.
     if "://" in host:
         return urlparse(host).hostname or host
     return host
-    
-    
+
+
 class DatabricksDataSource:
     """Opens a fresh connection per query.
 
@@ -39,19 +41,17 @@ class DatabricksDataSource:
         host = os.environ.get("DATABRICKS_HOST", "").strip()
         token = os.environ.get("DATABRICKS_TOKEN", "").strip()
         http_path = os.environ.get("DATABRICKS_HTTP_PATH", "").strip()
-
         if not host or not token or not http_path:
             raise DataSourceNotConfigured(
                 "Databricks SQL warehouse is not configured. "
                 "Set DATABRICKS_HOST, DATABRICKS_TOKEN, DATABRICKS_HTTP_PATH.",
             )
-
-        with sql.connect(
-            server_hostname=_hostname(host),
-            http_path=http_path,
-            access_token=token,
-        ) as connection:
-            with connection.cursor() as cursor:
-                cursor.execute(sql_text, parameters=dict(params or {}))
-                columns = [c[0] for c in cursor.description or []]
-                return [dict(zip(columns, row)) for row in cursor.fetchall()]
+        with (
+            sql.connect(
+                server_hostname=_hostname(host), http_path=http_path, access_token=token
+            ) as connection,
+            connection.cursor() as cursor,
+        ):
+            cursor.execute(sql_text, parameters=dict(params or {}))
+            columns = [c[0] for c in cursor.description or []]
+            return [dict(zip(columns, row)) for row in cursor.fetchall()]

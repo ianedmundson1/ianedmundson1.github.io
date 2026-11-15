@@ -5,13 +5,17 @@ Models live here so they can be reused without circular imports.
 """
 
 from __future__ import annotations
+
 import datetime as dt
+
 from pydantic import BaseModel
+
 
 class SeattleFire911MetadataResponse(BaseModel):
     table: str
     rowCount: int
     fetchedAt: str
+
 
 class Fire911RecentCall(BaseModel):
     incidentNumber: str
@@ -20,15 +24,18 @@ class Fire911RecentCall(BaseModel):
     address: str | None
     latitude: float | None
     longitude: float | None
-    
+
+
 class Fire911RecentCallsResponse(BaseModel):
     table: str
     calls: list[Fire911RecentCall]
     fetchedAt: str
-    
+
+
 class Fire911CategoryBucket(BaseModel):
     type: str
     count: int
+
 
 class Fire911Last24hByCategoryResponse(BaseModel):
     table: str
