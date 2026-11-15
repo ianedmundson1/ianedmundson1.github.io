@@ -27,6 +27,12 @@ _metadata_cache_recent_calls = TTLCache[str, Fire911RecentCallsResponse](maxsize
 
 _metadata_cache_last_24h_by_category = TTLCache[str, Fire911Last24hByCategoryResponse](maxsize=8, ttl=_CACHE_TTL_SECONDS)
 
+def _call_type(value: str | None) -> str:
+    """A missing or blank call type is reported as "Unknown"."""
+    if value is None or not value.strip():
+        return "Unknown"
+    return value
+
 def _fire_911_table() -> str:
     table = os.environ.get("SEATTLE_FIRE_911_TABLE")
     if not table:
@@ -44,7 +50,7 @@ def fire_911_recent_calls(ds: DataSource) -> Fire911RecentCallsResponse:
         Fire911RecentCall(
             incidentNumber=row["incident_number"],
             datetime=row["datetime"],
-            type=row["type"],
+            type=_call_type(row["type"]),
             address=row["address"],
             latitude=row.get("latitude"),
             longitude=row.get("longitude"),
