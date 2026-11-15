@@ -17,7 +17,7 @@ class Fire911RecentCall(BaseModel):
     incidentNumber: str
     datetime: dt.datetime | str
     type: str
-    address: str
+    address: str | None
     latitude: float | None
     longitude: float | None
     
