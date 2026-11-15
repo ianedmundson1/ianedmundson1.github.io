@@ -22,6 +22,10 @@ _Avoid_: scorer, endpoint, classifier
 How sure the classifier is of the emotion label, expressed as a whole percent.
 _Avoid_: score, probability
 
+**Emotion classification demo**:
+The interactive section of the MIT Applied Data Science page where a visitor submits a photo for emotion classification.
+_Avoid_: emotion detector, emotion detection demo
+
 ### Seattle Fire 911 analytics
 
 **Fire 911 call**:
