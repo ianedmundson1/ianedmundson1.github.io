@@ -1,17 +1,20 @@
-from typing import Any, Mapping
+import datetime as dt
+from collections.abc import Mapping
+from typing import Any
 
 import pytest
 
 from backend.analytics import service
 
-import datetime as dt
 
 class FakeDataSource:
     def __init__(self, rows: list[dict[str, Any]]):
         self.rows = rows
         self.calls: list[tuple[str, Mapping[str, Any] | None]] = []
 
-    def execute(self, sql: str, params: Mapping[str, Any] | None = None) -> list[dict[str, Any]]:
+    def execute(
+        self, sql: str, params: Mapping[str, Any] | None = None
+    ) -> list[dict[str, Any]]:
         self.calls.append((sql, params))
         return self.rows
 
@@ -76,7 +79,12 @@ RECENT_CALL_ROW = {
 
 
 def test_recent_calls_returns_typed_results(_table_env):
-    second_row = {**RECENT_CALL_ROW, "incident_number": "F26000002", "latitude": None, "longitude": None}
+    second_row = {
+        **RECENT_CALL_ROW,
+        "incident_number": "F26000002",
+        "latitude": None,
+        "longitude": None,
+    }
     ds = FakeDataSource([RECENT_CALL_ROW, second_row])
     result = service.fire_911_recent_calls(ds)
     assert result.table == "cat.schema.fire_911"

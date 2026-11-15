@@ -1,11 +1,17 @@
+import numpy as np
 import pytest
 from fastapi.testclient import TestClient
-import numpy as np
+
 from backend.emotion.model import EmotionModelCallFailed, EmotionModelUnavailable
 from backend.emotion.router import _emotion_model_dep, _face_detector_dep
 from backend.main import app
 from backend.ratelimit import limiter
-from tests.emotion_fakes import FakeEmotionModel, FakeFaceDetector, png_bytes, two_tone_png
+from tests.emotion_fakes import (
+    FakeEmotionModel,
+    FakeFaceDetector,
+    png_bytes,
+    two_tone_png,
+)
 
 URL = "/api/emotion_classification"
 ONE_FACE = [(50, 50, 80, 80)]
@@ -26,6 +32,7 @@ def _client(model: FakeEmotionModel, detector: FakeFaceDetector) -> TestClient:
 
 def _upload(client: TestClient, data: bytes, content_type: str = "image/png"):
     return client.post(URL, files={"file": ("face.png", data, content_type)})
+
 
 @pytest.mark.parametrize(
     ("error", "expected_status"),
@@ -51,6 +58,7 @@ def test_success_returns_the_emotion_models_label_and_confidence():
     assert response.status_code == 200
     assert response.json() == {"label": "surprise", "confidencePercent": 64}
 
+
 def test_emotion_model_receives_one_48x48_three_channel_batch_of_raw_pixel_values():
     model = FakeEmotionModel()
     client = _client(model, FakeFaceDetector(ONE_FACE))
@@ -67,6 +75,7 @@ def test_emotion_model_receives_one_48x48_three_channel_batch_of_raw_pixel_value
     assert (batch[..., 0] == batch[..., 1]).all()
     assert (batch[..., 1] == batch[..., 2]).all()
 
+
 def test_largest_detected_face_is_the_one_classified():
     small_dark = (10, 10, 30, 30)
     largest_bright = (170, 40, 110, 110)
@@ -78,6 +87,7 @@ def test_largest_detected_face_is_the_one_classified():
 
     # Every pixel came from the bright half, so the largest box was cropped.
     assert (model.received_batch == 220).all()
+
 
 def test_bytes_that_are_not_an_image_return_400():
     client = _client(FakeEmotionModel(), FakeFaceDetector(ONE_FACE))
@@ -108,4 +118,3 @@ def test_no_face_detected_returns_422():
     assert response.status_code == 422
     assert "face" in response.json()["detail"].lower()
     assert model.received_batch is None  # the emotion model was never called
-

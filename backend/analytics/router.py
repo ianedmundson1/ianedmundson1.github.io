@@ -8,24 +8,32 @@ network is required.
 from __future__ import annotations
 
 import logging
+from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException
 
-from backend.datasource import DataSource, DatabricksDataSource
+from backend.datasource import DatabricksDataSource, DataSource
 
 from . import service
-
-from .schemas import SeattleFire911MetadataResponse, Fire911RecentCallsResponse, Fire911Last24hByCategoryResponse
+from .schemas import (
+    Fire911Last24hByCategoryResponse,
+    Fire911RecentCallsResponse,
+    SeattleFire911MetadataResponse,
+)
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/analytics", tags=["analytics"])
 
+
 def _datasource_dep() -> DataSource:
     return DatabricksDataSource()
-    
+
+
 @router.get("/seattle-fire-911/metadata")
-def seattle_fire_911_metadata(ds: DataSource = Depends(_datasource_dep)) -> SeattleFire911MetadataResponse:
+def seattle_fire_911_metadata(
+    ds: Annotated[DataSource, Depends(_datasource_dep)],
+) -> SeattleFire911MetadataResponse:
     try:
         return service.fire_911_metadata(ds)
     except RuntimeError as exc:
@@ -36,9 +44,12 @@ def seattle_fire_911_metadata(ds: DataSource = Depends(_datasource_dep)) -> Seat
     except Exception:
         logger.exception("Failed to query Seattle Fire 911 metadata")
         raise HTTPException(status_code=502, detail="Upstream analytics query failed")
-    
+
+
 @router.get("/seattle-fire-911/recent-calls")
-def seattle_fire_911_recent_calls(ds: DataSource = Depends(_datasource_dep)) -> Fire911RecentCallsResponse:
+def seattle_fire_911_recent_calls(
+    ds: Annotated[DataSource, Depends(_datasource_dep)],
+) -> Fire911RecentCallsResponse:
     try:
         return service.fire_911_recent_calls(ds)
     except RuntimeError as exc:
@@ -47,9 +58,12 @@ def seattle_fire_911_recent_calls(ds: DataSource = Depends(_datasource_dep)) -> 
     except Exception:
         logger.exception("Failed to query Seattle Fire 911 recent calls")
         raise HTTPException(status_code=502, detail="Upstream analytics query failed")
-    
+
+
 @router.get("/seattle-fire-911/last-24h-by-category")
-def seattle_fire_911_last_24h_by_category(ds: DataSource = Depends(_datasource_dep)) -> Fire911Last24hByCategoryResponse:
+def seattle_fire_911_last_24h_by_category(
+    ds: Annotated[DataSource, Depends(_datasource_dep)],
+) -> Fire911Last24hByCategoryResponse:
     try:
         return service.fire_911_last_24h_by_category(ds)
     except RuntimeError as exc:

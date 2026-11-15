@@ -76,6 +76,11 @@ jobs:
       - name: Install backend dependencies
         run: uv sync
 
+      - name: Ruff
+        run: |
+          .venv/bin/ruff check backend/ tests/
+          .venv/bin/ruff format --check backend/ tests/
+
       - name: Run backend tests
         env:
           APP_ENV: test
