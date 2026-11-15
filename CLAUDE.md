@@ -81,7 +81,7 @@ The SPA static-file fallback lives in `backend/main.py` and has its own gotcha. 
 
 `App.tsx` uses `React.lazy` for every page and `Router` `basename={import.meta.env.BASE_URL}`. Vite's `base` is currently `/` (see `vite.config.ts`), and the router picks up the matching `BASE_URL` automatically. If the app is ever served from a sub-path, update `base` and both sides stay in sync.
 
-Plotly is heavy (~1 MB) and lives behind code splitting + dedicated cache. Don't import Plotly anywhere outside `PlotlyEmbed` — see `frontend/src/components/PlotlyEmbed/CLAUDE.md`.
+Plotly is heavy (~1 MB) and lives behind code splitting + dedicated cache. Don't import Plotly anywhere outside `frontend/src/components/PlotlyEmbed/PlotlyEmbed.tsx`: the lazy import there is the only thing that keeps the bundle out of the initial load.
 
 ### Sentry, two DSNs, two lifecycles
 
@@ -119,7 +119,7 @@ Frontend and backend each have independent `development`, `test`, and `productio
 
 - **Backend:** pytest, one `test_<module>.py` per backend module under repo-root `tests/`. Mirror the structure of `backend/`.
 - **Frontend unit:** vitest, co-located with source as `<Name>.test.tsx` / `<Name>.test.ts`.
-- **Frontend E2E:** playwright in `frontend/e2e/`, one `.spec.ts` per user-facing flow. Tests boot the Vite dev server via the `webServer` config — don't start it manually.
+- **Frontend E2E:** playwright, configured in the root `playwright.config.ts` with `testDir` set to `tests/e2e/` (the one spec today is `tests/e2e/e2e/home.spec.ts`), one `.spec.ts` per user-facing flow. Tests boot the Vite dev server via the `webServer` config, so don't start it manually.
 
 ### Adding a backend-dependent feature
 
